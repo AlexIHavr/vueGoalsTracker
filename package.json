@@ -6,17 +6,47 @@
   "scripts": {
     "start": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "stylelint": "stylelint \"src/**/*.{vue,scss}\"",
+    "stylelint:fix": "stylelint \"src/**/*.{scss,vue}\" --fix"
   },
   "dependencies": {
     "vue": "^3.5.25"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/tsconfig": "^0.8.1",
+    "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "^10.8.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.1",
+    "sass-embedded": "^1.97.3",
+    "stylelint": "^17.4.0",
+    "stylelint-config-idiomatic-order": "^10.0.0",
+    "stylelint-config-recommended-vue": "^1.6.1",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "stylelint-prettier": "^5.0.3",
+    "stylelint-scss": "^7.0.0",
+    "stylelint-use-nesting": "^6.0.2",
     "typescript": "~5.9.3",
+    "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
+    "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.1.5"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": "eslint --fix",
+    "*.{scss,vue}": "stylelint --fix",
+    "*.{js,ts,vue,scss,json,md}": "prettier --write"
   }
 }
