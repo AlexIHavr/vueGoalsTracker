@@ -127,8 +127,8 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
 .auth-form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
   gap: 15px;
+  margin-bottom: 15px;
 }
 
 .inputs-group {
