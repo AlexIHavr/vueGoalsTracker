@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  Form,
-  type FormResolverOptions,
-  type FormSubmitEvent,
-} from '@primevue/forms';
+import { Form, type FormSubmitEvent } from '@primevue/forms';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -17,34 +13,17 @@ import Password from 'primevue/password';
 import { reactive, ref } from 'vue';
 
 import AuthField from './AuthField.vue';
+import { authResolver } from './utils/authResolver';
 
+import type { AuthFormFields } from './interfaces/authFormFields';
 import type { FirebaseError } from 'firebase/app';
 
 import { auth } from '@/app/firebase';
 
-const form = reactive({
+const form = reactive<AuthFormFields>({
   email: '',
   password: '',
 });
-
-const resolver = ({ values }: FormResolverOptions) => {
-  const { email, password } = values as typeof form;
-  const errors = {} as Record<keyof typeof form, { message: string }[]>;
-
-  if (!email) {
-    errors.email = [{ message: 'Email обязателен' }];
-  } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-    errors.email = [{ message: 'Некорректный email' }];
-  }
-
-  if (!password) {
-    errors.password = [{ message: 'Пароль обязателен' }];
-  } else if (password.length < 6) {
-    errors.password = [{ message: 'Пароль должен быть минимум 6 символов' }];
-  }
-
-  return { values, errors };
-};
 
 const submitError = ref<string | null>(null);
 const isLoading = ref<boolean>(false);
@@ -92,7 +71,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
         <Form
           v-slot="$form"
           :model="form"
-          :resolver
+          :resolver="authResolver"
           class="auth-form"
           @submit="handleAuth"
         >
