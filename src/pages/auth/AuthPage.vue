@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   Form,
-  FormField,
   type FormResolverOptions,
   type FormSubmitEvent,
 } from '@primevue/forms';
@@ -12,11 +11,12 @@ import {
 import { AuthErrorCodes } from 'firebase/auth';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
-import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import Password from 'primevue/password';
 import { reactive, ref } from 'vue';
+
+import AuthField from './AuthField.vue';
 
 import type { FirebaseError } from 'firebase/app';
 
@@ -97,49 +97,29 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
           @submit="handleAuth"
         >
           <div class="inputs-group">
-            <FormField v-slot="$field" name="email">
-              <FloatLabel variant="on">
-                <InputText
-                  id="email"
-                  v-model="form.email"
-                  size="large"
-                  autocomplete="email"
-                  fluid
-                />
-                <label for="email">Email</label>
-              </FloatLabel>
+            <AuthField field-name="email">
+              <InputText
+                id="email"
+                v-model="form.email"
+                size="large"
+                autocomplete="email"
+                fluid
+              />
+              <label for="email">Email</label>
+            </AuthField>
 
-              <Message
-                v-if="$field?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                >{{ $field.error?.message }}</Message
-              >
-            </FormField>
-
-            <FormField v-slot="$field" name="password">
-              <FloatLabel variant="on">
-                <Password
-                  id="password"
-                  v-model="form.password"
-                  name="password"
-                  size="large"
-                  :feedback="false"
-                  toggle-mask
-                  fluid
-                />
-                <label for="password">Password</label>
-              </FloatLabel>
-
-              <Message
-                v-if="$field?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                >{{ $field.error?.message }}</Message
-              >
-            </FormField>
+            <AuthField field-name="password">
+              <Password
+                id="password"
+                v-model="form.password"
+                name="password"
+                size="large"
+                :feedback="false"
+                toggle-mask
+                fluid
+              />
+              <label for="password">Password</label>
+            </AuthField>
           </div>
 
           <Button
@@ -180,9 +160,5 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
 
 .p-card {
   --p-card-body-gap: 2rem;
-}
-
-.p-message-simple {
-  margin-top: 8px;
 }
 </style>
