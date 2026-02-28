@@ -12,7 +12,7 @@ import Message from 'primevue/message';
 import Password from 'primevue/password';
 import { reactive, ref } from 'vue';
 
-import AuthField from './AuthField.vue';
+import AuthField from './components/AuthField.vue';
 import { authResolver } from './utils/authResolver';
 
 import type { AuthFormFields } from './interfaces/authFormFields';
