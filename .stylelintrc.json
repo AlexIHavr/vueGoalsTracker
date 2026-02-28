@@ -3,7 +3,8 @@
     "stylelint-config-standard",
     "stylelint-config-standard-scss",
     "stylelint-config-recommended-vue",
-    "stylelint-prettier/recommended"
+    "stylelint-prettier/recommended",
+    "stylelint-config-recess-order"
   ],
   "plugins": ["stylelint-use-nesting"],
   "rules": {
