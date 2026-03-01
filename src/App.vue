@@ -2,7 +2,6 @@
 import { Button } from 'primevue';
 
 const toggleDarkMode = () => {
-  // eslint-disable-next-line no-undef
   document.documentElement.classList.toggle('dark-theme');
 };
 </script>
