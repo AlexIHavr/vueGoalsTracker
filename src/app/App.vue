@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AuthPage } from 'pages';
+import { AuthPage } from 'pages/auth';
 </script>
 
 <template>

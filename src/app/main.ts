@@ -3,8 +3,9 @@ import PrimeVue from 'primevue/config';
 import { createApp } from 'vue';
 import { VueFire, VueFireAuth } from 'vuefire';
 
+import { firebaseApp } from 'shared/api';
+
 import App from './App.vue';
-import { firebaseApp } from './firebase';
 
 import 'primeicons/primeicons.css';
 import './style.css';

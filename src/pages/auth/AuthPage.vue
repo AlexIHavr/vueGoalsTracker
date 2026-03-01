@@ -12,7 +12,7 @@ import Message from 'primevue/message';
 import Password from 'primevue/password';
 import { reactive, ref } from 'vue';
 
-import { auth } from 'app/firebase';
+import { auth } from 'shared/api';
 
 import AuthField from './components/AuthField.vue';
 import { authResolver } from './utils/authResolver';
