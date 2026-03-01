@@ -6,6 +6,7 @@ import { VueFire, VueFireAuth } from 'vuefire';
 import { firebaseApp } from 'shared/api';
 
 import App from './App.vue';
+import { router } from './router';
 
 import 'primeicons/primeicons.css';
 import './style.css';
@@ -23,5 +24,7 @@ app.use(VueFire, {
   firebaseApp,
   modules: [VueFireAuth()],
 });
+
+app.use(router);
 
 app.mount('#app');

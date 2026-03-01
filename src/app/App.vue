@@ -1,7 +1,5 @@
-<script setup lang="ts">
-import { AuthPage } from 'pages/auth';
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <AuthPage />
+  <router-view></router-view>
 </template>

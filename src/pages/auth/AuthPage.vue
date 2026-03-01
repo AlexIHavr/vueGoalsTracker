@@ -11,8 +11,10 @@ import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import Password from 'primevue/password';
 import { reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import { auth } from 'shared/api';
+import { ROUTES_PATHS } from 'shared/consts';
 
 import AuthField from './components/AuthField.vue';
 import { authResolver } from './utils/authResolver';
@@ -28,6 +30,9 @@ const form = reactive<AuthFormFields>({
 const submitError = ref<string | null>(null);
 const isLoading = ref<boolean>(false);
 
+const route = useRoute();
+const router = useRouter();
+
 const handleAuth = async ({ valid }: FormSubmitEvent) => {
   if (!valid) {
     return;
@@ -36,14 +41,20 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
   submitError.value = null;
   isLoading.value = true;
 
+  let redirectPath = (route.query.redirect ?? ROUTES_PATHS.MAIN) as string;
+
   try {
     await signInWithEmailAndPassword(auth, form.email, form.password);
+
+    router.push(redirectPath);
   } catch (err) {
     const firebaseError = err as FirebaseError;
 
     if (firebaseError.code === AuthErrorCodes.INVALID_LOGIN_CREDENTIALS) {
       try {
         await createUserWithEmailAndPassword(auth, form.email, form.password);
+
+        router.push(redirectPath);
       } catch (createErr) {
         const createError = createErr as FirebaseError;
 
