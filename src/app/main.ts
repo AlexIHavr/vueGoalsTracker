@@ -1,5 +1,6 @@
 import Aura from '@primeuix/themes/aura';
 import PrimeVue from 'primevue/config';
+import ToastService from 'primevue/toastservice';
 import { createApp } from 'vue';
 import { VueFire, VueFireAuth } from 'vuefire';
 
@@ -26,5 +27,7 @@ app.use(VueFire, {
 });
 
 app.use(router);
+
+app.use(ToastService);
 
 app.mount('#app');
