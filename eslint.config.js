@@ -3,6 +3,7 @@ import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import prettierPlugin from 'eslint-plugin-prettier';
 import vue from 'eslint-plugin-vue';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
 
@@ -22,10 +23,7 @@ export default [
       parserOptions: {
         parser: tseslint.parser,
       },
-      globals: {
-        document: 'readonly',
-        window: 'readonly',
-      },
+      globals: globals.browser,
     },
     settings: {
       'import/resolver': {
@@ -60,5 +58,23 @@ export default [
         },
       ],
     },
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          'app/**',
+          'pages/*/**',
+          'widgets/*/**',
+          'features/*/**',
+          'entities/*/**',
+          'shared/*/*/**',
+          '../**/app',
+          '../**/pages',
+          '../**/features',
+          '../**/entities',
+          '../**/shared',
+        ],
+      },
+    ],
   },
 ];
