@@ -17,6 +17,31 @@ export default [
       prettier: prettierPlugin,
       import: importPlugin,
     },
+    languageOptions: {
+      parser: vueParser,
+      parserOptions: {
+        parser: tseslint.parser,
+      },
+      globals: {
+        document: 'readonly',
+        window: 'readonly',
+      },
+    },
+    settings: {
+      'import/resolver': {
+        alias: {
+          map: [
+            ['app', './src/app'],
+            ['pages', './src/pages'],
+            ['widgets', './src/widgets'],
+            ['features', './src/features'],
+            ['entities', './src/entities'],
+            ['shared', './src/shared'],
+          ],
+          extensions: ['.js', '.ts', '.jsx', '.tsx', '.vue', '.json'],
+        },
+      },
+    },
     rules: {
       'prettier/prettier': 'error',
       'import/order': [
@@ -34,16 +59,6 @@ export default [
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-    },
-    languageOptions: {
-      parser: vueParser,
-      parserOptions: {
-        parser: tseslint.parser,
-      },
-      globals: {
-        document: 'readonly',
-        window: 'readonly',
-      },
     },
   },
 ];

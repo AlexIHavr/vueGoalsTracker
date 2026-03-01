@@ -12,13 +12,13 @@ import Message from 'primevue/message';
 import Password from 'primevue/password';
 import { reactive, ref } from 'vue';
 
+import { auth } from 'app/firebase';
+
 import AuthField from './components/AuthField.vue';
 import { authResolver } from './utils/authResolver';
 
 import type { AuthFormFields } from './interfaces/authFormFields';
 import type { FirebaseError } from 'firebase/app';
-
-import { auth } from '@/app/firebase';
 
 const form = reactive<AuthFormFields>({
   email: '',
