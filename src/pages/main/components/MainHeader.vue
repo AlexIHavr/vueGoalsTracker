@@ -28,7 +28,7 @@ const handleLogout = async () => {
   } catch (error) {
     toast.add({
       severity: 'error',
-      summary: 'Logout error',
+      summary: 'Ошибка при выходе',
       detail: (error as Error).message,
     });
   } finally {
