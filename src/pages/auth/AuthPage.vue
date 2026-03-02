@@ -15,7 +15,6 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { auth } from 'shared/api';
 import { ROUTES_PATHS } from 'shared/consts';
-import { useNotification } from 'shared/hooks';
 
 import AuthField from './components/AuthField.vue';
 import { authResolver } from './utils/authResolver';
@@ -33,15 +32,9 @@ const isLoading = ref<boolean>(false);
 
 const route = useRoute();
 const router = useRouter();
-const toast = useNotification();
 
-const successAuth = (message: string) => {
+const successAuthRedirect = () => {
   let redirectPath = (route.query.redirect ?? ROUTES_PATHS.MAIN) as string;
-
-  toast.add({
-    severity: 'success',
-    summary: message,
-  });
 
   router.push(redirectPath);
 };
@@ -57,7 +50,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
   try {
     await signInWithEmailAndPassword(auth, form.email, form.password);
 
-    successAuth('Вы успешно вошли');
+    successAuthRedirect();
   } catch (err) {
     const firebaseError = err as FirebaseError;
 
@@ -65,7 +58,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
       try {
         await createUserWithEmailAndPassword(auth, form.email, form.password);
 
-        successAuth('Вы успешно зарегистрировались');
+        successAuthRedirect();
       } catch (createErr) {
         const createError = createErr as FirebaseError;
 
