@@ -121,7 +121,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
             label="Продолжить"
             icon="pi pi-user"
             :loading="isLoading"
-            :disabled="!$form.valid"
+            :disabled="!$form.valid || isLoading"
           />
         </Form>
 

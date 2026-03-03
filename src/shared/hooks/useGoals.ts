@@ -4,32 +4,43 @@ import {
   updateDoc,
   doc,
   deleteDoc,
+  query,
+  where,
 } from 'firebase/firestore';
-import { useCollection, useDocument } from 'vuefire';
+import { useCollection, useCurrentUser, useDocument } from 'vuefire';
 
 import { db } from 'shared/api';
 import { COLLECTIONS_NAMES } from 'shared/consts';
 
-interface GoalSettings {
+interface GoalFields {
   title: string;
   description?: string;
 }
 
+const USER_ID = 'userId';
+
 export function useGoals() {
+  const user = useCurrentUser();
+
   const goalsCollection = collection(db, COLLECTIONS_NAMES.GOALS);
 
-  const data = useCollection(goalsCollection);
+  const data = useCollection(
+    query(goalsCollection, where(USER_ID, '==', user.value?.uid))
+  );
 
-  const createGoals = async (itemData: GoalSettings[]) => {
+  const createGoal = async (goal: GoalFields) => {
+    if (!user.value) return;
+
     return await addDoc(goalsCollection, {
-      ...itemData,
+      ...goal,
+      userId: user.value.uid,
       createdAt: new Date(),
     });
   };
 
-  const updateGoal = async (id: string, itemData: GoalSettings[]) => {
+  const updateGoal = async (id: string, goal: GoalFields) => {
     return await updateDoc(doc(db, COLLECTIONS_NAMES.GOALS, id), {
-      ...itemData,
+      ...goal,
       updatedAt: new Date(),
     });
   };
@@ -44,7 +55,7 @@ export function useGoals() {
 
   return {
     data,
-    createGoals,
+    createGoal,
     updateGoal,
     removeGoal,
     getGoal,

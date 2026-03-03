@@ -13,7 +13,7 @@ const goalsTitle = ref<string>('');
 const goalsDescription = ref<string>('');
 const isLoading = ref<boolean>(false);
 
-const { createGoals } = useGoals();
+const { createGoal } = useGoals();
 const toast = useNotification();
 
 const handleShowDialog = () => {
@@ -29,10 +29,13 @@ const resetDialog = () => {
 const handleCreateGoals = async () => {
   isLoading.value = true;
 
+  await Promise.resolve(setTimeout(() => {}, 3000));
+
   try {
-    await createGoals([
-      { title: goalsTitle.value, description: goalsDescription.value },
-    ]);
+    await createGoal({
+      title: goalsTitle.value,
+      description: goalsDescription.value,
+    });
 
     resetDialog();
   } catch (error) {
@@ -79,8 +82,9 @@ const handleCreateGoals = async () => {
       <div class="confirm-button">
         <Button
           label="Подтвердить"
-          :icon="'pi ' + (isLoading ? 'pi-spinner' : 'pi-check')"
+          icon="pi pi-check"
           raised
+          :loading="isLoading"
           :disabled="!goalsTitle || isLoading"
           @click="handleCreateGoals"
         />
