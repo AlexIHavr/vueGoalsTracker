@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import Form, { type FormSubmitEvent } from '@primevue/forms/form';
-import FormField from '@primevue/forms/formfield';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
-import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
 import { reactive, ref } from 'vue';
 
+import { BaseFormField } from 'features/BaseFormField';
 import { useGoals, useNotification } from 'shared/hooks';
 
 import { createGoalsResolver } from '../utils/createGoalsResolver';
@@ -84,48 +82,26 @@ const handleCreateGoals = async ({ valid }: FormSubmitEvent) => {
         :resolver="createGoalsResolver"
         @submit="handleCreateGoals"
       >
-        <FormField v-slot="$field" name="title">
-          <FloatLabel variant="on">
-            <InputText
-              id="goals-title"
-              v-model="createGoalsForm.title"
-              size="large"
-              fluid
-            />
-            <label for="goals-title">Название</label>
-          </FloatLabel>
+        <BaseFormField field-name="title">
+          <InputText
+            id="goals-title"
+            v-model="createGoalsForm.title"
+            size="large"
+            fluid
+          />
+          <label for="goals-title">Название</label>
+        </BaseFormField>
 
-          <Message
-            v-if="$field?.invalid"
-            severity="error"
-            size="small"
-            variant="simple"
-          >
-            {{ $field.error?.message }}
-          </Message>
-        </FormField>
-
-        <FormField v-slot="$field" name="description">
-          <FloatLabel variant="on">
-            <Textarea
-              id="goals-description"
-              v-model="createGoalsForm.description"
-              size="large"
-              class="goals-description"
-              fluid
-            />
-            <label for="goals-description">Описание</label>
-          </FloatLabel>
-
-          <Message
-            v-if="$field?.invalid"
-            severity="error"
-            size="small"
-            variant="simple"
-          >
-            {{ $field.error?.message }}
-          </Message>
-        </FormField>
+        <BaseFormField field-name="description">
+          <Textarea
+            id="goals-description"
+            v-model="createGoalsForm.description"
+            size="large"
+            class="goals-description"
+            fluid
+          />
+          <label for="goals-description">Описание</label>
+        </BaseFormField>
 
         <Button
           type="submit"

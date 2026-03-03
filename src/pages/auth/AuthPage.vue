@@ -13,10 +13,10 @@ import Password from 'primevue/password';
 import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { BaseFormField } from 'features/BaseFormField';
 import { auth } from 'shared/api';
 import { ROUTES_PATHS } from 'shared/consts';
 
-import AuthField from './components/AuthField.vue';
 import { authResolver } from './utils/authResolver';
 
 import type { AuthFormFields } from './interfaces/authFormFields';
@@ -95,7 +95,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
           @submit="handleAuth"
         >
           <div class="inputs-group">
-            <AuthField field-name="email">
+            <BaseFormField field-name="email">
               <InputText
                 id="email"
                 v-model="authForm.email"
@@ -104,20 +104,19 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
                 fluid
               />
               <label for="email">Email</label>
-            </AuthField>
+            </BaseFormField>
 
-            <AuthField field-name="password">
+            <BaseFormField field-name="password">
               <Password
                 id="password"
                 v-model="authForm.password"
-                name="password"
                 size="large"
                 :feedback="false"
                 toggle-mask
                 fluid
               />
               <label for="password">Password</label>
-            </AuthField>
+            </BaseFormField>
           </div>
 
           <Button

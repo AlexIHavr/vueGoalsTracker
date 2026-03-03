@@ -3,10 +3,8 @@ import FormField from '@primevue/forms/formfield';
 import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
 
-import type { AuthFormFields } from '../interfaces/authFormFields';
-
 const { fieldName } = defineProps<{
-  fieldName: keyof AuthFormFields;
+  fieldName: string;
 }>();
 </script>
 

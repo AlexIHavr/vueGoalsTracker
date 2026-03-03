@@ -1,12 +1,10 @@
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { FormResolverOptions } from '@primevue/forms';
+import type { FormErrors } from 'shared/types';
 
 export const createGoalsResolver = ({ values }: FormResolverOptions) => {
   const { title, description } = values as CreateGoalsFormFields;
-  const errors = {} as Record<
-    keyof CreateGoalsFormFields,
-    { message: string }[]
-  >;
+  const errors = {} as FormErrors<CreateGoalsFormFields>;
 
   if (!title) {
     errors.title = [{ message: 'Название обязательно' }];
