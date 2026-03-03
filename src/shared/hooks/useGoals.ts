@@ -12,10 +12,7 @@ import { useCollection, useCurrentUser, useDocument } from 'vuefire';
 import { db } from 'shared/api';
 import { COLLECTIONS_NAMES } from 'shared/consts';
 
-interface GoalFields {
-  title: string;
-  description?: string;
-}
+import type { GoalDocument, GoalSettings } from 'shared/interfaces';
 
 const USER_ID = 'userId';
 
@@ -24,23 +21,23 @@ export function useGoals() {
 
   const goalsCollection = collection(db, COLLECTIONS_NAMES.GOALS);
 
-  const data = useCollection(
+  const data = useCollection<GoalDocument>(
     query(goalsCollection, where(USER_ID, '==', user.value?.uid))
   );
 
-  const createGoal = async (goal: GoalFields) => {
+  const createGoal = async (goalSettings: GoalSettings) => {
     if (!user.value) return;
 
     return await addDoc(goalsCollection, {
-      ...goal,
+      ...goalSettings,
       userId: user.value.uid,
       createdAt: new Date(),
     });
   };
 
-  const updateGoal = async (id: string, goal: GoalFields) => {
+  const updateGoal = async (id: string, goalSettings: GoalSettings) => {
     return await updateDoc(doc(db, COLLECTIONS_NAMES.GOALS, id), {
-      ...goal,
+      ...goalSettings,
       updatedAt: new Date(),
     });
   };
