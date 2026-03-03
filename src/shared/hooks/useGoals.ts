@@ -28,18 +28,25 @@ export function useGoals() {
   const createGoal = async (goalSettings: GoalSettings) => {
     if (!user.value) return;
 
-    return await addDoc(goalsCollection, {
+    const goalDoc: Omit<GoalDocument, 'id'> = {
       ...goalSettings,
       userId: user.value.uid,
       createdAt: new Date(),
-    });
+    };
+
+    return await addDoc(goalsCollection, goalDoc);
   };
 
-  const updateGoal = async (id: string, goalSettings: GoalSettings) => {
-    return await updateDoc(doc(db, COLLECTIONS_NAMES.GOALS, id), {
+  const updateGoal = async (
+    id: string,
+    goalSettings: Partial<GoalSettings>
+  ) => {
+    const goalDoc: Partial<GoalDocument> = {
       ...goalSettings,
       updatedAt: new Date(),
-    });
+    };
+
+    return await updateDoc(doc(db, COLLECTIONS_NAMES.GOALS, id), goalDoc);
   };
 
   const removeGoal = async (id: string) => {

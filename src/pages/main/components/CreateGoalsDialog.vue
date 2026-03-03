@@ -29,12 +29,13 @@ const resetDialog = () => {
 const handleCreateGoals = async () => {
   isLoading.value = true;
 
-  await Promise.resolve(setTimeout(() => {}, 3000));
-
   try {
     await createGoal({
       title: goalsTitle.value,
       description: goalsDescription.value,
+      startDate: new Date(2026, 0),
+      endDate: new Date(2026, 12, 0),
+      isCompleted: false,
     });
 
     resetDialog();

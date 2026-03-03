@@ -1,6 +1,9 @@
 export interface GoalSettings {
   title: string;
   description?: string;
+  startDate: Date;
+  endDate: Date;
+  isCompleted: boolean;
 }
 
 export interface GoalDocument extends GoalSettings {
