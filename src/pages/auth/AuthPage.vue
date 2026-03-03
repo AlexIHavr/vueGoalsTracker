@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Form, type FormSubmitEvent } from '@primevue/forms';
+import Form, { type FormSubmitEvent } from '@primevue/forms/form';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  AuthErrorCodes,
 } from 'firebase/auth';
-import { AuthErrorCodes } from 'firebase/auth';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import InputText from 'primevue/inputtext';
@@ -22,7 +22,7 @@ import { authResolver } from './utils/authResolver';
 import type { AuthFormFields } from './interfaces/authFormFields';
 import type { FirebaseError } from 'firebase/app';
 
-const form = reactive<AuthFormFields>({
+const authForm = reactive<AuthFormFields>({
   email: '',
   password: '',
 });
@@ -48,7 +48,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
   isLoading.value = true;
 
   try {
-    await signInWithEmailAndPassword(auth, form.email, form.password);
+    await signInWithEmailAndPassword(auth, authForm.email, authForm.password);
 
     successAuthRedirect();
   } catch (err) {
@@ -56,7 +56,11 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
 
     if (firebaseError.code === AuthErrorCodes.INVALID_LOGIN_CREDENTIALS) {
       try {
-        await createUserWithEmailAndPassword(auth, form.email, form.password);
+        await createUserWithEmailAndPassword(
+          auth,
+          authForm.email,
+          authForm.password
+        );
 
         successAuthRedirect();
       } catch (createErr) {
@@ -85,7 +89,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
       <template #content>
         <Form
           v-slot="$form"
-          :model="form"
+          :model="authForm"
           :resolver="authResolver"
           class="auth-form"
           @submit="handleAuth"
@@ -94,7 +98,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
             <AuthField field-name="email">
               <InputText
                 id="email"
-                v-model="form.email"
+                v-model="authForm.email"
                 size="large"
                 autocomplete="email"
                 fluid
@@ -105,7 +109,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
             <AuthField field-name="password">
               <Password
                 id="password"
-                v-model="form.password"
+                v-model="authForm.password"
                 name="password"
                 size="large"
                 :feedback="false"

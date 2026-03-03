@@ -1,16 +1,26 @@
 <script setup lang="ts">
+import Form, { type FormSubmitEvent } from '@primevue/forms/form';
+import FormField from '@primevue/forms/formfield';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
+import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 import { useGoals, useNotification } from 'shared/hooks';
 
+import { createGoalsResolver } from '../utils/createGoalsResolver';
+
+import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+
+const createGoalsForm = reactive<CreateGoalsFormFields>({
+  title: '',
+  description: '',
+});
+
 const isDialogVisible = ref(false);
-const goalsTitle = ref<string>('');
-const goalsDescription = ref<string>('');
 const isLoading = ref<boolean>(false);
 
 const { createGoal } = useGoals();
@@ -21,18 +31,23 @@ const handleShowDialog = () => {
 };
 
 const resetDialog = () => {
-  goalsTitle.value = '';
-  goalsDescription.value = '';
+  createGoalsForm.title = '';
+  createGoalsForm.description = '';
+
   isDialogVisible.value = false;
 };
 
-const handleCreateGoals = async () => {
+const handleCreateGoals = async ({ valid }: FormSubmitEvent) => {
+  if (!valid) {
+    return;
+  }
+
   isLoading.value = true;
 
   try {
     await createGoal({
-      title: goalsTitle.value,
-      description: goalsDescription.value,
+      title: createGoalsForm.title,
+      description: createGoalsForm.description,
       startDate: new Date(2026, 0),
       endDate: new Date(2026, 12, 0),
       isCompleted: false,
@@ -63,34 +78,65 @@ const handleCreateGoals = async () => {
       <h2 class="goals-header">Создать цели</h2>
     </template>
     <div class="goals-content">
-      <FloatLabel variant="on">
-        <InputText id="goals-title" v-model="goalsTitle" size="large" fluid />
-        <label for="goals-title">Название</label>
-      </FloatLabel>
+      <Form
+        v-slot="$form"
+        :model="createGoalsForm"
+        :resolver="createGoalsResolver"
+        @submit="handleCreateGoals"
+      >
+        <FormField v-slot="$field" name="title">
+          <FloatLabel variant="on">
+            <InputText
+              id="goals-title"
+              v-model="createGoalsForm.title"
+              size="large"
+              fluid
+            />
+            <label for="goals-title">Название</label>
+          </FloatLabel>
 
-      <FloatLabel variant="on">
-        <Textarea
-          id="goals-description"
-          v-model="goalsDescription"
-          size="large"
-          class="goals-description"
-          fluid
-        />
-        <label for="goals-description">Описание</label>
-      </FloatLabel>
-    </div>
-    <template #footer>
-      <div class="confirm-button">
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple"
+          >
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
+
+        <FormField v-slot="$field" name="description">
+          <FloatLabel variant="on">
+            <Textarea
+              id="goals-description"
+              v-model="createGoalsForm.description"
+              size="large"
+              class="goals-description"
+              fluid
+            />
+            <label for="goals-description">Описание</label>
+          </FloatLabel>
+
+          <Message
+            v-if="$field?.invalid"
+            severity="error"
+            size="small"
+            variant="simple"
+          >
+            {{ $field.error?.message }}
+          </Message>
+        </FormField>
+
         <Button
+          type="submit"
           label="Подтвердить"
           icon="pi pi-check"
           raised
           :loading="isLoading"
-          :disabled="!goalsTitle || isLoading"
-          @click="handleCreateGoals"
+          :disabled="!$form.valid || isLoading"
         />
-      </div>
-    </template>
+      </Form>
+    </div>
   </Dialog>
 </template>
 
@@ -110,9 +156,5 @@ const handleCreateGoals = async () => {
 .goals-description {
   height: 100px;
   resize: none;
-}
-
-.confirm-button {
-  margin: 0 auto;
 }
 </style>
