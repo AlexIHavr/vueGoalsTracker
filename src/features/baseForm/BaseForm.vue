@@ -43,6 +43,7 @@ const handleFormSubmit = async (event: FormSubmitEvent) => {
 
     <Button
       type="submit"
+      raised
       :label="submitButtonLabel"
       :icon="'pi ' + submitButtonIcon"
       :loading="isLoading"

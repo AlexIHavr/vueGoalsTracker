@@ -1,0 +1,24 @@
+:root {
+  --background-color-primary: #cfdace;
+
+  .p-card {
+    --p-card-background: #e9ffe8;
+  }
+}
+
+.dark-theme {
+  --background-color-primary: #4b4b4b;
+
+  .p-card {
+    --p-card-background: #1f2126;
+  }
+}
+
+html {
+  font-family: Inter, sans-serif;
+  background-color: var(--background-color-primary);
+}
+
+body {
+  overflow-wrap: break-word;
+}

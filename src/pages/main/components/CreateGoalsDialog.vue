@@ -47,12 +47,15 @@ const handleCreateGoals = async () => {
 </script>
 
 <template>
-  <Button
-    label="Добавить цели"
-    icon="pi pi-plus"
-    raised
-    @click="handleShowDialog"
-  />
+  <div>
+    <Button
+      label="Добавить цели"
+      icon="pi pi-plus"
+      raised
+      @click="handleShowDialog"
+    />
+  </div>
+
   <Dialog v-model:visible="isDialogVisible" modal>
     <template #header>
       <h2 class="goals-header">Создать цели</h2>
