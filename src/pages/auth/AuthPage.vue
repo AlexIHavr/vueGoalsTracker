@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import Form, { type FormSubmitEvent } from '@primevue/forms/form';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   AuthErrorCodes,
 } from 'firebase/auth';
-import Button from 'primevue/button';
 import Card from 'primevue/card';
 import InputText from 'primevue/inputtext';
-import Message from 'primevue/message';
 import Password from 'primevue/password';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { BaseFormField } from 'features/BaseFormField';
+import { BaseForm, type BaseFormEvent } from 'features/baseForm';
+import { BaseFormField } from 'features/baseFormField';
 import { auth } from 'shared/api';
 import { ROUTES_PATHS } from 'shared/consts';
 
@@ -27,9 +25,6 @@ const authForm = reactive<AuthFormFields>({
   password: '',
 });
 
-const submitError = ref<string | null>(null);
-const isLoading = ref<boolean>(false);
-
 const route = useRoute();
 const router = useRouter();
 
@@ -39,14 +34,7 @@ const successAuthRedirect = () => {
   router.push(redirectPath);
 };
 
-const handleAuth = async ({ valid }: FormSubmitEvent) => {
-  if (!valid) {
-    return;
-  }
-
-  submitError.value = null;
-  isLoading.value = true;
-
+const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
   try {
     await signInWithEmailAndPassword(auth, authForm.email, authForm.password);
 
@@ -67,16 +55,14 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
         const createError = createErr as FirebaseError;
 
         if (createError.code === AuthErrorCodes.EMAIL_EXISTS) {
-          submitError.value = 'Неверный пароль';
+          submitErrorMessage.value = 'Неверный пароль';
         } else {
-          submitError.value = createError.message;
+          submitErrorMessage.value = createError.message;
         }
       }
     } else {
-      submitError.value = firebaseError.message;
+      submitErrorMessage.value = firebaseError.message;
     }
-  } finally {
-    isLoading.value = false;
   }
 };
 </script>
@@ -87,12 +73,13 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
       <template #title>Вход / Регистрация</template>
 
       <template #content>
-        <Form
-          v-slot="$form"
+        <BaseForm
+          submit-button-label="Продолжить"
+          submit-button-icon="pi-user"
           :model="authForm"
           :resolver="authResolver"
           class="auth-form"
-          @submit="handleAuth"
+          :form-submit="handleAuth"
         >
           <div class="inputs-group">
             <BaseFormField field-name="email">
@@ -118,19 +105,7 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
               <label for="password">Password</label>
             </BaseFormField>
           </div>
-
-          <Button
-            type="submit"
-            label="Продолжить"
-            icon="pi pi-user"
-            :loading="isLoading"
-            :disabled="!$form.valid || isLoading"
-          />
-        </Form>
-
-        <Message v-if="submitError" severity="error">
-          {{ submitError }}
-        </Message>
+        </BaseForm>
       </template>
     </Card>
   </div>
@@ -146,7 +121,6 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 15px;
 }
 
 .inputs-group {
