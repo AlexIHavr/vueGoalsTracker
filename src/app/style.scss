@@ -3,6 +3,10 @@
 
   .p-card {
     --p-card-background: #e9ffe8;
+
+    &.completed {
+      --p-card-background: #c3ffb2;
+    }
   }
 }
 
@@ -11,6 +15,10 @@
 
   .p-card {
     --p-card-background: #1f2126;
+
+    &.completed {
+      --p-card-background: #14450d;
+    }
   }
 }
 
