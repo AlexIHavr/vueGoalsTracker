@@ -2,10 +2,20 @@
   --background-color-primary: #cfdace;
 
   .p-card {
-    --p-card-background: #e9ffe8;
+    &.to-do {
+      --p-card-background: #f5fff4;
+    }
+
+    &.in-progress {
+      --p-card-background: #e9ffe8;
+    }
 
     &.completed {
       --p-card-background: #c3ffb2;
+    }
+
+    &.expired {
+      --p-card-background: #fb979f;
     }
   }
 }
@@ -14,10 +24,20 @@
   --background-color-primary: #4b4b4b;
 
   .p-card {
-    --p-card-background: #1f2126;
+    &.to-do {
+      --p-card-background: #35383f;
+    }
+
+    &.in-progress {
+      --p-card-background: #212429;
+    }
 
     &.completed {
       --p-card-background: #14450d;
+    }
+
+    &.expired {
+      --p-card-background: #570007;
     }
   }
 }
