@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FormField } from '@primevue/forms';
+import FormField from '@primevue/forms/formfield';
 import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
 
@@ -19,8 +19,9 @@ const { fieldName } = defineProps<{
       severity="error"
       size="small"
       variant="simple"
-      >{{ $field.error?.message }}</Message
     >
+      {{ $field.error?.message }}
+    </Message>
   </FormField>
 </template>
 

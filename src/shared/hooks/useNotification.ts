@@ -2,11 +2,19 @@ import { useToast } from 'primevue/usetoast';
 
 import type { ToastMessageOptions } from 'primevue';
 
+const DEFAULT_LIFE_TIME = 3000;
+
 export function useNotification() {
   const toast = useToast();
 
   const add = (toastOptions: ToastMessageOptions) => {
-    toast.add({ ...toastOptions, life: toastOptions.life ?? 3000 });
+    const lifeTime =
+      toastOptions.severity !== 'error' ? DEFAULT_LIFE_TIME : undefined;
+
+    toast.add({
+      ...toastOptions,
+      life: toastOptions.life ?? lifeTime,
+    });
   };
 
   return { add };

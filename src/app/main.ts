@@ -10,7 +10,7 @@ import App from './App.vue';
 import { router } from './router';
 
 import 'primeicons/primeicons.css';
-import './style.css';
+import './style.scss';
 
 const app = createApp(App);
 

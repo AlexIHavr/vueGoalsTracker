@@ -1,9 +1,10 @@
 import type { AuthFormFields } from '../interfaces/authFormFields';
 import type { FormResolverOptions } from '@primevue/forms';
+import type { FormErrors } from 'shared/types';
 
 export const authResolver = ({ values }: FormResolverOptions) => {
   const { email, password } = values as AuthFormFields;
-  const errors = {} as Record<keyof AuthFormFields, { message: string }[]>;
+  const errors = {} as FormErrors<AuthFormFields>;
 
   if (!email) {
     errors.email = [{ message: 'Email обязателен' }];

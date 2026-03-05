@@ -1,85 +1,68 @@
 <script setup lang="ts">
-import { Form, type FormSubmitEvent } from '@primevue/forms';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  AuthErrorCodes,
 } from 'firebase/auth';
-import { AuthErrorCodes } from 'firebase/auth';
-import Button from 'primevue/button';
 import Card from 'primevue/card';
 import InputText from 'primevue/inputtext';
-import Message from 'primevue/message';
 import Password from 'primevue/password';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { BaseForm, type BaseFormEvent } from 'features/baseForm';
+import { BaseFormField } from 'features/baseFormField';
 import { auth } from 'shared/api';
 import { ROUTES_PATHS } from 'shared/consts';
-import { useNotification } from 'shared/hooks';
 
-import AuthField from './components/AuthField.vue';
 import { authResolver } from './utils/authResolver';
 
 import type { AuthFormFields } from './interfaces/authFormFields';
 import type { FirebaseError } from 'firebase/app';
 
-const form = reactive<AuthFormFields>({
+const authForm = reactive<AuthFormFields>({
   email: '',
   password: '',
 });
 
-const submitError = ref<string | null>(null);
-const isLoading = ref<boolean>(false);
-
 const route = useRoute();
 const router = useRouter();
-const toast = useNotification();
 
-const successAuth = (message: string) => {
+const successAuthRedirect = () => {
   let redirectPath = (route.query.redirect ?? ROUTES_PATHS.MAIN) as string;
-
-  toast.add({
-    severity: 'success',
-    summary: message,
-  });
 
   router.push(redirectPath);
 };
 
-const handleAuth = async ({ valid }: FormSubmitEvent) => {
-  if (!valid) {
-    return;
-  }
-
-  submitError.value = null;
-  isLoading.value = true;
-
+const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
   try {
-    await signInWithEmailAndPassword(auth, form.email, form.password);
+    await signInWithEmailAndPassword(auth, authForm.email, authForm.password);
 
-    successAuth('Вы успешно вошли');
+    successAuthRedirect();
   } catch (err) {
     const firebaseError = err as FirebaseError;
 
     if (firebaseError.code === AuthErrorCodes.INVALID_LOGIN_CREDENTIALS) {
       try {
-        await createUserWithEmailAndPassword(auth, form.email, form.password);
+        await createUserWithEmailAndPassword(
+          auth,
+          authForm.email,
+          authForm.password
+        );
 
-        successAuth('Вы успешно зарегистрировались');
+        successAuthRedirect();
       } catch (createErr) {
         const createError = createErr as FirebaseError;
 
         if (createError.code === AuthErrorCodes.EMAIL_EXISTS) {
-          submitError.value = 'Неверный пароль';
+          submitErrorMessage.value = 'Неверный пароль';
         } else {
-          submitError.value = createError.message;
+          submitErrorMessage.value = createError.message;
         }
       }
     } else {
-      submitError.value = firebaseError.message;
+      submitErrorMessage.value = firebaseError.message;
     }
-  } finally {
-    isLoading.value = false;
   }
 };
 </script>
@@ -90,51 +73,39 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
       <template #title>Вход / Регистрация</template>
 
       <template #content>
-        <Form
-          v-slot="$form"
-          :model="form"
+        <BaseForm
+          submit-button-label="Продолжить"
+          submit-button-icon="pi-user"
+          :model="authForm"
           :resolver="authResolver"
           class="auth-form"
-          @submit="handleAuth"
+          :form-submit="handleAuth"
         >
           <div class="inputs-group">
-            <AuthField field-name="email">
+            <BaseFormField field-name="email">
               <InputText
                 id="email"
-                v-model="form.email"
+                v-model="authForm.email"
                 size="large"
                 autocomplete="email"
                 fluid
               />
               <label for="email">Email</label>
-            </AuthField>
+            </BaseFormField>
 
-            <AuthField field-name="password">
+            <BaseFormField field-name="password">
               <Password
                 id="password"
-                v-model="form.password"
-                name="password"
+                v-model="authForm.password"
                 size="large"
                 :feedback="false"
                 toggle-mask
                 fluid
               />
               <label for="password">Password</label>
-            </AuthField>
+            </BaseFormField>
           </div>
-
-          <Button
-            type="submit"
-            label="Продолжить"
-            icon="pi pi-user"
-            :loading="isLoading"
-            :disabled="!$form.valid"
-          />
-        </Form>
-
-        <Message v-if="submitError" severity="error">
-          {{ submitError }}
-        </Message>
+        </BaseForm>
       </template>
     </Card>
   </div>
@@ -150,7 +121,6 @@ const handleAuth = async ({ valid }: FormSubmitEvent) => {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 15px;
 }
 
 .inputs-group {

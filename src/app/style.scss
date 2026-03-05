@@ -1,0 +1,73 @@
+:root {
+  --background-color-primary: #cfdace;
+
+  .to-do {
+    &.p-card {
+      --p-card-background: #e4e7ff;
+    }
+  }
+
+  .in-progress {
+    &.p-card {
+      --p-card-background: #e3ffe2;
+    }
+  }
+
+  .completed {
+    &.p-card {
+      --p-card-background: #c3ffb2;
+    }
+  }
+
+  .expired {
+    &.p-card {
+      --p-card-background: #fb979f;
+    }
+  }
+}
+
+.dark-theme {
+  --background-color-primary: #4b4b4b;
+
+  .to-do {
+    &.p-card {
+      --p-card-background: #1e2433;
+    }
+  }
+
+  .in-progress {
+    &.p-card {
+      --p-card-background: #1f4919;
+    }
+  }
+
+  .completed {
+    &.p-card {
+      --p-card-background: #0e270a;
+    }
+  }
+
+  .expired {
+    &.p-card {
+      --p-card-background: #420f13;
+    }
+  }
+}
+
+html {
+  font-family: Inter, sans-serif;
+  background-color: var(--background-color-primary);
+}
+
+body {
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
