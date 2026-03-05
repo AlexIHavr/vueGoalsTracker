@@ -5,7 +5,9 @@ import CreateGoalsDialog from './components/CreateGoalsDialog.vue';
 import GoalsBoard from './components/GoalsBoard.vue';
 import MainHeader from './components/MainHeader.vue';
 
-const { pending } = useGoals();
+const {
+  data: { pending },
+} = useGoals();
 </script>
 
 <template>

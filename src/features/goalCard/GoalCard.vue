@@ -6,16 +6,17 @@ import { computed } from 'vue';
 import { useGoals } from 'shared/hooks';
 
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
+import { getGoalStatus } from './utils/getGoalStatus';
 
-import type { GoalData } from 'shared/interfaces';
+import type { GoalDocument } from 'shared/interfaces';
 
 const { goal } = defineProps<{
-  goal: GoalData;
+  goal: GoalDocument;
 }>();
 
 const { updateGoal, removeGoal } = useGoals();
 
-const goalStatus = computed(() => goal.status);
+const goalStatus = computed(() => getGoalStatus(goal));
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);
 
@@ -25,28 +26,31 @@ const handleCompleteGoal = () => {
 </script>
 
 <template>
-  <Card :class="['goal-card', goal.status]">
+  <Card :class="['goal-card', goalStatus]">
     <template #title>
       <div class="title-buttons-wrapper">
-        <h3 class="goal-title">{{ goal.title }}</h3>
+        <h3>{{ goal.title }}</h3>
         <Button
-          :icon="goalAttrs.titleStatusIcon"
+          :icon="goalAttrs.statusIcon"
           rounded
-          variant="outlined"
           aria-label="status"
+          :severity="goalAttrs.buttonSeverity"
+          size="small"
           @click="handleCompleteGoal()"
         />
       </div>
     </template>
-    <template #content>{{ goal.description }}</template>
+    <template #content>
+      <h4>{{ goal.description }}</h4>
+    </template>
     <template #footer>
       <div class="footer-buttons-wrapper">
         <Button
-          :icon="goalAttrs.completeButtonStatusIcon"
+          :icon="goalAttrs.statusIcon"
           :label="goalAttrs.completeButtonLabel"
-          severity="success"
           raised
           fluid
+          :severity="goalAttrs.buttonSeverity"
           @click="handleCompleteGoal()"
         />
         <Button
@@ -62,10 +66,6 @@ const handleCompleteGoal = () => {
 </template>
 
 <style lang="scss">
-.goal-title {
-  margin: 0;
-}
-
 .goal-card {
   width: 300px;
   min-width: 300px;

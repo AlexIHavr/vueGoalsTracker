@@ -8,15 +8,12 @@ import {
   where,
   Timestamp,
 } from 'firebase/firestore';
-import { computed, type ComputedRef } from 'vue';
 import { useCollection, useCurrentUser, useDocument } from 'vuefire';
 
 import { db } from 'shared/api';
 import { COLLECTIONS_NAMES } from 'shared/consts';
-import { getCurrentGoalStatus } from 'shared/utils';
 
 import type {
-  GoalData,
   GoalDocument,
   GoalSettings,
   GoalSettingsParams,
@@ -31,14 +28,6 @@ export function useGoals() {
 
   const data = useCollection<GoalDocument>(
     query(goalsCollection, where(USER_ID, '==', user.value?.uid))
-  );
-
-  const goalsData: ComputedRef<GoalData[]> = computed(() =>
-    data.value.map((goal) => ({
-      ...goal,
-      id: goal.id,
-      status: getCurrentGoalStatus(goal),
-    }))
   );
 
   const createGoal = async (goalSettings: GoalSettingsParams) => {
@@ -84,8 +73,7 @@ export function useGoals() {
   };
 
   return {
-    ...data,
-    data: goalsData,
+    data,
     createGoal,
     updateGoal,
     removeGoal,

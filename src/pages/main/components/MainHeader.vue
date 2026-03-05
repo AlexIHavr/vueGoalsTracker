@@ -58,13 +58,13 @@ const handleToggleTheme = () => {
     <Button
       :label="isDarkTheme ? 'Светлая тема' : 'Темная тема'"
       icon="pi pi-sync"
-      severity="info"
+      severity="contrast"
       raised
       @click="handleToggleTheme"
     />
-    <Message class="welcome-message" severity="secondary"
-      >Добро пожаловать {{ user?.email }}</Message
-    >
+    <Message class="welcome-message" severity="secondary">
+      <h4>Добро пожаловать {{ user?.email }}</h4>
+    </Message>
   </header>
 </template>
 

@@ -1,6 +1,4 @@
 import type { Timestamp } from 'firebase/firestore';
-import type { GOAL_STATUSES } from 'shared/consts';
-import type { ValueOf } from 'shared/types';
 
 export interface GoalSettings {
   title: string;
@@ -23,8 +21,4 @@ export interface GoalDocument extends GoalSettings {
   userId: string;
   createdAt: Timestamp;
   updatedAt?: Timestamp;
-}
-
-export interface GoalData extends GoalDocument {
-  status: ValueOf<typeof GOAL_STATUSES>;
 }

@@ -3,7 +3,7 @@ import { GOAL_STATUSES } from '../consts/goalStatuses';
 import type { GoalDocument } from 'shared/interfaces';
 import type { ValueOf } from 'shared/types';
 
-export const getCurrentGoalStatus = ({
+export const getGoalStatus = ({
   isCompleted,
   startDate,
   endDate,

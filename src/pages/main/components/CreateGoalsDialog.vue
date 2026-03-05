@@ -58,7 +58,7 @@ const handleCreateGoals = async () => {
 
   <Dialog v-model:visible="isDialogVisible" modal>
     <template #header>
-      <h2 class="goals-header">Создать цели</h2>
+      <h2>Создать цели</h2>
     </template>
     <BaseForm
       submit-button-label="Создать"
@@ -93,10 +93,6 @@ const handleCreateGoals = async () => {
 </template>
 
 <style lang="scss">
-.goals-header {
-  margin: 0;
-}
-
 .create-goals-form {
   display: flex;
   flex-direction: column;

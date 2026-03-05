@@ -1,43 +1,45 @@
 import { reactive, watchEffect, type ComputedRef } from 'vue';
 
-import { GOAL_STATUSES } from 'shared/consts';
+import { GOAL_STATUSES } from '../consts/goalStatuses';
+
+import type { ButtonProps } from 'primevue/button';
 
 export function useGoalStatusAttrs(status: ComputedRef<string>) {
   const goalAttrs = reactive<{
-    titleStatusIcon: string;
-    completeButtonStatusIcon: string;
+    statusIcon: string;
     completeButtonLabel: string;
+    buttonSeverity: ButtonProps['severity'];
   }>({
-    titleStatusIcon: '',
-    completeButtonStatusIcon: '',
+    statusIcon: '',
     completeButtonLabel: '',
+    buttonSeverity: '',
   });
 
   watchEffect(() => {
     switch (status.value) {
       case GOAL_STATUSES.COMPLETED:
-        goalAttrs.titleStatusIcon = 'pi pi-check';
-        goalAttrs.completeButtonStatusIcon = 'pi pi-check-circle';
+        goalAttrs.statusIcon = 'pi pi-check';
         goalAttrs.completeButtonLabel = 'Выполнено';
+        goalAttrs.buttonSeverity = 'success';
         break;
 
       case GOAL_STATUSES.EXPIRED:
-        goalAttrs.titleStatusIcon = 'pi pi-times';
-        goalAttrs.completeButtonStatusIcon = 'pi pi-times';
+        goalAttrs.statusIcon = 'pi pi-clock';
         goalAttrs.completeButtonLabel = 'Срок истек';
+        goalAttrs.buttonSeverity = 'danger';
         break;
 
       case GOAL_STATUSES.IN_PROGRESS:
-        goalAttrs.titleStatusIcon = 'pi pi-circle-fill';
-        goalAttrs.completeButtonStatusIcon = 'pi pi-circle';
+        goalAttrs.statusIcon = 'pi pi-circle';
         goalAttrs.completeButtonLabel = 'Выполнить';
+        goalAttrs.buttonSeverity = '';
         break;
 
       case GOAL_STATUSES.TO_DO:
       default:
-        goalAttrs.titleStatusIcon = 'pi pi-bookmark';
-        goalAttrs.completeButtonStatusIcon = 'pi pi-bookmark';
+        goalAttrs.statusIcon = 'pi pi-bookmark';
         goalAttrs.completeButtonLabel = 'К выполнению';
+        goalAttrs.buttonSeverity = 'info';
         break;
     }
   });
