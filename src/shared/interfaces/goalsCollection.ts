@@ -1,14 +1,30 @@
+import type { Timestamp } from 'firebase/firestore';
+import type { GOAL_STATUSES } from 'shared/consts';
+import type { ValueOf } from 'shared/types';
+
 export interface GoalSettings {
   title: string;
   description?: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Timestamp;
+  endDate: Timestamp;
   isCompleted: boolean;
 }
 
+export interface GoalSettingsParams extends Omit<
+  GoalSettings,
+  'startDate' | 'endDate'
+> {
+  startDate: Date;
+  endDate: Date;
+}
+
 export interface GoalDocument extends GoalSettings {
-  id: string;
+  readonly id: string;
   userId: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: Timestamp;
+  updatedAt?: Timestamp;
+}
+
+export interface GoalData extends GoalDocument {
+  status: ValueOf<typeof GOAL_STATUSES>;
 }

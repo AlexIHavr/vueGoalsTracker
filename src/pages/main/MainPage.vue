@@ -5,13 +5,11 @@ import CreateGoalsDialog from './components/CreateGoalsDialog.vue';
 import GoalsBoard from './components/GoalsBoard.vue';
 import MainHeader from './components/MainHeader.vue';
 
-const { data } = useGoals();
-
-const isLoading = data.pending;
+const { pending } = useGoals();
 </script>
 
 <template>
-  <div v-if="!isLoading" class="main-page">
+  <div v-if="!pending" class="main-page">
     <MainHeader />
     <CreateGoalsDialog />
     <GoalsBoard />

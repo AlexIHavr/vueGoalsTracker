@@ -2,13 +2,65 @@
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 
+import { GOAL_STATUSES } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 
-import type { GoalDocument } from 'shared/interfaces';
+import type { GoalData } from 'shared/interfaces';
 
 const { data, updateGoal, removeGoal } = useGoals();
 
-const handleCompleteGoal = ({ id, isCompleted }: GoalDocument) => {
+const getTitleStatusIcon = ({ status }: GoalData) => {
+  switch (status) {
+    case GOAL_STATUSES.COMPLETED:
+      return 'pi pi-check';
+
+    case GOAL_STATUSES.EXPIRED:
+      return 'pi pi-times';
+
+    case GOAL_STATUSES.IN_PROGRESS:
+      return 'pi pi-circle-fill';
+
+    case GOAL_STATUSES.TO_DO:
+    default:
+      return 'pi pi-bookmark';
+  }
+};
+
+const getCompleteButtonStatusIcon = ({ status }: GoalData) => {
+  switch (status) {
+    case GOAL_STATUSES.COMPLETED:
+      return 'pi pi-check-circle';
+
+    case GOAL_STATUSES.EXPIRED:
+      return 'pi pi-times';
+
+    case GOAL_STATUSES.IN_PROGRESS:
+      return 'pi pi-circle';
+
+    case GOAL_STATUSES.TO_DO:
+    default:
+      return 'pi pi-bookmark';
+  }
+};
+
+const getCompleteButtonLabel = ({ status }: GoalData) => {
+  switch (status) {
+    case GOAL_STATUSES.COMPLETED:
+      return 'Выполнено';
+
+    case GOAL_STATUSES.EXPIRED:
+      return 'Срок истек';
+
+    case GOAL_STATUSES.IN_PROGRESS:
+      return 'Выполнить';
+
+    case GOAL_STATUSES.TO_DO:
+    default:
+      return 'К выполнению';
+  }
+};
+
+const handleCompleteGoal = ({ id, isCompleted }: GoalData) => {
   updateGoal(id, { isCompleted: !isCompleted });
 };
 </script>
@@ -20,7 +72,7 @@ const handleCompleteGoal = ({ id, isCompleted }: GoalDocument) => {
         <div class="title-buttons-wrapper">
           <h3 class="goal-title">{{ goal.title }}</h3>
           <Button
-            :icon="'pi ' + (goal.isCompleted ? 'pi-check' : 'pi-circle-fill')"
+            :icon="getTitleStatusIcon(goal)"
             rounded
             variant="outlined"
             aria-label="status"
@@ -32,8 +84,8 @@ const handleCompleteGoal = ({ id, isCompleted }: GoalDocument) => {
       <template #footer>
         <div class="footer-buttons-wrapper">
           <Button
-            :icon="'pi ' + (goal.isCompleted ? 'pi-check-circle' : 'pi-circle')"
-            :label="goal.isCompleted ? 'Выполнено' : 'Выполнить'"
+            :icon="getCompleteButtonStatusIcon(goal)"
+            :label="getCompleteButtonLabel(goal)"
             severity="success"
             raised
             fluid

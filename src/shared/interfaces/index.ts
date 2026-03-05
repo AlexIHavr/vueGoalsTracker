@@ -1,1 +1,6 @@
-export type { GoalDocument, GoalSettings } from './goalsCollection';
+export type {
+  GoalDocument,
+  GoalSettings,
+  GoalSettingsParams,
+  GoalData,
+} from './goalsCollection';

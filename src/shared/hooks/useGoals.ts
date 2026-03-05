@@ -6,13 +6,21 @@ import {
   deleteDoc,
   query,
   where,
+  Timestamp,
 } from 'firebase/firestore';
+import { computed, type ComputedRef } from 'vue';
 import { useCollection, useCurrentUser, useDocument } from 'vuefire';
 
 import { db } from 'shared/api';
 import { COLLECTIONS_NAMES } from 'shared/consts';
+import { getCurrentGoalStatus } from 'shared/utils';
 
-import type { GoalDocument, GoalSettings } from 'shared/interfaces';
+import type {
+  GoalData,
+  GoalDocument,
+  GoalSettings,
+  GoalSettingsParams,
+} from 'shared/interfaces';
 
 const USER_ID = 'userId';
 
@@ -25,13 +33,23 @@ export function useGoals() {
     query(goalsCollection, where(USER_ID, '==', user.value?.uid))
   );
 
-  const createGoal = async (goalSettings: GoalSettings) => {
+  const goalsData: ComputedRef<GoalData[]> = computed(() =>
+    data.value.map((goal) => ({
+      ...goal,
+      id: goal.id,
+      status: getCurrentGoalStatus(goal),
+    }))
+  );
+
+  const createGoal = async (goalSettings: GoalSettingsParams) => {
     if (!user.value) return;
 
     const goalDoc: Omit<GoalDocument, 'id'> = {
       ...goalSettings,
+      startDate: Timestamp.fromDate(goalSettings.startDate),
+      endDate: Timestamp.fromDate(goalSettings.endDate),
       userId: user.value.uid,
-      createdAt: new Date(),
+      createdAt: Timestamp.now(),
     };
 
     return await addDoc(goalsCollection, goalDoc);
@@ -39,12 +57,20 @@ export function useGoals() {
 
   const updateGoal = async (
     id: string,
-    goalSettings: Partial<GoalSettings>
+    goalSettings: Partial<GoalSettingsParams>
   ) => {
     const goalDoc: Partial<GoalDocument> = {
-      ...goalSettings,
-      updatedAt: new Date(),
+      ...(goalSettings as Partial<GoalSettings>),
+      updatedAt: Timestamp.now(),
     };
+
+    if (goalSettings.startDate) {
+      goalDoc.startDate = Timestamp.fromDate(goalSettings.startDate);
+    }
+
+    if (goalSettings.endDate) {
+      goalDoc.endDate = Timestamp.fromDate(goalSettings.endDate);
+    }
 
     return await updateDoc(doc(db, COLLECTIONS_NAMES.GOALS, id), goalDoc);
   };
@@ -58,7 +84,8 @@ export function useGoals() {
   };
 
   return {
-    data,
+    ...data,
+    data: goalsData,
     createGoal,
     updateGoal,
     removeGoal,
