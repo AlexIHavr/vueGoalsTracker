@@ -39,8 +39,13 @@ const resetDialog = () => {
 
 const handleCreateGoals = async () => {
   await createGoal({
-    ...createGoalsForm,
-    currentTimesToComplete: createGoalsForm.startTimesToComplete,
+    ...{
+      ...createGoalsForm,
+      timesToComplete: {
+        ...createGoalsForm.timesToComplete,
+        current: createGoalsForm.timesToComplete.start,
+      },
+    },
     startDate: new Date(2026, 0),
     endDate: new Date(2026, 12, 0),
     isCompleted: false,
@@ -101,7 +106,7 @@ const handleCreateGoals = async () => {
               <BaseFormField name="endTimesToComplete">
                 <InputNumber
                   id="goals-endTimesToComplete"
-                  v-model="createGoalsForm.endTimesToComplete"
+                  v-model="createGoalsForm.timesToComplete.end"
                   fluid
                 />
                 <label for="goals-endTimesToComplete">Количество раз</label>
@@ -110,7 +115,7 @@ const handleCreateGoals = async () => {
               <BaseFormField name="startTimesToComplete">
                 <InputNumber
                   id="goals-startTimesToComplete"
-                  v-model="createGoalsForm.startTimesToComplete"
+                  v-model="createGoalsForm.timesToComplete.start"
                   fluid
                 />
                 <label for="goals-startTimesToComplete">
@@ -121,7 +126,7 @@ const handleCreateGoals = async () => {
               <BaseFormField name="timesStepToComplete">
                 <InputNumber
                   id="goals-timesStepToComplete"
-                  v-model="createGoalsForm.timesStepToComplete"
+                  v-model="createGoalsForm.timesToComplete.step"
                   fluid
                 />
                 <label for="goals-timesStepToComplete">Шаг</label>

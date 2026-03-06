@@ -34,7 +34,7 @@ export function useGoals() {
     if (!user.value) return;
 
     const goalDoc: Omit<GoalDocument, 'id'> = {
-      ...goalSettings,
+      ...structuredClone(goalSettings),
       startDate: Timestamp.fromDate(goalSettings.startDate),
       endDate: Timestamp.fromDate(goalSettings.endDate),
       userId: user.value.uid,
@@ -49,7 +49,7 @@ export function useGoals() {
     goalSettings: Partial<GoalSettingsParams>
   ) => {
     const goalDoc: Partial<GoalDocument> = {
-      ...(goalSettings as Partial<GoalSettings>),
+      ...(structuredClone(goalSettings) as Partial<GoalSettings>),
       updatedAt: Timestamp.now(),
     };
 

@@ -1,7 +1,10 @@
 export interface CreateGoalsFormFields {
   title: string;
   description?: string;
-  startTimesToComplete: number;
-  endTimesToComplete: number;
-  timesStepToComplete: number;
+  timesToComplete: {
+    start: number;
+    end: number;
+    step: number;
+    current: number;
+  };
 }

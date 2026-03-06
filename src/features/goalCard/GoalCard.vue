@@ -20,17 +20,35 @@ const { updateGoal, removeGoal } = useGoals();
 const goalStatus = computed(() => getGoalStatus(goal));
 
 const goalTimes = computed(() => {
+  let timesStr = '';
+
   if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
-    return '';
+    return timesStr;
   }
 
-  return ` ${String(goal.currentTimesToComplete)} из ${String(goal.endTimesToComplete)}`;
+  if (goal.timesToComplete.end === 1) {
+    return timesStr;
+  }
+
+  timesStr += ` ${String(goal.timesToComplete.current)} из ${String(goal.timesToComplete.end)}`;
+
+  if (goal.timesToComplete.step > 1) {
+    timesStr += ` (шаг - ${goal.timesToComplete.step})`;
+  }
+
+  return timesStr;
 });
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);
 
 const handleCompleteGoal = () => {
-  updateGoal(goal.id, { isCompleted: !goal.isCompleted });
+  updateGoal(goal.id, {
+    isCompleted: !goal.isCompleted,
+    timesToComplete: {
+      ...goal.timesToComplete,
+      current: goal.timesToComplete.start,
+    },
+  });
 };
 
 const handleUpdateTimes = () => {
@@ -39,15 +57,19 @@ const handleUpdateTimes = () => {
     return;
   }
 
-  const newTime = goal.currentTimesToComplete + goal.timesStepToComplete;
+  const { current, end, start, step } = goal.timesToComplete;
 
-  if (newTime >= goal.endTimesToComplete) {
+  const newTime = current + step;
+
+  if (newTime >= end) {
     updateGoal(goal.id, {
       isCompleted: true,
-      currentTimesToComplete: goal.startTimesToComplete,
+      timesToComplete: { ...goal.timesToComplete, current: start },
     });
   } else {
-    updateGoal(goal.id, { currentTimesToComplete: newTime });
+    updateGoal(goal.id, {
+      timesToComplete: { ...goal.timesToComplete, current: newTime },
+    });
   }
 };
 </script>
