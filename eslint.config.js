@@ -57,24 +57,24 @@ export default [
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            'app/**',
+            'pages/*/**',
+            'widgets/*/**',
+            'features/*/**',
+            'entities/*/**',
+            'shared/*/*/**',
+            '../**/app',
+            '../**/pages',
+            '../**/features',
+            '../**/entities',
+            '../**/shared',
+          ],
+        },
+      ],
     },
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          'app/**',
-          'pages/*/**',
-          'widgets/*/**',
-          'features/*/**',
-          'entities/*/**',
-          'shared/*/*/**',
-          '../**/app',
-          '../**/pages',
-          '../**/features',
-          '../**/entities',
-          '../**/shared',
-        ],
-      },
-    ],
   },
 ];

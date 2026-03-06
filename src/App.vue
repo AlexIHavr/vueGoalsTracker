@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from 'primevue';
+import Button from 'primevue/button';
 
 const toggleDarkMode = () => {
   document.documentElement.classList.toggle('dark-theme');
