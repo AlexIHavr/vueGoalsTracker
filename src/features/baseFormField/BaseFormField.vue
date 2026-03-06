@@ -2,14 +2,10 @@
 import FormField from '@primevue/forms/formfield';
 import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
-
-const { fieldName } = defineProps<{
-  fieldName: string;
-}>();
 </script>
 
 <template>
-  <FormField v-slot="$field" :name="fieldName">
+  <FormField v-slot="$field">
     <FloatLabel variant="on">
       <slot></slot>
     </FloatLabel>

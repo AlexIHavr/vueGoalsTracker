@@ -7,9 +7,9 @@ export const authResolver = ({ values }: FormResolverOptions) => {
   const errors = {} as FormErrors<AuthFormFields>;
 
   if (!email) {
-    errors.email = [{ message: 'Email обязателен' }];
+    errors.email = [{ message: 'Почта обязательна' }];
   } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-    errors.email = [{ message: 'Некорректный email' }];
+    errors.email = [{ message: 'Некорректная почта' }];
   }
 
   if (!password) {

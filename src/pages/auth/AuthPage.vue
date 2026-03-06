@@ -76,13 +76,12 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
         <BaseForm
           submit-button-label="Продолжить"
           submit-button-icon="pi-user"
-          :model="authForm"
           :resolver="authResolver"
           class="auth-form"
           :form-submit="handleAuth"
         >
           <div class="inputs-group">
-            <BaseFormField field-name="email">
+            <BaseFormField name="email">
               <InputText
                 id="email"
                 v-model="authForm.email"
@@ -90,10 +89,10 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
                 autocomplete="email"
                 fluid
               />
-              <label for="email">Email</label>
+              <label for="email">Почта</label>
             </BaseFormField>
 
-            <BaseFormField field-name="password">
+            <BaseFormField name="password">
               <Password
                 id="password"
                 v-model="authForm.password"
@@ -102,7 +101,7 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
                 toggle-mask
                 fluid
               />
-              <label for="password">Password</label>
+              <label for="password">Пароль</label>
             </BaseFormField>
           </div>
         </BaseForm>

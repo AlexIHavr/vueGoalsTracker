@@ -5,6 +5,7 @@ import { computed } from 'vue';
 
 import { useGoals } from 'shared/hooks';
 
+import { GOAL_STATUSES } from './consts/goalStatuses';
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
 import { getGoalStatus } from './utils/getGoalStatus';
 
@@ -18,10 +19,36 @@ const { updateGoal, removeGoal } = useGoals();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
+const goalTimes = computed(() => {
+  if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
+    return '';
+  }
+
+  return ` ${String(goal.currentTimesToComplete)} из ${String(goal.endTimesToComplete)}`;
+});
+
 const goalAttrs = useGoalStatusAttrs(goalStatus);
 
 const handleCompleteGoal = () => {
   updateGoal(goal.id, { isCompleted: !goal.isCompleted });
+};
+
+const handleUpdateTimes = () => {
+  if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
+    handleCompleteGoal();
+    return;
+  }
+
+  const newTime = goal.currentTimesToComplete + goal.timesStepToComplete;
+
+  if (newTime >= goal.endTimesToComplete) {
+    updateGoal(goal.id, {
+      isCompleted: true,
+      currentTimesToComplete: goal.startTimesToComplete,
+    });
+  } else {
+    updateGoal(goal.id, { currentTimesToComplete: newTime });
+  }
 };
 </script>
 
@@ -47,11 +74,11 @@ const handleCompleteGoal = () => {
       <div class="footer-buttons-wrapper">
         <Button
           :icon="goalAttrs.statusIcon"
-          :label="goalAttrs.completeButtonLabel"
+          :label="goalAttrs.completeButtonLabel + goalTimes"
+          :severity="goalAttrs.buttonSeverity"
           raised
           fluid
-          :severity="goalAttrs.buttonSeverity"
-          @click="handleCompleteGoal()"
+          @click="handleUpdateTimes()"
         />
         <Button
           icon="pi pi-trash"

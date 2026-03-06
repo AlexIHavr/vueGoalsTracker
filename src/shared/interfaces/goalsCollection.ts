@@ -6,6 +6,10 @@ export interface GoalSettings {
   startDate: Timestamp;
   endDate: Timestamp;
   isCompleted: boolean;
+  startTimesToComplete: number;
+  endTimesToComplete: number;
+  timesStepToComplete: number;
+  currentTimesToComplete: number;
 }
 
 export interface GoalSettingsParams extends Omit<

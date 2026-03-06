@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import Accordion from 'primevue/accordion';
+import AccordionContent from 'primevue/accordioncontent';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import { reactive, ref } from 'vue';
@@ -9,13 +14,13 @@ import { BaseForm } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
 import { useGoals } from 'shared/hooks';
 
+import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormValues';
 import { createGoalsResolver } from '../utils/createGoalsResolver';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
-  title: '',
-  description: '',
+  ...DEFAULT_GOALS_FORM_FIELDS,
 });
 
 const isDialogVisible = ref(false);
@@ -27,16 +32,15 @@ const handleShowDialog = () => {
 };
 
 const resetDialog = () => {
-  createGoalsForm.title = '';
-  createGoalsForm.description = '';
+  Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
 
   isDialogVisible.value = false;
 };
 
 const handleCreateGoals = async () => {
   await createGoal({
-    title: createGoalsForm.title,
-    description: createGoalsForm.description,
+    ...createGoalsForm,
+    currentTimesToComplete: createGoalsForm.startTimesToComplete,
     startDate: new Date(2026, 0),
     endDate: new Date(2026, 12, 0),
     isCompleted: false,
@@ -64,11 +68,11 @@ const handleCreateGoals = async () => {
       submit-button-label="Создать"
       submit-button-icon="pi-plus"
       class="create-goals-form"
-      :model="createGoalsForm"
+      :initial-values="DEFAULT_GOALS_FORM_FIELDS"
       :resolver="createGoalsResolver"
       :form-submit="handleCreateGoals"
     >
-      <BaseFormField field-name="title">
+      <BaseFormField name="title">
         <InputText
           id="goals-title"
           v-model="createGoalsForm.title"
@@ -78,7 +82,7 @@ const handleCreateGoals = async () => {
         <label for="goals-title">Название</label>
       </BaseFormField>
 
-      <BaseFormField field-name="description">
+      <BaseFormField name="description">
         <Textarea
           id="goals-description"
           v-model="createGoalsForm.description"
@@ -88,6 +92,44 @@ const handleCreateGoals = async () => {
         />
         <label for="goals-description">Описание</label>
       </BaseFormField>
+
+      <Accordion>
+        <AccordionPanel value="extraSettings">
+          <AccordionHeader>Дополнительные параметры</AccordionHeader>
+          <AccordionContent>
+            <div class="extra-settings-wrapper">
+              <BaseFormField name="endTimesToComplete">
+                <InputNumber
+                  id="goals-endTimesToComplete"
+                  v-model="createGoalsForm.endTimesToComplete"
+                  fluid
+                />
+                <label for="goals-endTimesToComplete">Количество раз</label>
+              </BaseFormField>
+
+              <BaseFormField name="startTimesToComplete">
+                <InputNumber
+                  id="goals-startTimesToComplete"
+                  v-model="createGoalsForm.startTimesToComplete"
+                  fluid
+                />
+                <label for="goals-startTimesToComplete">
+                  Начальное количество раз
+                </label>
+              </BaseFormField>
+
+              <BaseFormField name="timesStepToComplete">
+                <InputNumber
+                  id="goals-timesStepToComplete"
+                  v-model="createGoalsForm.timesStepToComplete"
+                  fluid
+                />
+                <label for="goals-timesStepToComplete">Шаг</label>
+              </BaseFormField>
+            </div>
+          </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
     </BaseForm>
   </Dialog>
 </template>
@@ -104,5 +146,11 @@ const handleCreateGoals = async () => {
 .goals-description {
   height: 100px;
   resize: none;
+}
+
+.extra-settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 </style>
