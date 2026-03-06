@@ -1,12 +1,10 @@
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type { CreateGoalsFormFields } from '../types/createGoalsFormFields';
 
 export const DEFAULT_GOALS_FORM_FIELDS: CreateGoalsFormFields = {
   title: '',
   description: '',
-  timesToComplete: {
-    start: 0,
-    end: 1,
-    step: 1,
-    current: 0,
-  },
+  timesStart: 0,
+  timesEnd: 1,
+  timesStep: 1,
+  timesCurrent: 0,
 } as const;

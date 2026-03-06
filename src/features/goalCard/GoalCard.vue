@@ -26,14 +26,14 @@ const goalTimes = computed(() => {
     return timesStr;
   }
 
-  if (goal.timesToComplete.end === 1) {
+  if (goal.timesEnd === 1) {
     return timesStr;
   }
 
-  timesStr += ` ${String(goal.timesToComplete.current)} из ${String(goal.timesToComplete.end)}`;
+  timesStr += ` ${String(goal.timesCurrent)} из ${String(goal.timesEnd)}`;
 
-  if (goal.timesToComplete.step > 1) {
-    timesStr += ` (шаг - ${goal.timesToComplete.step})`;
+  if (goal.timesStep > 1) {
+    timesStr += ` (шаг - ${goal.timesStep})`;
   }
 
   return timesStr;
@@ -44,10 +44,7 @@ const goalAttrs = useGoalStatusAttrs(goalStatus);
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,
-    timesToComplete: {
-      ...goal.timesToComplete,
-      current: goal.timesToComplete.start,
-    },
+    timesCurrent: goal.timesStart,
   });
 };
 
@@ -57,18 +54,16 @@ const handleUpdateTimes = () => {
     return;
   }
 
-  const { current, end, start, step } = goal.timesToComplete;
+  const newTimes = goal.timesCurrent + goal.timesStep;
 
-  const newTime = current + step;
-
-  if (newTime >= end) {
+  if (newTimes >= goal.timesEnd) {
     updateGoal(goal.id, {
       isCompleted: true,
-      timesToComplete: { ...goal.timesToComplete, current: start },
+      timesCurrent: goal.timesStart,
     });
   } else {
     updateGoal(goal.id, {
-      timesToComplete: { ...goal.timesToComplete, current: newTime },
+      timesCurrent: newTimes,
     });
   }
 };

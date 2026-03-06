@@ -17,7 +17,7 @@ import { useGoals } from 'shared/hooks';
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormValues';
 import { createGoalsResolver } from '../utils/createGoalsResolver';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type { CreateGoalsFormFields } from '../types/createGoalsFormFields';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
   ...DEFAULT_GOALS_FORM_FIELDS,
@@ -39,13 +39,8 @@ const resetDialog = () => {
 
 const handleCreateGoals = async () => {
   await createGoal({
-    ...{
-      ...createGoalsForm,
-      timesToComplete: {
-        ...createGoalsForm.timesToComplete,
-        current: createGoalsForm.timesToComplete.start,
-      },
-    },
+    ...createGoalsForm,
+    timesCurrent: createGoalsForm.timesStart,
     startDate: new Date(2026, 0),
     endDate: new Date(2026, 12, 0),
     isCompleted: false,
@@ -103,33 +98,31 @@ const handleCreateGoals = async () => {
           <AccordionHeader>Дополнительные параметры</AccordionHeader>
           <AccordionContent>
             <div class="extra-settings-wrapper">
-              <BaseFormField name="endTimesToComplete">
+              <BaseFormField name="timesEnd">
                 <InputNumber
-                  id="goals-endTimesToComplete"
-                  v-model="createGoalsForm.timesToComplete.end"
+                  id="goals-timesEnd"
+                  v-model="createGoalsForm.timesEnd"
                   fluid
                 />
-                <label for="goals-endTimesToComplete">Количество раз</label>
+                <label for="goals-timesEnd">Количество раз</label>
               </BaseFormField>
 
-              <BaseFormField name="startTimesToComplete">
+              <BaseFormField name="timesStart">
                 <InputNumber
-                  id="goals-startTimesToComplete"
-                  v-model="createGoalsForm.timesToComplete.start"
+                  id="goals-timesStart"
+                  v-model="createGoalsForm.timesStart"
                   fluid
                 />
-                <label for="goals-startTimesToComplete">
-                  Начальное количество раз
-                </label>
+                <label for="goals-timesStart"> Начальное количество раз </label>
               </BaseFormField>
 
-              <BaseFormField name="timesStepToComplete">
+              <BaseFormField name="timesStep">
                 <InputNumber
-                  id="goals-timesStepToComplete"
-                  v-model="createGoalsForm.timesToComplete.step"
+                  id="goals-timesStep"
+                  v-model="createGoalsForm.timesStep"
                   fluid
                 />
-                <label for="goals-timesStepToComplete">Шаг</label>
+                <label for="goals-timesStep">Шаг</label>
               </BaseFormField>
             </div>
           </AccordionContent>
