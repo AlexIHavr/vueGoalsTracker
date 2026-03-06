@@ -9,13 +9,7 @@ export const MAX_FIELDS_COUNT = {
 } as const;
 
 export const createGoalsResolver = ({ values }: FormResolverOptions) => {
-  const {
-    title,
-    description,
-    startTimesToComplete,
-    endTimesToComplete,
-    timesStepToComplete,
-  } = values as CreateGoalsFormFields;
+  const { title, description } = values as CreateGoalsFormFields;
   const errors = {} as FormErrors<CreateGoalsFormFields>;
 
   if (!title) {
@@ -36,52 +30,52 @@ export const createGoalsResolver = ({ values }: FormResolverOptions) => {
     ];
   }
 
-  if (endTimesToComplete === null) {
-    errors.endTimesToComplete = [{ message: 'Количество раз обязательно' }];
-  } else if (
-    endTimesToComplete <= 0 ||
-    endTimesToComplete > MAX_FIELDS_COUNT.TIMES_TO_COMPLETE
-  ) {
-    errors.endTimesToComplete = [
-      {
-        message: `Количество раз должно быть от 1 до ${MAX_FIELDS_COUNT.TIMES_TO_COMPLETE}`,
-      },
-    ];
-  }
+  // if (endTimesToComplete === null) {
+  //   errors.endTimesToComplete = [{ message: 'Количество раз обязательно' }];
+  // } else if (
+  //   endTimesToComplete <= 0 ||
+  //   endTimesToComplete > MAX_FIELDS_COUNT.TIMES_TO_COMPLETE
+  // ) {
+  //   errors.endTimesToComplete = [
+  //     {
+  //       message: `Количество раз должно быть от 1 до ${MAX_FIELDS_COUNT.TIMES_TO_COMPLETE}`,
+  //     },
+  //   ];
+  // }
 
-  if (startTimesToComplete === null) {
-    errors.startTimesToComplete = [
-      { message: 'Начальное количество раз обязательно' },
-    ];
-  } else if (
-    startTimesToComplete < 0 ||
-    startTimesToComplete > MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1
-  ) {
-    errors.startTimesToComplete = [
-      {
-        message: `Начальное количество раз должно быть от 0 до ${MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1}`,
-      },
-    ];
-  } else if (startTimesToComplete >= endTimesToComplete) {
-    errors.startTimesToComplete = [
-      {
-        message: 'Начальное количество раз не должно превышать количество раз',
-      },
-    ];
-  }
+  // if (startTimesToComplete === null) {
+  //   errors.startTimesToComplete = [
+  //     { message: 'Начальное количество раз обязательно' },
+  //   ];
+  // } else if (
+  //   startTimesToComplete < 0 ||
+  //   startTimesToComplete > MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1
+  // ) {
+  //   errors.startTimesToComplete = [
+  //     {
+  //       message: `Начальное количество раз должно быть от 0 до ${MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1}`,
+  //     },
+  //   ];
+  // } else if (startTimesToComplete >= endTimesToComplete) {
+  //   errors.startTimesToComplete = [
+  //     {
+  //       message: 'Начальное количество раз не должно превышать количество раз',
+  //     },
+  //   ];
+  // }
 
-  if (timesStepToComplete === null) {
-    errors.timesStepToComplete = [{ message: 'Шаг обязательный' }];
-  } else if (
-    timesStepToComplete <= 0 ||
-    timesStepToComplete > MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1
-  ) {
-    errors.timesStepToComplete = [
-      {
-        message: `Шаг должен быть от 1 до ${MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1}`,
-      },
-    ];
-  }
+  // if (timesStepToComplete === null) {
+  //   errors.timesStepToComplete = [{ message: 'Шаг обязательный' }];
+  // } else if (
+  //   timesStepToComplete <= 0 ||
+  //   timesStepToComplete > MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1
+  // ) {
+  //   errors.timesStepToComplete = [
+  //     {
+  //       message: `Шаг должен быть от 1 до ${MAX_FIELDS_COUNT.TIMES_TO_COMPLETE - 1}`,
+  //     },
+  //   ];
+  // }
 
   return { values, errors };
 };

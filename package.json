@@ -12,7 +12,10 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "stylelint": "stylelint \"src/**/*.{vue,scss}\"",
-    "stylelint:fix": "stylelint \"src/**/*.{scss,vue}\" --fix"
+    "stylelint:fix": "stylelint \"src/**/*.{scss,vue}\" --fix",
+    "type-check:app": "vue-tsc -p tsconfig.app.json --noEmit",
+    "type-check:node": "vue-tsc -p tsconfig.node.json --noEmit",
+    "type-check": "npm run type-check:app && npm run type-check:node"
   },
   "dependencies": {
     "@primeuix/themes": "^2.0.3",
@@ -52,11 +55,11 @@
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
     "vue-eslint-parser": "^10.4.0",
-    "vue-tsc": "^3.1.5"
+    "vue-tsc": "^3.2.5"
   },
   "lint-staged": {
     "*.{ts,vue}": "eslint --fix",
-    "*.{scss,vue}": "stylelint --fix",
-    "*.{js,ts,vue,scss,json,md}": "prettier --write"
+    "*.{css,scss,vue}": "stylelint --fix",
+    "*.{js,ts,vue,css,scss,json,md}": "prettier --write"
   }
 }
