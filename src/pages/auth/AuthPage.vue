@@ -15,7 +15,7 @@ import { BaseFormField } from 'features/baseFormField';
 import { auth } from 'shared/api';
 import { ROUTES_PATHS } from 'shared/consts';
 
-import { authResolver } from './utils/authResolver';
+import { authResolver } from './schemas/authResolver';
 
 import type { AuthFormFields } from './interfaces/authFormFields';
 import type { FirebaseError } from 'firebase/app';
@@ -76,11 +76,13 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
         <BaseForm
           submit-button-label="Продолжить"
           submit-button-icon="pi-user"
-          :resolver="authResolver"
           class="auth-form"
+          :resolver="authResolver"
           :form-submit="handleAuth"
+          :initial-values="authForm"
         >
           <div class="inputs-group">
+            <!-- @vue-generic {keyof AuthFormFields} -->
             <BaseFormField name="email">
               <InputText
                 id="email"
@@ -92,6 +94,7 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
               <label for="email">Почта</label>
             </BaseFormField>
 
+            <!-- @vue-generic {keyof AuthFormFields} -->
             <BaseFormField name="password">
               <Password
                 id="password"

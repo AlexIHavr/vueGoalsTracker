@@ -14,8 +14,8 @@ import { BaseForm } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
 import { useGoals } from 'shared/hooks';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormValues';
-import { createGoalsResolver } from '../utils/createGoalsResolver';
+import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
+import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
 import type { CreateGoalsFormFields } from '../types/createGoalsFormFields';
 
@@ -68,11 +68,14 @@ const handleCreateGoals = async () => {
       submit-button-label="Создать"
       submit-button-icon="pi-plus"
       class="create-goals-form"
-      :initial-values="DEFAULT_GOALS_FORM_FIELDS"
       :resolver="createGoalsResolver"
       :form-submit="handleCreateGoals"
     >
-      <BaseFormField name="title">
+      <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+      <BaseFormField
+        name="title"
+        :initial-value="DEFAULT_GOALS_FORM_FIELDS.title"
+      >
         <InputText
           id="goals-title"
           v-model="createGoalsForm.title"
@@ -82,7 +85,11 @@ const handleCreateGoals = async () => {
         <label for="goals-title">Название</label>
       </BaseFormField>
 
-      <BaseFormField name="description">
+      <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+      <BaseFormField
+        name="description"
+        :initial-value="DEFAULT_GOALS_FORM_FIELDS.description"
+      >
         <Textarea
           id="goals-description"
           v-model="createGoalsForm.description"
@@ -98,29 +105,35 @@ const handleCreateGoals = async () => {
           <AccordionHeader>Дополнительные параметры</AccordionHeader>
           <AccordionContent>
             <div class="extra-settings-wrapper">
-              <BaseFormField name="timesEnd">
-                <InputNumber
-                  id="goals-timesEnd"
-                  v-model="createGoalsForm.timesEnd"
-                  fluid
-                />
-                <label for="goals-timesEnd">Количество раз</label>
-              </BaseFormField>
-
+              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
               <BaseFormField name="timesStart">
                 <InputNumber
                   id="goals-timesStart"
                   v-model="createGoalsForm.timesStart"
                   fluid
+                  show-clear
                 />
-                <label for="goals-timesStart"> Начальное количество раз </label>
+                <label for="goals-timesStart">Начальное количество раз</label>
               </BaseFormField>
 
+              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+              <BaseFormField name="timesEnd">
+                <InputNumber
+                  id="goals-timesEnd"
+                  v-model="createGoalsForm.timesEnd"
+                  fluid
+                  show-clear
+                />
+                <label for="goals-timesEnd">Количество раз</label>
+              </BaseFormField>
+
+              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
               <BaseFormField name="timesStep">
                 <InputNumber
                   id="goals-timesStep"
                   v-model="createGoalsForm.timesStep"
                   fluid
+                  show-clear
                 />
                 <label for="goals-timesStep">Шаг</label>
               </BaseFormField>
