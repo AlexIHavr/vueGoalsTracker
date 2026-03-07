@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Card from 'primevue/card';
+import Message from 'primevue/message';
 import { computed } from 'vue';
 
 import { useGoals } from 'shared/hooks';
+import { getLocaleNumberString } from 'shared/utils';
 
 import { GOAL_STATUSES } from './consts/goalStatuses';
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
@@ -20,23 +22,15 @@ const { updateGoal, removeGoal } = useGoals();
 const goalStatus = computed(() => getGoalStatus(goal));
 
 const goalTimes = computed(() => {
-  let timesStr = '';
-
   if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
-    return timesStr;
+    return '';
   }
 
   if (goal.timesEnd === 1) {
-    return timesStr;
+    return '';
   }
 
-  timesStr += ` ${String(goal.timesCurrent)} из ${String(goal.timesEnd)}`;
-
-  if (goal.timesStep > 1) {
-    timesStr += ` (шаг - ${goal.timesStep})`;
-  }
-
-  return timesStr;
+  return `${getLocaleNumberString(goal.timesCurrent)} из ${getLocaleNumberString(goal.timesEnd)}`;
 });
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);
@@ -72,7 +66,7 @@ const handleUpdateTimes = () => {
 <template>
   <Card :class="['goal-card', goalStatus]">
     <template #title>
-      <div class="title-buttons-wrapper">
+      <div class="title-wrapper">
         <h3>{{ goal.title }}</h3>
         <Button
           :icon="goalAttrs.statusIcon"
@@ -85,18 +79,24 @@ const handleUpdateTimes = () => {
       </div>
     </template>
     <template #content>
-      <h4>{{ goal.description }}</h4>
+      <div class="content-wrapper">
+        <Message v-if="goalTimes" severity="success" size="small">
+          {{ goalTimes }}
+        </Message>
+        <h4>{{ goal.description }}</h4>
+      </div>
     </template>
     <template #footer>
-      <div class="footer-buttons-wrapper">
+      <div class="footer-wrapper">
         <Button
           :icon="goalAttrs.statusIcon"
-          :label="goalAttrs.completeButtonLabel + goalTimes"
+          :label="goalAttrs.completeButtonLabel"
           :severity="goalAttrs.buttonSeverity"
           raised
           fluid
           @click="handleUpdateTimes()"
         />
+
         <Button
           icon="pi pi-trash"
           aria-label="Save"
@@ -113,18 +113,25 @@ const handleUpdateTimes = () => {
 .goal-card {
   width: 300px;
   min-width: 300px;
-  height: 220px;
-  min-height: 220px;
+  height: 270px;
+  min-height: 270px;
 }
 
-.title-buttons-wrapper {
+.title-wrapper {
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: space-between;
 }
 
-.footer-buttons-wrapper {
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.footer-wrapper {
   display: flex;
   gap: 10px;
   justify-content: space-between;

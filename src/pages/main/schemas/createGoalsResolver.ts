@@ -1,18 +1,20 @@
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import z from 'zod';
 
+import { getLocaleNumberString } from 'shared/utils';
+
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 
 import type {
   CreateGoalsFormFields,
   CreateGoalsFormTimesFields,
-} from '../types/createGoalsFormFields';
+} from '../interfaces/createGoalsFormFields';
 
 const MAX_TITLE_LENGTH = 20;
 const MAX_DESCRIPTION_LENGTH = 100;
 const MAX_TIMES = 1_000_000;
 
-const MAX_TIMES_LOCAL_STRING = MAX_TIMES.toLocaleString('ru-RU');
+const MAX_TIMES_LOCAL_STRING = getLocaleNumberString(MAX_TIMES);
 
 const getTimesScheme = (
   field: keyof CreateGoalsFormTimesFields,
@@ -20,10 +22,11 @@ const getTimesScheme = (
 ) => {
   const defaultField = DEFAULT_GOALS_FORM_FIELDS[field];
 
+  //preprocess ignores null value - fix open issue https://github.com/primefaces/primevue/issues/8364
   return z.preprocess(
     (value) => (value === null ? defaultField : value),
     z
-      .number({ error: `${name} обязательно` })
+      .number()
       .min(defaultField, {
         error: `${name} не должно быть меньше ${defaultField}`,
       })
@@ -45,12 +48,12 @@ export const createGoalsResolver = zodResolver(
       description: z.string().max(MAX_DESCRIPTION_LENGTH, {
         error: `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`,
       }),
-      timesStart: getTimesScheme('timesStart', 'Начальное количество раз'),
-      timesEnd: getTimesScheme('timesEnd', 'Количество раз'),
+      timesStart: getTimesScheme('timesStart', 'Начальное количество'),
+      timesEnd: getTimesScheme('timesEnd', 'Количество'),
       timesStep: getTimesScheme('timesStep', 'Шаг'),
     })
     .refine(({ timesStart, timesEnd }) => timesEnd > timesStart, {
       path: ['timesEnd'],
-      error: 'Начальное количество раз не должно превышать количество раз',
+      error: 'Начальное количество не должно превышать количество',
     }) satisfies z.ZodType<CreateGoalsFormFields>
 );

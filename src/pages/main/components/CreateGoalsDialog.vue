@@ -17,7 +17,7 @@ import { useGoals } from 'shared/hooks';
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
-import type { CreateGoalsFormFields } from '../types/createGoalsFormFields';
+import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
   ...DEFAULT_GOALS_FORM_FIELDS,
@@ -38,9 +38,21 @@ const resetDialog = () => {
 };
 
 const handleCreateGoals = async () => {
+  const timesStart =
+    createGoalsForm.timesStart ?? DEFAULT_GOALS_FORM_FIELDS.timesStart;
+
+  const timesEnd =
+    createGoalsForm.timesEnd ?? DEFAULT_GOALS_FORM_FIELDS.timesEnd;
+
+  const timesStep =
+    createGoalsForm.timesStep ?? DEFAULT_GOALS_FORM_FIELDS.timesStep;
+
   await createGoal({
     ...createGoalsForm,
-    timesCurrent: createGoalsForm.timesStart,
+    timesStart,
+    timesEnd,
+    timesStep,
+    timesCurrent: timesStart,
     startDate: new Date(2026, 0),
     endDate: new Date(2026, 12, 0),
     isCompleted: false,
@@ -82,7 +94,7 @@ const handleCreateGoals = async () => {
           size="large"
           fluid
         />
-        <label for="goals-title">Название</label>
+        <label for="goals-title">Название*</label>
       </BaseFormField>
 
       <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -112,8 +124,10 @@ const handleCreateGoals = async () => {
                   v-model="createGoalsForm.timesStart"
                   fluid
                   show-clear
+                  autocomplete="off"
+                  :pt:pcinputtext:root="{ autocomplete: 'off' }"
                 />
-                <label for="goals-timesStart">Начальное количество раз</label>
+                <label for="goals-timesStart">Начальное количество</label>
               </BaseFormField>
 
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -123,8 +137,9 @@ const handleCreateGoals = async () => {
                   v-model="createGoalsForm.timesEnd"
                   fluid
                   show-clear
+                  :pt:pcinputtext:root="{ autocomplete: 'off' }"
                 />
-                <label for="goals-timesEnd">Количество раз</label>
+                <label for="goals-timesEnd">Количество</label>
               </BaseFormField>
 
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -134,6 +149,7 @@ const handleCreateGoals = async () => {
                   v-model="createGoalsForm.timesStep"
                   fluid
                   show-clear
+                  :pt:pcinputtext:root="{ autocomplete: 'off' }"
                 />
                 <label for="goals-timesStep">Шаг</label>
               </BaseFormField>
@@ -163,5 +179,17 @@ const handleCreateGoals = async () => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.p-accordionheader {
+  --p-accordion-header-padding: 0 0 20px 0;
+}
+
+.p-accordionpanel {
+  --p-accordion-panel-border-width: 0;
+}
+
+.p-accordioncontent-content {
+  --p-accordion-content-padding: 0;
 }
 </style>

@@ -1,6 +1,6 @@
-import type { CreateGoalsFormFields } from '../types/createGoalsFormFields';
+import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
-export const DEFAULT_GOALS_FORM_FIELDS: CreateGoalsFormFields = {
+export const DEFAULT_GOALS_FORM_FIELDS: Required<CreateGoalsFormFields> = {
   title: '',
   description: '',
   timesStart: 0,
