@@ -10,6 +10,7 @@ export interface GoalSettings {
   timesEnd: number;
   timesStep: number;
   timesCurrent: number;
+  timesSuffix?: string;
 }
 
 export interface GoalSettingsParams extends Omit<

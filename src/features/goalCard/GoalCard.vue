@@ -30,7 +30,10 @@ const goalTimes = computed(() => {
     return '';
   }
 
-  return `${getLocaleNumberString(goal.timesCurrent)} из ${getLocaleNumberString(goal.timesEnd)}`;
+  const timesCurrentString = `${getLocaleNumberString(goal.timesCurrent)}${goal.timesSuffix}`;
+  const timesEndString = `${getLocaleNumberString(goal.timesEnd)}${goal.timesSuffix}`;
+
+  return `${timesCurrentString} из ${timesEndString}`;
 });
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);

@@ -13,6 +13,7 @@ import type {
 const MAX_TITLE_LENGTH = 20;
 const MAX_DESCRIPTION_LENGTH = 100;
 const MAX_TIMES = 1_000_000;
+const MAX_TIMES_SUFFIX_LENGTH = 5;
 
 const MAX_TIMES_LOCAL_STRING = getLocaleNumberString(MAX_TIMES);
 
@@ -51,6 +52,9 @@ export const createGoalsResolver = zodResolver(
       timesStart: getTimesScheme('timesStart', 'Начальное количество'),
       timesEnd: getTimesScheme('timesEnd', 'Количество'),
       timesStep: getTimesScheme('timesStep', 'Шаг'),
+      timesSuffix: z.string().max(MAX_TIMES_SUFFIX_LENGTH, {
+        error: `Наименование количества не должно превышать ${MAX_TIMES_SUFFIX_LENGTH} символов`,
+      }),
     })
     .refine(({ timesStart, timesEnd }) => timesEnd > timesStart, {
       path: ['timesEnd'],

@@ -118,14 +118,29 @@ const handleCreateGoals = async () => {
           <AccordionContent>
             <div class="extra-settings-wrapper">
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+              <BaseFormField
+                name="timesSuffix"
+                :initial-value="DEFAULT_GOALS_FORM_FIELDS.timesSuffix"
+              >
+                <InputText
+                  id="goals-timesSuffix"
+                  v-model="createGoalsForm.timesSuffix"
+                  v-keyfilter="/[^0-9]/"
+                  fluid
+                  show-clear
+                />
+                <label for="goals-timesSuffix">Наименование количества</label>
+              </BaseFormField>
+
+              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
               <BaseFormField name="timesStart">
                 <InputNumber
                   id="goals-timesStart"
                   v-model="createGoalsForm.timesStart"
                   fluid
                   show-clear
-                  autocomplete="off"
                   :pt:pcinputtext:root="{ autocomplete: 'off' }"
+                  :suffix="createGoalsForm.timesSuffix"
                 />
                 <label for="goals-timesStart">Начальное количество</label>
               </BaseFormField>
@@ -138,6 +153,7 @@ const handleCreateGoals = async () => {
                   fluid
                   show-clear
                   :pt:pcinputtext:root="{ autocomplete: 'off' }"
+                  :suffix="createGoalsForm.timesSuffix"
                 />
                 <label for="goals-timesEnd">Количество</label>
               </BaseFormField>
@@ -150,6 +166,7 @@ const handleCreateGoals = async () => {
                   fluid
                   show-clear
                   :pt:pcinputtext:root="{ autocomplete: 'off' }"
+                  :suffix="createGoalsForm.timesSuffix"
                 />
                 <label for="goals-timesStep">Шаг</label>
               </BaseFormField>

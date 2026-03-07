@@ -6,4 +6,5 @@ export const DEFAULT_GOALS_FORM_FIELDS: Required<CreateGoalsFormFields> = {
   timesStart: 0,
   timesEnd: 1,
   timesStep: 1,
+  timesSuffix: '',
 } as const;

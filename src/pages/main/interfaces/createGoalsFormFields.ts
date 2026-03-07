@@ -7,4 +7,5 @@ export interface CreateGoalsFormTimesFields {
 export interface CreateGoalsFormFields extends CreateGoalsFormTimesFields {
   title: string;
   description?: string;
+  timesSuffix?: string;
 }
