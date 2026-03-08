@@ -4,6 +4,7 @@ import AccordionContent from 'primevue/accordioncontent';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
+import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
@@ -14,6 +15,7 @@ import { BaseForm } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
 import { useGoals } from 'shared/hooks';
 
+import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
@@ -53,8 +55,6 @@ const handleCreateGoals = async () => {
     timesEnd,
     timesStep,
     timesCurrent: timesStart,
-    startDate: new Date(2026, 0),
-    endDate: new Date(2026, 12, 0),
     isCompleted: false,
   });
 
@@ -72,11 +72,17 @@ const handleCreateGoals = async () => {
     />
   </div>
 
-  <Dialog v-model:visible="isDialogVisible" modal>
+  <Dialog
+    v-model:visible="isDialogVisible"
+    modal
+    dismissable-mask
+    @after-hide="resetDialog"
+  >
     <template #header>
       <h2>Создать цели</h2>
     </template>
     <BaseForm
+      ref="createGoalsFormRef"
       submit-button-label="Создать"
       submit-button-icon="pi-plus"
       class="create-goals-form"
@@ -169,6 +175,36 @@ const handleCreateGoals = async () => {
                   :suffix="createGoalsForm.timesSuffix"
                 />
                 <label for="goals-timesStep">Шаг</label>
+              </BaseFormField>
+
+              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+              <BaseFormField
+                name="startDate"
+                :initial-value="DEFAULT_GOALS_FORM_FIELDS.startDate"
+              >
+                <DatePicker
+                  id="goals-startDate"
+                  v-model="createGoalsForm.startDate"
+                  fluid
+                  show-icon
+                  :date-format="DATE_FIELD_FORMAT"
+                />
+                <label for="goals-startDate">Начало действия</label>
+              </BaseFormField>
+
+              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+              <BaseFormField
+                name="endDate"
+                :initial-value="DEFAULT_GOALS_FORM_FIELDS.endDate"
+              >
+                <DatePicker
+                  id="goals-endDate"
+                  v-model="createGoalsForm.endDate"
+                  fluid
+                  show-icon
+                  :date-format="DATE_FIELD_FORMAT"
+                />
+                <label for="goals-endDate">Конец действия</label>
               </BaseFormField>
             </div>
           </AccordionContent>
