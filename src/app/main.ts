@@ -8,6 +8,7 @@ import { VueFire, VueFireAuth } from 'vuefire';
 import { firebaseApp } from 'shared/api';
 
 import App from './App.vue';
+import { ruLocale } from './locales/ru';
 import { router } from './router';
 
 import 'primeicons/primeicons.css';
@@ -20,6 +21,7 @@ app.use(PrimeVue, {
     preset: Aura,
     options: { darkModeSelector: '.dark-theme' },
   },
+  locale: ruLocale,
 });
 
 app.use(VueFire, {

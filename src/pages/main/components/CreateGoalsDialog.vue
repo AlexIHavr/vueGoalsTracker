@@ -13,10 +13,15 @@ import { reactive, ref } from 'vue';
 
 import { BaseForm } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
+import { ALL_EXCEPT_NUMBERS_REGEX } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 
 import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
+import {
+  DEFAULT_GOALS_FORM_FIELDS,
+  MAX_START_DATE,
+  MIN_START_DATE,
+} from '../consts/goalsFormFields';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
@@ -131,7 +136,7 @@ const handleCreateGoals = async () => {
                 <InputText
                   id="goals-timesSuffix"
                   v-model="createGoalsForm.timesSuffix"
-                  v-keyfilter="/[^0-9]/"
+                  v-keyfilter="ALL_EXCEPT_NUMBERS_REGEX"
                   fluid
                   show-clear
                 />
@@ -188,6 +193,9 @@ const handleCreateGoals = async () => {
                   fluid
                   show-icon
                   :date-format="DATE_FIELD_FORMAT"
+                  :manual-input="false"
+                  :min-date="MIN_START_DATE"
+                  :max-date="MAX_START_DATE"
                 />
                 <label for="goals-startDate">Начало действия</label>
               </BaseFormField>
@@ -203,6 +211,9 @@ const handleCreateGoals = async () => {
                   fluid
                   show-icon
                   :date-format="DATE_FIELD_FORMAT"
+                  :manual-input="false"
+                  :min-date="MIN_START_DATE"
+                  :max-date="MAX_START_DATE"
                 />
                 <label for="goals-endDate">Конец действия</label>
               </BaseFormField>

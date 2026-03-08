@@ -1,1 +1,1 @@
-export const DATE_FIELD_FORMAT = 'dd.mm.yy';
+export const DATE_FIELD_FORMAT = 'd MM';
