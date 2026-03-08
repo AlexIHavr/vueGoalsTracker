@@ -22,6 +22,7 @@ import {
   MAX_START_DATE,
   MIN_START_DATE,
 } from '../consts/goalsFormFields';
+import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
@@ -31,8 +32,11 @@ const createGoalsForm = reactive<CreateGoalsFormFields>({
 });
 
 const isDialogVisible = ref(false);
+const createGoalsFormRef = ref(null);
 
 const { createGoal } = useGoals();
+
+useWatchFormRefs(createGoalsFormRef);
 
 const handleShowDialog = () => {
   isDialogVisible.value = true;
@@ -87,6 +91,7 @@ const handleCreateGoals = async () => {
       <h2>Создать цели</h2>
     </template>
     <BaseForm
+      ref="createGoalsFormRef"
       submit-button-label="Создать"
       submit-button-icon="pi-plus"
       class="create-goals-form"

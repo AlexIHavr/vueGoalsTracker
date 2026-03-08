@@ -25,7 +25,7 @@ const getTimesScheme = (
   const defaultField = DEFAULT_GOALS_FORM_FIELDS[field];
 
   return number()
-    .nullable()
+    .transform((value) => (value === null ? defaultField : value))
     .default(defaultField)
     .min(defaultField, `${name} не ${errorVerb} быть меньше ${defaultField}`)
     .max(
