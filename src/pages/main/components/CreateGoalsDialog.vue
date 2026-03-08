@@ -87,7 +87,6 @@ const handleCreateGoals = async () => {
       <h2>Создать цели</h2>
     </template>
     <BaseForm
-      ref="createGoalsFormRef"
       submit-button-label="Создать"
       submit-button-icon="pi-plus"
       class="create-goals-form"
@@ -152,6 +151,7 @@ const handleCreateGoals = async () => {
                   show-clear
                   :pt:pcinputtext:root="{ autocomplete: 'off' }"
                   :suffix="createGoalsForm.timesSuffix"
+                  :min="DEFAULT_GOALS_FORM_FIELDS.timesStart"
                 />
                 <label for="goals-timesStart">Начальное количество</label>
               </BaseFormField>
@@ -165,6 +165,7 @@ const handleCreateGoals = async () => {
                   show-clear
                   :pt:pcinputtext:root="{ autocomplete: 'off' }"
                   :suffix="createGoalsForm.timesSuffix"
+                  :min="DEFAULT_GOALS_FORM_FIELDS.timesEnd"
                 />
                 <label for="goals-timesEnd">Количество</label>
               </BaseFormField>
@@ -178,6 +179,7 @@ const handleCreateGoals = async () => {
                   show-clear
                   :pt:pcinputtext:root="{ autocomplete: 'off' }"
                   :suffix="createGoalsForm.timesSuffix"
+                  :min="DEFAULT_GOALS_FORM_FIELDS.timesStep"
                 />
                 <label for="goals-timesStep">Шаг</label>
               </BaseFormField>

@@ -1,5 +1,5 @@
-import { zodResolver } from '@primevue/forms/resolvers/zod';
-import z from 'zod';
+import { yupResolver } from '@primevue/forms/resolvers/yup';
+import { date, number, object, ObjectSchema, ref, string } from 'yup';
 
 import { getLocaleNumberString } from 'shared/utils';
 
@@ -19,51 +19,53 @@ const MAX_TIMES_LOCAL_STRING = getLocaleNumberString(MAX_TIMES);
 
 const getTimesScheme = (
   field: keyof CreateGoalsFormTimesFields,
-  name: string
+  name: string,
+  errorVerb: string = 'должно'
 ) => {
   const defaultField = DEFAULT_GOALS_FORM_FIELDS[field];
 
-  //preprocess ignores null value - fix open issue https://github.com/primefaces/primevue/issues/8364
-  return z.preprocess(
-    (value) => (value === null ? defaultField : value),
-    z
-      .number()
-      .min(defaultField, {
-        error: `${name} не должно быть меньше ${defaultField}`,
-      })
-      .max(MAX_TIMES, {
-        error: `${name} не должно превышать ${MAX_TIMES_LOCAL_STRING}`,
-      })
-  );
+  return number()
+    .nullable()
+    .default(defaultField)
+    .min(defaultField, `${name} не ${errorVerb} быть меньше ${defaultField}`)
+    .max(
+      MAX_TIMES,
+      `${name} не ${errorVerb} превышать ${MAX_TIMES_LOCAL_STRING}`
+    );
 };
 
-const createGoalsSchema = z
-  .object({
-    title: z
-      .string()
-      .nonempty({ error: 'Название обязательно' })
-      .max(MAX_TITLE_LENGTH, {
-        error: `Название не должно превышать ${MAX_TITLE_LENGTH} символов`,
-      }),
-    description: z.string().max(MAX_DESCRIPTION_LENGTH, {
-      error: `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`,
-    }),
-    timesStart: getTimesScheme('timesStart', 'Начальное количество'),
-    timesEnd: getTimesScheme('timesEnd', 'Количество'),
-    timesStep: getTimesScheme('timesStep', 'Шаг'),
-    timesSuffix: z.string().max(MAX_TIMES_SUFFIX_LENGTH, {
-      error: `Наименование количества не должно превышать ${MAX_TIMES_SUFFIX_LENGTH} символов`,
-    }),
-    startDate: z.date({ error: 'Некорректный формат даты' }),
-    endDate: z.date({ error: 'Некорректный формат даты' }),
-  })
-  .refine(({ timesStart, timesEnd }) => timesEnd > timesStart, {
-    path: ['timesEnd'],
-    error: 'Начальное количество не должно превышать количество',
-  })
-  .refine((data) => data.endDate > data.startDate, {
-    path: ['endDate'],
-    message: 'Начало действия не должно превышать конец действия',
-  }) satisfies z.ZodType<CreateGoalsFormFields>;
+const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
+  title: string()
+    .required('Название обязательно')
+    .max(
+      MAX_TITLE_LENGTH,
+      `Название не должно превышать ${MAX_TITLE_LENGTH} символов`
+    ),
+  description: string().max(
+    MAX_DESCRIPTION_LENGTH,
+    `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`
+  ),
+  timesStart: getTimesScheme('timesStart', 'Начальное количество').lessThan(
+    ref('timesEnd'),
+    'Начальное количество должно быть меньше количества'
+  ),
+  timesEnd: getTimesScheme('timesEnd', 'Количество').moreThan(
+    ref('timesStart'),
+    'Количество должно быть больше начального количества'
+  ),
+  timesStep: getTimesScheme('timesStep', 'Шаг', 'должен'),
+  timesSuffix: string().max(
+    MAX_TIMES_SUFFIX_LENGTH,
+    `Наименование количества не должно превышать ${MAX_TIMES_SUFFIX_LENGTH} символов`
+  ),
+  startDate: date()
+    .typeError('Некорректный формат даты')
+    .required('Начало действия обязательно')
+    .max(ref('endDate'), 'Начало действия должно быть больше конца действия'),
+  endDate: date()
+    .typeError('Некорректный формат даты')
+    .required('Конец действия обязателен')
+    .min(ref('startDate'), 'Конец действия должен быть меньше начала действия'),
+});
 
-export const createGoalsResolver = zodResolver(createGoalsSchema);
+export const createGoalsResolver = yupResolver(createGoalsSchema);

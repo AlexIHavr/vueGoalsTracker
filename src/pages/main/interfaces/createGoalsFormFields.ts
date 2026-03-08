@@ -1,7 +1,7 @@
 export interface CreateGoalsFormTimesFields {
-  timesStart?: number;
-  timesEnd?: number;
-  timesStep?: number;
+  timesStart: number | null;
+  timesEnd: number | null;
+  timesStep: number | null;
 }
 
 export interface CreateGoalsFormFields extends CreateGoalsFormTimesFields {
