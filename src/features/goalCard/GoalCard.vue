@@ -5,11 +5,12 @@ import Message from 'primevue/message';
 import { computed } from 'vue';
 
 import { useGoals } from 'shared/hooks';
-import { getLocaleNumberString } from 'shared/utils';
 
 import { GOAL_STATUSES } from './consts/goalStatuses';
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
+import { getGoalDates } from './utils/getGoalDates';
 import { getGoalStatus } from './utils/getGoalStatus';
+import { getGoalTimes } from './utils/getGoalTimes';
 
 import type { GoalDocument } from 'shared/interfaces';
 
@@ -21,20 +22,9 @@ const { updateGoal, removeGoal } = useGoals();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
-const goalTimes = computed(() => {
-  if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
-    return '';
-  }
+const goalTimes = computed(() => getGoalTimes(goalStatus, goal));
 
-  if (goal.timesEnd === 1) {
-    return '';
-  }
-
-  const timesCurrentString = `${getLocaleNumberString(goal.timesCurrent)}${goal.timesSuffix}`;
-  const timesEndString = `${getLocaleNumberString(goal.timesEnd)}${goal.timesSuffix}`;
-
-  return `${timesCurrentString} из ${timesEndString}`;
-});
+const goalDates = computed(() => getGoalDates(goalStatus, goal));
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);
 
@@ -83,30 +73,46 @@ const handleUpdateTimes = () => {
     </template>
     <template #content>
       <div class="content-wrapper">
-        <Message v-if="goalTimes" severity="success" size="small">
-          {{ goalTimes }}
+        <Message
+          v-if="goalDates"
+          size="small"
+          :severity="goalAttrs.messageSeverity"
+        >
+          {{ goalDates }}
         </Message>
         <h4>{{ goal.description }}</h4>
       </div>
     </template>
     <template #footer>
       <div class="footer-wrapper">
-        <Button
-          :icon="goalAttrs.statusIcon"
-          :label="goalAttrs.completeButtonLabel"
-          :severity="goalAttrs.buttonSeverity"
-          raised
-          fluid
-          @click="handleUpdateTimes()"
-        />
+        <Message
+          v-if="goalTimes"
+          severity="success"
+          size="small"
+          class="goal-times-message"
+          variant="outlined"
+        >
+          {{ goalTimes }}
+        </Message>
 
-        <Button
-          icon="pi pi-trash"
-          aria-label="Save"
-          severity="danger"
-          raised
-          @click="removeGoal(goal.id)"
-        />
+        <div class="footer-buttons-wrapper">
+          <Button
+            :icon="goalAttrs.statusIcon"
+            :label="goalAttrs.completeButtonLabel"
+            :severity="goalAttrs.buttonSeverity"
+            raised
+            fluid
+            @click="handleUpdateTimes()"
+          />
+
+          <Button
+            icon="pi pi-trash"
+            aria-label="Save"
+            severity="danger"
+            raised
+            @click="removeGoal(goal.id)"
+          />
+        </div>
       </div>
     </template>
   </Card>
@@ -116,8 +122,8 @@ const handleUpdateTimes = () => {
 .goal-card {
   width: 300px;
   min-width: 300px;
-  height: 270px;
-  min-height: 270px;
+  height: 300px;
+  min-height: 300px;
 }
 
 .title-wrapper {
@@ -136,8 +142,18 @@ const handleUpdateTimes = () => {
 
 .footer-wrapper {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-buttons-wrapper {
+  display: flex;
   gap: 10px;
   justify-content: space-between;
+}
+
+.goal-times-message {
+  width: fit-content;
 }
 
 .p-card-body {

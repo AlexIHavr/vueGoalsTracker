@@ -2,6 +2,7 @@ import { reactive, watchEffect, type ComputedRef } from 'vue';
 
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
+import type { MessageProps } from 'primevue';
 import type { ButtonProps } from 'primevue/button';
 
 export function useGoalStatusAttrs(status: ComputedRef<string>) {
@@ -9,10 +10,12 @@ export function useGoalStatusAttrs(status: ComputedRef<string>) {
     statusIcon: string;
     completeButtonLabel: string;
     buttonSeverity: ButtonProps['severity'];
+    messageSeverity: MessageProps['severity'];
   }>({
     statusIcon: '',
     completeButtonLabel: '',
     buttonSeverity: '',
+    messageSeverity: '',
   });
 
   watchEffect(() => {
@@ -21,18 +24,21 @@ export function useGoalStatusAttrs(status: ComputedRef<string>) {
         goalAttrs.statusIcon = 'pi pi-check';
         goalAttrs.completeButtonLabel = 'Выполнено';
         goalAttrs.buttonSeverity = 'success';
+        goalAttrs.messageSeverity = 'success';
         break;
 
       case GOAL_STATUSES.EXPIRED:
         goalAttrs.statusIcon = 'pi pi-clock';
         goalAttrs.completeButtonLabel = 'Срок истек';
         goalAttrs.buttonSeverity = 'danger';
+        goalAttrs.messageSeverity = 'error';
         break;
 
       case GOAL_STATUSES.IN_PROGRESS:
         goalAttrs.statusIcon = 'pi pi-circle';
         goalAttrs.completeButtonLabel = 'Выполнить';
         goalAttrs.buttonSeverity = '';
+        goalAttrs.messageSeverity = 'success';
         break;
 
       case GOAL_STATUSES.TO_DO:
@@ -40,6 +46,7 @@ export function useGoalStatusAttrs(status: ComputedRef<string>) {
         goalAttrs.statusIcon = 'pi pi-bookmark';
         goalAttrs.completeButtonLabel = 'К выполнению';
         goalAttrs.buttonSeverity = 'info';
+        goalAttrs.messageSeverity = 'info';
         break;
     }
   });
