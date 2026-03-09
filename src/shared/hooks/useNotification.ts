@@ -1,6 +1,6 @@
 import { useToast } from 'primevue/usetoast';
 
-import type { ToastMessageOptions } from 'primevue';
+import type { ToastMessageOptions } from 'primevue/toast';
 
 const DEFAULT_LIFE_TIME = 3000;
 

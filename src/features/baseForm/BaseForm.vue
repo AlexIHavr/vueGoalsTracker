@@ -2,7 +2,7 @@
 import Form, { type FormSubmitEvent } from '@primevue/forms/form';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
-import { ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 
 import type { BaseFormEvent } from './interfaces/baseFormEvent';
 
@@ -18,6 +18,10 @@ const {
 
 const isLoading = ref<boolean>(false);
 const submitErrorMessage = ref<string | null>(null);
+
+const formRef = useTemplateRef('formRef');
+
+defineExpose({ formRef });
 
 const handleFormSubmit = async (event: FormSubmitEvent) => {
   if (!event.valid) {
@@ -38,7 +42,7 @@ const handleFormSubmit = async (event: FormSubmitEvent) => {
 </script>
 
 <template>
-  <Form v-slot="$form" @submit="handleFormSubmit">
+  <Form v-slot="$form" ref="formRef" @submit="handleFormSubmit">
     <slot></slot>
 
     <Button

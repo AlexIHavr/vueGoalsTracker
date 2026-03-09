@@ -1,13 +1,13 @@
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
+import type { GoalStatus } from '../types/goalStatus';
 import type { GoalDocument } from 'shared/interfaces';
-import type { ValueOf } from 'shared/types';
 
 export const getGoalStatus = ({
   isCompleted,
   startDate,
   endDate,
-}: GoalDocument): ValueOf<typeof GOAL_STATUSES> => {
+}: GoalDocument): GoalStatus => {
   const isExpiredStatus = endDate.seconds < Date.now() / 1000;
   const isInProgressStatus = startDate.seconds <= Date.now() / 1000;
 
