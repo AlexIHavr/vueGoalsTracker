@@ -13,8 +13,9 @@ import { reactive, ref } from 'vue';
 
 import { BaseForm } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
-import { ALL_EXCEPT_NUMBERS_REGEX } from 'shared/consts';
+import { ALL_EXCEPT_NUMBERS_REGEX, CURRENT_YEAR } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
+import { selectedYearRef } from 'shared/store';
 
 import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
 import {
@@ -76,6 +77,7 @@ const handleCreateGoals = async () => {
     label="Добавить цели"
     icon="pi pi-plus"
     raised
+    :disabled="selectedYearRef !== CURRENT_YEAR"
     @click="handleShowDialog"
   />
 

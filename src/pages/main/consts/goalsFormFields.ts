@@ -1,4 +1,4 @@
-export const CURRENT_YEAR = new Date().getFullYear();
+import { CURRENT_YEAR } from 'shared/consts';
 
 export const MIN_START_DATE = new Date(CURRENT_YEAR, 0);
 export const MAX_START_DATE = new Date(CURRENT_YEAR, 12, 0);
