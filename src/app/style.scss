@@ -147,10 +147,32 @@ h6 {
   --p-select-background: var(--p-button-primary-background);
   --p-select-shadow: var(--p-button-raised-shadow);
   --p-select-border-color: transparent;
+  --p-select-focus-ring-shadow: var(--p-button-raised-shadow);
+  --p-select-hover-border-color: var(--p-select-border-color);
+  --p-select-disabled-background: var(--p-button-primary-background);
+
+  &.p-select-open {
+    background-color: var(--p-button-primary-hover-background);
+  }
+
+  &.p-disabled.p-disabled {
+    box-shadow: none;
+    opacity: 0.9;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--p-button-primary-hover-background);
+    }
+  }
 }
 
 .p-select-label {
   --p-select-color: var(--p-button-primary-color);
+  --p-select-placeholder-color: var(--p-button-primary-color);
+  --p-select-disabled-color: var(--p-button-primary-color);
+
+  font-weight: var(--p-button-label-font-weight);
 }
 
 .p-select-dropdown {

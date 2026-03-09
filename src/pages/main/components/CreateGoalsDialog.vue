@@ -6,8 +6,10 @@ import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
+import Divider from 'primevue/divider';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
+import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
 import { reactive, ref } from 'vue';
 
@@ -23,10 +25,20 @@ import {
   MAX_START_DATE,
   MIN_START_DATE,
 } from '../consts/goalsFormFields';
+import {
+  PERIOD_FILTERS,
+  PERIOD_FILTERS_OPTIONS,
+  PERIOD_TYPES,
+  PERIOD_TYPES_OPTIONS,
+} from '../consts/periodOptions';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type {
+  PeriodFiltersValues,
+  PeriodTypesValues,
+} from '../types/periodOptions';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
   ...DEFAULT_GOALS_FORM_FIELDS,
@@ -34,6 +46,8 @@ const createGoalsForm = reactive<CreateGoalsFormFields>({
 
 const isDialogVisible = ref(false);
 const createGoalsFormRef = ref(null);
+const selectedPeriod = ref<PeriodTypesValues>(PERIOD_TYPES.YEAR);
+const selectedPeriodFilter = ref<PeriodFiltersValues>(PERIOD_FILTERS.ALL);
 
 const { createGoal } = useGoals();
 
@@ -132,6 +146,27 @@ const handleCreateGoals = async () => {
           <AccordionHeader>Дополнительные параметры</AccordionHeader>
           <AccordionContent>
             <div class="extra-settings-wrapper">
+              <div class="period-settings">
+                <Select
+                  v-model="selectedPeriod"
+                  option-label="label"
+                  option-value="value"
+                  :default-value="PERIOD_TYPES.YEAR"
+                  :options="PERIOD_TYPES_OPTIONS"
+                />
+
+                <Select
+                  v-if="selectedPeriod !== PERIOD_TYPES.YEAR"
+                  v-model="selectedPeriodFilter"
+                  option-label="label"
+                  option-value="value"
+                  :default-value="PERIOD_FILTERS.ALL"
+                  :options="PERIOD_FILTERS_OPTIONS"
+                />
+              </div>
+
+              <Divider />
+
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
               <BaseFormField
                 name="timesSuffix"
@@ -252,6 +287,11 @@ const handleCreateGoals = async () => {
   gap: 20px;
 }
 
+.period-settings {
+  display: flex;
+  gap: 10px;
+}
+
 .p-accordionheader {
   --p-accordion-header-padding: 0 0 20px 0;
 }
@@ -262,5 +302,17 @@ const handleCreateGoals = async () => {
 
 .p-accordioncontent-content {
   --p-accordion-content-padding: 0;
+}
+
+.p-divider-horizontal {
+  --p-divider-horizontal-margin: 0;
+}
+
+.p-select {
+  width: 135px;
+
+  .p-select-label {
+    padding-right: 0;
+  }
 }
 </style>
