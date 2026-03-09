@@ -21,7 +21,7 @@ const submitErrorMessage = ref<string | null>(null);
 
 const formRef = useTemplateRef('formRef');
 
-defineExpose({ formRef });
+defineExpose({ formRef, isLoading });
 
 const handleFormSubmit = async (event: FormSubmitEvent) => {
   if (!event.valid) {

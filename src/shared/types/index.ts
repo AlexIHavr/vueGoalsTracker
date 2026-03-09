@@ -1,2 +1,2 @@
 export type { FormErrors } from './formResolver';
-export type { ValueOf } from './common';
+export type { ValueOf, NotNullableObject } from './common';

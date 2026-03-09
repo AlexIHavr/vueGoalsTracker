@@ -17,7 +17,7 @@ const yearSelectOptions = computed(() =>
         .map(({ startDate }) => startDate.toDate().getFullYear())
         .concat(CURRENT_YEAR)
     )
-  ).sort((year1, year2) => year1 - year2)
+  ).sort((firstYear, secondYear) => firstYear - secondYear)
 );
 </script>
 

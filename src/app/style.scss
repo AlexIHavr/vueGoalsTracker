@@ -156,8 +156,7 @@ h6 {
   }
 
   &.p-disabled.p-disabled {
-    box-shadow: none;
-    opacity: 0.9;
+    opacity: var(--p-disabled-opacity);
   }
 
   @media (hover: hover) {
