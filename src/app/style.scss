@@ -1,6 +1,7 @@
 :root {
   --background-color-primary: #cfdace;
 
+  // p-card
   .to-do {
     &.p-card {
       --p-card-background: #cbd0ff;
@@ -24,11 +25,39 @@
       --p-card-background: #fb979f;
     }
   }
+
+  // p-datepicker
+  .p-datepicker-panel {
+    --p-datepicker-panel-background: #e3ffe2;
+  }
+
+  .p-datepicker-header {
+    --p-datepicker-header-background: #e3ffe2;
+  }
+
+  .p-datepicker-prev-button,
+  .p-datepicker-next-button {
+    --p-button-text-secondary-hover-background: #b5ffb3;
+    --p-button-text-secondary-color: #000;
+  }
+
+  .p-datepicker-day {
+    --p-datepicker-date-hover-background: #b5ffb3;
+  }
+
+  .p-datepicker-select-month {
+    --p-datepicker-select-month-hover-background: #b5ffb3;
+  }
+
+  .p-datepicker-month {
+    --p-datepicker-date-hover-background: #b5ffb3;
+  }
 }
 
 .dark-theme {
   --background-color-primary: #4b4b4b;
 
+  // p-card
   .to-do {
     &.p-card {
       --p-card-background: #1b2a51;
@@ -51,6 +80,33 @@
     &.p-card {
       --p-card-background: #420f13;
     }
+  }
+
+  // p-datepicker
+  .p-datepicker-panel {
+    --p-datepicker-panel-background: #00412a;
+  }
+
+  .p-datepicker-header {
+    --p-datepicker-header-background: #00412a;
+  }
+
+  .p-datepicker-prev-button,
+  .p-datepicker-next-button {
+    --p-button-text-secondary-hover-background: #008c5b;
+    --p-button-text-secondary-color: #fff;
+  }
+
+  .p-datepicker-day {
+    --p-datepicker-date-hover-background: #008c5b;
+  }
+
+  .p-datepicker-select-month {
+    --p-datepicker-select-month-hover-background: #008c5b;
+  }
+
+  .p-datepicker-month {
+    --p-datepicker-date-hover-background: #008c5b;
   }
 }
 
@@ -75,4 +131,12 @@ h6 {
 .p-datepicker-select-year {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.p-datepicker-select-month {
+  font-size: 1rem;
+}
+
+.p-datepicker-select-year {
+  font-size: 1rem;
 }
