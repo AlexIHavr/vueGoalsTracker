@@ -21,26 +21,57 @@ const dataInYear = computed(() =>
 </script>
 
 <template>
-  <main class="goals-board-wrapper">
-    <TransitionGroup name="goal-cards">
-      <GoalCard v-for="goal in dataInYear" :key="goal.id" :goal="goal" />
-    </TransitionGroup>
-  </main>
+  <TransitionGroup name="goal-cards" tag="main" class="goals-board">
+    <GoalCard v-for="goal in dataInYear" :key="goal.id" :goal="goal" />
+  </TransitionGroup>
 </template>
 
 <style lang="scss">
-.goals-board-wrapper {
+.goals-board {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
 .goal-cards-enter-active {
-  transition: all 0.3s;
+  animation: bounce-in 0.5s;
 }
 
-.goal-cards-enter-from {
-  opacity: 0;
-  transform: translateY(-30px);
+.goal-cards-leave-active {
+  animation: bounce-out 0.5s;
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
 }
 </style>
