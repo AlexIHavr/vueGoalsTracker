@@ -37,10 +37,6 @@ const dataInYear = computed(() =>
   animation: bounce-in 0.5s;
 }
 
-.goal-cards-leave-active {
-  animation: bounce-out 0.5s;
-}
-
 @keyframes bounce-in {
   0% {
     opacity: 0;
@@ -55,23 +51,6 @@ const dataInYear = computed(() =>
   100% {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes bounce-out {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(0.3);
   }
 }
 </style>

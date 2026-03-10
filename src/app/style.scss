@@ -177,3 +177,39 @@ h6 {
 .p-select-dropdown {
   --p-select-dropdown-color: var(--p-button-primary-color);
 }
+
+// p-multiselect
+.p-multiselect {
+  --p-multiselect-background: var(--p-button-primary-background);
+  --p-multiselect-shadow: var(--p-button-raised-shadow);
+  --p-multiselect-border-color: transparent;
+  --p-multiselect-focus-ring-shadow: var(--p-button-raised-shadow);
+  --p-multiselect-hover-border-color: var(--p-multiselect-border-color);
+  --p-multiselect-disabled-background: var(--p-button-primary-background);
+
+  &.p-multiselect-open {
+    background-color: var(--p-button-primary-hover-background);
+  }
+
+  &.p-disabled.p-disabled {
+    opacity: var(--p-disabled-opacity);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--p-button-primary-hover-background);
+    }
+  }
+}
+
+.p-multiselect-label {
+  --p-multiselect-color: var(--p-button-primary-color);
+  --p-multiselect-placeholder-color: var(--p-button-primary-color);
+  --p-multiselect-disabled-color: var(--p-button-primary-color);
+
+  font-weight: var(--p-button-label-font-weight);
+}
+
+.p-multiselect-dropdown {
+  --p-multiselect-dropdown-color: var(--p-button-primary-color);
+}

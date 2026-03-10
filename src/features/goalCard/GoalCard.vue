@@ -63,9 +63,9 @@ const handleUpdateTimes = () => {
         <h3>{{ goal.title }}</h3>
         <Button
           :icon="goalAttrs.statusIcon"
+          :severity="goalAttrs.buttonSeverity"
           rounded
           aria-label="status"
-          :severity="goalAttrs.buttonSeverity"
           size="small"
           @click="handleCompleteGoal()"
         />
@@ -75,8 +75,8 @@ const handleUpdateTimes = () => {
       <div class="content-wrapper">
         <Message
           v-if="goalDates"
-          size="small"
           :severity="goalAttrs.messageSeverity"
+          size="small"
         >
           {{ goalDates }}
         </Message>

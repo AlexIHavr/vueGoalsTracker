@@ -9,6 +9,7 @@ import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
+import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
 import { reactive, ref } from 'vue';
@@ -26,6 +27,7 @@ import {
   MIN_START_DATE,
 } from '../consts/goalsFormFields';
 import {
+  MONTH_CHOOSE_FILTERS_OPTIONS,
   PERIOD_FILTERS,
   PERIOD_FILTERS_OPTIONS,
   PERIOD_TYPES,
@@ -36,8 +38,8 @@ import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type {
-  PeriodFiltersValues,
-  PeriodTypesValues,
+  PeriodFilterValue,
+  PeriodTypeValue,
 } from '../types/periodOptions';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
@@ -46,8 +48,9 @@ const createGoalsForm = reactive<CreateGoalsFormFields>({
 
 const isDialogVisible = ref<boolean>(false);
 const createGoalsFormRef = ref<BaseFormExpose>();
-const selectedPeriod = ref<PeriodTypesValues>(PERIOD_TYPES.YEAR);
-const selectedPeriodFilter = ref<PeriodFiltersValues>(PERIOD_FILTERS.ALL);
+const selectedPeriod = ref<PeriodTypeValue>(PERIOD_TYPES.YEAR);
+const selectedPeriodFilter = ref<PeriodFilterValue>(PERIOD_FILTERS.ALL);
+const selectedMonthChooseFilter = ref<number[]>([]);
 
 const { createGoal } = useGoals();
 
@@ -59,6 +62,10 @@ const handleShowDialog = () => {
 
 const resetDialog = () => {
   Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
+
+  selectedPeriod.value = PERIOD_TYPES.YEAR;
+  selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
+  selectedMonthChooseFilter.value = [];
 
   isDialogVisible.value = false;
 };
@@ -76,32 +83,109 @@ const handleCreateGoals = async () => {
   let startDate = createGoalsForm.startDate;
   let endDate = createGoalsForm.endDate;
 
+  const startDay =
+    createGoalsForm.startDay ?? DEFAULT_GOALS_FORM_FIELDS.startDay;
+  const endDay = createGoalsForm.endDay ?? DEFAULT_GOALS_FORM_FIELDS.endDay;
+
   if (selectedPeriod.value === PERIOD_TYPES.MONTH) {
     switch (selectedPeriodFilter.value) {
       default:
       case PERIOD_FILTERS.ALL:
-        for (let index = 0; index < 12; index++) {
-          const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
-          const startDay =
-            createGoalsForm.startDay ?? DEFAULT_GOALS_FORM_FIELDS.startDay;
-          const endDay =
-            createGoalsForm.endDay ?? DEFAULT_GOALS_FORM_FIELDS.endDay;
+        await Promise.all(
+          Array.from({ length: 12 }, (_, index) => {
+            const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
 
-          startDate = new Date(
-            CURRENT_YEAR,
-            index,
-            startDay > lastDay ? lastDay : startDay
-          );
+            startDate = new Date(
+              CURRENT_YEAR,
+              index,
+              startDay > lastDay ? lastDay : startDay
+            );
 
-          endDate = new Date(
-            CURRENT_YEAR,
-            index,
-            endDay > lastDay ? lastDay : endDay
-          );
+            endDate = new Date(
+              CURRENT_YEAR,
+              index,
+              endDay > lastDay ? lastDay : endDay
+            );
 
-          await createOneGoal();
-        }
+            return createOneGoal();
+          })
+        );
 
+        break;
+
+      case PERIOD_FILTERS.EVEN:
+        await Promise.all(
+          Array.from({ length: 12 }, (_, index) => {
+            if (index % 2 === 0) {
+              const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
+
+              startDate = new Date(
+                CURRENT_YEAR,
+                index,
+                startDay > lastDay ? lastDay : startDay
+              );
+
+              endDate = new Date(
+                CURRENT_YEAR,
+                index,
+                endDay > lastDay ? lastDay : endDay
+              );
+
+              return createOneGoal();
+            }
+          })
+        );
+
+        break;
+
+      case PERIOD_FILTERS.ODD:
+        await Promise.all(
+          Array.from({ length: 12 }, (_, index) => {
+            if (index % 2) {
+              const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
+
+              startDate = new Date(
+                CURRENT_YEAR,
+                index,
+                startDay > lastDay ? lastDay : startDay
+              );
+
+              endDate = new Date(
+                CURRENT_YEAR,
+                index,
+                endDay > lastDay ? lastDay : endDay
+              );
+
+              return createOneGoal();
+            }
+          })
+        );
+
+        break;
+
+      case PERIOD_FILTERS.CHOOSE:
+        await Promise.all(
+          (selectedMonthChooseFilter.value.length
+            ? selectedMonthChooseFilter.value
+            : new Array(12).fill(null)
+          ).map((_, index) => {
+            const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
+
+            startDate = new Date(
+              CURRENT_YEAR,
+              index,
+              startDay > lastDay ? lastDay : startDay
+            );
+
+            endDate = new Date(
+              CURRENT_YEAR,
+              index,
+              endDay > lastDay ? lastDay : endDay
+            );
+
+            return createOneGoal();
+          })
+        );
         break;
     }
   } else {
@@ -192,7 +276,6 @@ const handleCreateGoals = async () => {
                   v-model="selectedPeriod"
                   option-label="label"
                   option-value="value"
-                  :default-value="PERIOD_TYPES.YEAR"
                   :options="PERIOD_TYPES_OPTIONS"
                   :disabled="!!createGoalsFormRef?.isLoading"
                 />
@@ -202,8 +285,17 @@ const handleCreateGoals = async () => {
                   v-model="selectedPeriodFilter"
                   option-label="label"
                   option-value="value"
-                  :default-value="PERIOD_FILTERS.ALL"
                   :options="PERIOD_FILTERS_OPTIONS"
+                  :disabled="!!createGoalsFormRef?.isLoading"
+                />
+
+                <MultiSelect
+                  v-if="selectedPeriodFilter === PERIOD_FILTERS.CHOOSE"
+                  v-model="selectedMonthChooseFilter"
+                  option-label="label"
+                  option-value="value"
+                  placeholder="Все месяцы"
+                  :options="MONTH_CHOOSE_FILTERS_OPTIONS"
                   :disabled="!!createGoalsFormRef?.isLoading"
                 />
               </div>
@@ -387,5 +479,17 @@ const handleCreateGoals = async () => {
   .p-select-label {
     padding-right: 0;
   }
+}
+
+.p-multiselect {
+  width: 150px;
+
+  .p-multiselect-label {
+    padding-right: 0;
+  }
+}
+
+.p-multiselect-overlay .p-multiselect-header {
+  display: none;
 }
 </style>

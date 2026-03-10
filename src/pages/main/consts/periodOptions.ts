@@ -1,4 +1,5 @@
 import type {
+  MonthChooseFiltersOptions,
   PeriodFiltersOptions,
   PeriodTypesOptions,
 } from '../types/periodOptions';
@@ -12,7 +13,7 @@ export const PERIOD_FILTERS = {
   ALL: 'all',
   EVEN: 'even',
   ODD: 'odd',
-  RANGE: 'range',
+  CHOOSE: 'choose',
 } as const;
 
 export const PERIOD_TYPES_OPTIONS: PeriodTypesOptions = [
@@ -24,7 +25,7 @@ export const PERIOD_TYPES_OPTIONS: PeriodTypesOptions = [
     label: 'Месяц',
     value: PERIOD_TYPES.MONTH,
   },
-];
+] as const;
 
 export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
   {
@@ -40,7 +41,28 @@ export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
     value: PERIOD_FILTERS.ODD,
   },
   {
-    label: 'Диапазон',
-    value: PERIOD_FILTERS.RANGE,
+    label: 'Выбор',
+    value: PERIOD_FILTERS.CHOOSE,
   },
-];
+] as const;
+
+export const MONTH_CHOOSE_FILTERS_LABELS = [
+  'Январь',
+  'Февраль',
+  'Март',
+  'Апрель',
+  'Май',
+  'Июнь',
+  'Июль',
+  'Август',
+  'Сентябрь',
+  'Октябрь',
+  'Ноябрь',
+  'Декабрь',
+] as const;
+
+export const MONTH_CHOOSE_FILTERS_OPTIONS: MonthChooseFiltersOptions =
+  Array.from({ length: 12 }, (_, index) => ({
+    label: MONTH_CHOOSE_FILTERS_LABELS[index]!,
+    value: index,
+  }));
