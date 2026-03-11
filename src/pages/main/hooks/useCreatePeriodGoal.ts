@@ -72,7 +72,7 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
         const day = dayNumber > lastDay ? lastDay : dayNumber;
 
         const startDate = new Date(CURRENT_YEAR, monthIndex, day);
-        const endDate = new Date(CURRENT_YEAR, monthIndex, day + 1);
+        const endDate = new Date(CURRENT_YEAR, monthIndex, day, 23, 59, 59);
 
         daysGoal.push(createYearGoal(startDate, endDate));
       });

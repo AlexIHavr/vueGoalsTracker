@@ -44,5 +44,5 @@ export const isFullDay = (startDate: Date, endDate: Date) => {
     return false;
   }
 
-  return endDate.getDate() - startDate.getDate() === 1;
+  return endDate.getDate() === startDate.getDate();
 };

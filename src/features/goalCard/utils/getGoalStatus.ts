@@ -9,7 +9,7 @@ export const getGoalStatus = ({
   endDate,
 }: GoalDocument): GoalStatus => {
   const now = new Date();
-  const isExpiredStatus = endDate.toDate() <= now;
+  const isExpiredStatus = endDate.toDate() < now;
   const isInProgressStatus = startDate.toDate() <= now;
 
   if (isCompleted) {

@@ -12,7 +12,7 @@ import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
@@ -66,6 +66,10 @@ const { createYearGoal, createMonthGoal, createDayGoal } =
 
 useWatchFormRefs(createGoalsFormRef);
 
+watch(selectedMonthChooseFilter, () => {
+  selectedDayChooseFilter.value = [];
+});
+
 const handleShowDialog = () => {
   isDialogVisible.value = true;
 };
@@ -76,6 +80,7 @@ const resetDialog = () => {
   selectedPeriod.value = PERIOD_TYPES.YEAR;
   selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
   selectedMonthChooseFilter.value = [];
+  selectedDayChooseFilter.value = [];
 
   isDialogVisible.value = false;
 };
@@ -189,44 +194,50 @@ const handleCreateGoals = async () => {
           <AccordionHeader>Дополнительные параметры</AccordionHeader>
           <AccordionContent>
             <div class="extra-settings-wrapper">
-              <div class="period-settings">
-                <Select
-                  v-model="selectedPeriod"
-                  option-label="label"
-                  option-value="value"
-                  :options="PERIOD_TYPES_OPTIONS"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
+              <div class="period-settings-wrapper">
+                <div class="period-settings">
+                  <Select
+                    v-model="selectedPeriod"
+                    option-label="label"
+                    option-value="value"
+                    :options="PERIOD_TYPES_OPTIONS"
+                    :disabled="!!createGoalsFormRef?.isLoading"
+                  />
 
-                <Select
-                  v-if="selectedPeriod !== PERIOD_TYPES.YEAR"
-                  v-model="selectedPeriodFilter"
-                  option-label="label"
-                  option-value="value"
-                  :options="PERIOD_FILTERS_OPTIONS"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
+                  <Select
+                    v-if="selectedPeriod !== PERIOD_TYPES.YEAR"
+                    v-model="selectedPeriodFilter"
+                    option-label="label"
+                    option-value="value"
+                    :options="PERIOD_FILTERS_OPTIONS"
+                    :disabled="!!createGoalsFormRef?.isLoading"
+                  />
+                </div>
 
-                <MultiSelect
-                  v-if="selectedPeriodFilter === PERIOD_FILTERS.CHOOSE"
-                  v-model="selectedMonthChooseFilter"
-                  option-label="label"
-                  option-value="value"
-                  placeholder="Все месяцы"
-                  :options="MONTH_CHOOSE_FILTERS_OPTIONS"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
-
-                <MultiSelect
+                <div
                   v-if="
                     selectedPeriodFilter === PERIOD_FILTERS.CHOOSE &&
-                    selectedPeriod === PERIOD_TYPES.DAY
+                    selectedPeriod !== PERIOD_TYPES.YEAR
                   "
-                  v-model="selectedDayChooseFilter"
-                  placeholder="Все дни"
-                  :options="dayChooseFilterOptions"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
+                  class="period-settings"
+                >
+                  <MultiSelect
+                    v-model="selectedMonthChooseFilter"
+                    option-label="label"
+                    option-value="value"
+                    placeholder="Все месяцы"
+                    :options="MONTH_CHOOSE_FILTERS_OPTIONS"
+                    :disabled="!!createGoalsFormRef?.isLoading"
+                  />
+
+                  <MultiSelect
+                    v-if="selectedPeriod === PERIOD_TYPES.DAY"
+                    v-model="selectedDayChooseFilter"
+                    placeholder="Все дни"
+                    :options="dayChooseFilterOptions"
+                    :disabled="!!createGoalsFormRef?.isLoading"
+                  />
+                </div>
               </div>
 
               <Divider />
@@ -376,9 +387,14 @@ const handleCreateGoals = async () => {
   gap: 20px;
 }
 
+.period-settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .period-settings {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -398,10 +414,7 @@ const handleCreateGoals = async () => {
   --p-divider-horizontal-margin: 0;
 }
 
-.p-select {
-  width: 135px;
-}
-
+.p-select,
 .p-multiselect {
   width: 170px;
 }
