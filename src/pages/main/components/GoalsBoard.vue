@@ -8,23 +8,49 @@ import { selectedYearRef } from 'shared/store';
 const { data } = useGoals();
 
 const dataInYear = computed(() =>
-  data.value.filter(
-    ({ startDate }) =>
-      startDate.toDate().getFullYear() === selectedYearRef.value
-  )
+  data.value
+    .filter(
+      ({ startDate }) =>
+        startDate.toDate().getFullYear() === selectedYearRef.value
+    )
+    .sort(
+      (firstGoal, secondGoal) =>
+        firstGoal.startDate.seconds - secondGoal.startDate.seconds
+    )
 );
 </script>
 
 <template>
-  <main class="goals-board-wrapper">
+  <TransitionGroup name="goal-cards" tag="main" class="goals-board">
     <GoalCard v-for="goal in dataInYear" :key="goal.id" :goal="goal" />
-  </main>
+  </TransitionGroup>
 </template>
 
 <style lang="scss">
-.goals-board-wrapper {
+.goals-board {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.goal-cards-enter-active {
+  animation: bounce-in 0.5s;
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>

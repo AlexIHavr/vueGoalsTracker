@@ -62,11 +62,11 @@ const handleUpdateTimes = () => {
       <div class="title-wrapper">
         <h3>{{ goal.title }}</h3>
         <Button
-          :icon="goalAttrs.statusIcon"
-          rounded
           aria-label="status"
-          :severity="goalAttrs.buttonSeverity"
           size="small"
+          rounded
+          :icon="goalAttrs.statusIcon"
+          :severity="goalAttrs.buttonSeverity"
           @click="handleCompleteGoal()"
         />
       </div>
@@ -97,11 +97,11 @@ const handleUpdateTimes = () => {
 
         <div class="footer-buttons-wrapper">
           <Button
+            raised
+            fluid
             :icon="goalAttrs.statusIcon"
             :label="goalAttrs.completeButtonLabel"
             :severity="goalAttrs.buttonSeverity"
-            raised
-            fluid
             @click="handleUpdateTimes()"
           />
 
@@ -122,8 +122,8 @@ const handleUpdateTimes = () => {
 .goal-card {
   width: 300px;
   min-width: 300px;
-  height: 300px;
-  min-height: 300px;
+  height: 320px;
+  min-height: 320px;
 }
 
 .title-wrapper {

@@ -56,10 +56,10 @@ const handleToggleTheme = () => {
       @click="handleLogout"
     />
     <Button
-      :label="isDarkTheme ? 'Светлая тема' : 'Темная тема'"
       icon="pi pi-sync"
       severity="contrast"
       raised
+      :label="isDarkTheme ? 'Светлая тема' : 'Темная тема'"
       @click="handleToggleTheme"
     />
     <Message class="welcome-message" severity="secondary">

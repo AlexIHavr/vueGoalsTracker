@@ -2,6 +2,7 @@
 import Select from 'primevue/select';
 import { computed } from 'vue';
 
+import { CURRENT_YEAR } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 import { selectedYearRef } from 'shared/store';
 
@@ -11,8 +12,12 @@ const { data } = useGoals();
 
 const yearSelectOptions = computed(() =>
   Array.from(
-    new Set(data.value.map(({ startDate }) => startDate.toDate().getFullYear()))
-  ).sort((year1, year2) => year1 - year2)
+    new Set(
+      data.value
+        .map(({ startDate }) => startDate.toDate().getFullYear())
+        .concat(CURRENT_YEAR)
+    )
+  ).sort((firstYear, secondYear) => firstYear - secondYear)
 );
 </script>
 
@@ -20,7 +25,6 @@ const yearSelectOptions = computed(() =>
   <div class="goals-board-header">
     <CreateGoalsDialog />
     <Select
-      id="year-select"
       v-model="selectedYearRef"
       :options="yearSelectOptions"
       :default-value="selectedYearRef"
