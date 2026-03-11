@@ -75,6 +75,26 @@ export default [
           ],
         },
       ],
+      'vue/attributes-order': [
+        'error',
+        {
+          order: [
+            'DEFINITION',
+            'LIST_RENDERING',
+            'CONDITIONALS',
+            'RENDER_MODIFIERS',
+            'GLOBAL',
+            ['UNIQUE', 'SLOT'],
+            'TWO_WAY_BINDING',
+            'OTHER_DIRECTIVES',
+            'ATTR_STATIC',
+            'ATTR_SHORTHAND_BOOL',
+            'ATTR_DYNAMIC',
+            'EVENTS',
+            'CONTENT',
+          ],
+        },
+      ],
     },
   },
 ];
