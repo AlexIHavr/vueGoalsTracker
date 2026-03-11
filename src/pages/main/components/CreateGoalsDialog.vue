@@ -215,7 +215,6 @@ const handleCreateGoals = async () => {
                   v-model="createGoalsForm.timesStart"
                   fluid
                   show-clear
-                  :pt:pcinputtext:root="{ autocomplete: 'off' }"
                   :suffix="createGoalsForm.timesSuffix"
                   :min="DEFAULT_GOALS_FORM_FIELDS.timesStart"
                 />
@@ -229,7 +228,6 @@ const handleCreateGoals = async () => {
                   v-model="createGoalsForm.timesEnd"
                   fluid
                   show-clear
-                  :pt:pcinputtext:root="{ autocomplete: 'off' }"
                   :suffix="createGoalsForm.timesSuffix"
                   :min="DEFAULT_GOALS_FORM_FIELDS.timesEnd"
                 />
@@ -243,7 +241,6 @@ const handleCreateGoals = async () => {
                   v-model="createGoalsForm.timesStep"
                   fluid
                   show-clear
-                  :pt:pcinputtext:root="{ autocomplete: 'off' }"
                   :suffix="createGoalsForm.timesSuffix"
                   :min="DEFAULT_GOALS_FORM_FIELDS.timesStep"
                 />
@@ -296,7 +293,6 @@ const handleCreateGoals = async () => {
                     v-model="createGoalsForm.startDay"
                     fluid
                     show-clear
-                    :pt:pcinputtext:root="{ autocomplete: 'off' }"
                     :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
                   />
                   <label for="goals-startDay">День начала</label>
@@ -309,7 +305,6 @@ const handleCreateGoals = async () => {
                     v-model="createGoalsForm.endDay"
                     fluid
                     show-clear
-                    :pt:pcinputtext:root="{ autocomplete: 'off' }"
                     :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
                   />
                   <label for="goals-endDay">День окончания</label>

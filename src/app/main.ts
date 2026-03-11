@@ -22,6 +22,13 @@ app.use(PrimeVue, {
     options: { darkModeSelector: '.dark-theme' },
   },
   locale: ruLocale,
+  pt: {
+    inputNumber: {
+      pcinputtext: {
+        root: { autocomplete: 'off' },
+      },
+    },
+  },
 });
 
 app.use(VueFire, {
