@@ -1,4 +1,4 @@
-import { parseTimestamp, isFullYear } from './parseTimestamp';
+import { parseTimestamp, isFullYear, isFullMonth } from './parseTimestamp';
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
 import type { GoalStatus } from '../types/goalStatus';
@@ -18,6 +18,10 @@ export const getGoalDates = (
 
   if (isFullYear(goal.startDate, goal.endDate)) {
     return 'Целый год';
+  }
+
+  if (isFullMonth(goal.startDate, goal.endDate)) {
+    return 'Целый месяц';
   }
 
   if (goalStatus.value === GOAL_STATUSES.TO_DO) {

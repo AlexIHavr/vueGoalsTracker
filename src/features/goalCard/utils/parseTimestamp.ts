@@ -20,3 +20,27 @@ export const isFullYear = (
 
   return isStartYear && isEndYear;
 };
+
+export const isFullMonth = (
+  startTimestamp: Timestamp,
+  endTimestamp: Timestamp
+) => {
+  const startDate = startTimestamp.toDate();
+  const endDate = endTimestamp.toDate();
+
+  if (startDate.getMonth() !== endDate.getMonth()) {
+    return false;
+  }
+
+  const isStartMonth = startDate.getDate() === 1;
+
+  const lastDayOfMonth = new Date(
+    endDate.getFullYear(),
+    endDate.getMonth() + 1,
+    0
+  ).getDate();
+
+  const isEndMonth = endDate.getDate() === lastDayOfMonth;
+
+  return isStartMonth && isEndMonth;
+};

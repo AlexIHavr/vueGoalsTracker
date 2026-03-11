@@ -9,19 +9,19 @@ import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields'
 export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
   const { createGoal } = useGoals();
 
-  const timesStart =
-    createGoalsForm.timesStart ?? DEFAULT_GOALS_FORM_FIELDS.timesStart;
-
-  const timesEnd =
-    createGoalsForm.timesEnd ?? DEFAULT_GOALS_FORM_FIELDS.timesEnd;
-
-  const timesStep =
-    createGoalsForm.timesStep ?? DEFAULT_GOALS_FORM_FIELDS.timesStep;
-
   const createYearGoal = async (
     startDate: Date = createGoalsForm.startDate,
     endDate: Date = createGoalsForm.endDate
-  ) =>
+  ) => {
+    const timesStart =
+      createGoalsForm.timesStart ?? DEFAULT_GOALS_FORM_FIELDS.timesStart;
+
+    const timesEnd =
+      createGoalsForm.timesEnd ?? DEFAULT_GOALS_FORM_FIELDS.timesEnd;
+
+    const timesStep =
+      createGoalsForm.timesStep ?? DEFAULT_GOALS_FORM_FIELDS.timesStep;
+
     await createGoal({
       title: createGoalsForm.title,
       description: createGoalsForm.description,
@@ -34,6 +34,7 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
       timesCurrent: timesStart,
       isCompleted: false,
     });
+  };
 
   const createMonthGoal = async (months: number[] = []) => {
     const startDay =
