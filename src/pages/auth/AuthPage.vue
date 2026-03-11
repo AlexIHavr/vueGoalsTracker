@@ -100,9 +100,9 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
                 id="password"
                 v-model="authForm.password"
                 size="large"
-                :feedback="false"
                 toggle-mask
                 fluid
+                :feedback="false"
               />
               <label for="password">Пароль</label>
             </BaseFormField>
