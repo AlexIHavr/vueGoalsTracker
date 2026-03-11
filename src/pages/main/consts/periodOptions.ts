@@ -4,6 +4,8 @@ import type {
   PeriodTypesOptions,
 } from '../types/periodOptions';
 
+export const MONTHS_IN_YEAR = 12;
+
 export const PERIOD_TYPES = {
   YEAR: 'year',
   MONTH: 'month',
@@ -61,8 +63,13 @@ export const MONTH_CHOOSE_FILTERS_LABELS = [
   'Декабрь',
 ] as const;
 
+export const MONTH_INDEXES = Array.from(
+  { length: MONTHS_IN_YEAR },
+  (_, index) => index + 1
+);
+
 export const MONTH_CHOOSE_FILTERS_OPTIONS: MonthChooseFiltersOptions =
-  Array.from({ length: 12 }, (_, index) => ({
-    label: MONTH_CHOOSE_FILTERS_LABELS[index]!,
-    value: index,
+  MONTH_INDEXES.map((month) => ({
+    label: MONTH_CHOOSE_FILTERS_LABELS[month - 1]!,
+    value: month,
   }));

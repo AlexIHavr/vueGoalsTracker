@@ -17,7 +17,6 @@ import { reactive, ref } from 'vue';
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
 import { ALL_EXCEPT_NUMBERS_REGEX, CURRENT_YEAR } from 'shared/consts';
-import { useGoals } from 'shared/hooks';
 import { selectedYearRef } from 'shared/store';
 
 import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
@@ -28,11 +27,13 @@ import {
 } from '../consts/goalsFormFields';
 import {
   MONTH_CHOOSE_FILTERS_OPTIONS,
+  MONTH_INDEXES,
   PERIOD_FILTERS,
   PERIOD_FILTERS_OPTIONS,
   PERIOD_TYPES,
   PERIOD_TYPES_OPTIONS,
 } from '../consts/periodOptions';
+import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 
@@ -52,7 +53,8 @@ const selectedPeriod = ref<PeriodTypeValue>(PERIOD_TYPES.YEAR);
 const selectedPeriodFilter = ref<PeriodFilterValue>(PERIOD_FILTERS.ALL);
 const selectedMonthChooseFilter = ref<number[]>([]);
 
-const { createGoal } = useGoals();
+const { createYearGoal, createMonthGoal } =
+  useCreatePeriodGoal(createGoalsForm);
 
 useWatchFormRefs(createGoalsFormRef);
 
@@ -71,143 +73,32 @@ const resetDialog = () => {
 };
 
 const handleCreateGoals = async () => {
-  const timesStart =
-    createGoalsForm.timesStart ?? DEFAULT_GOALS_FORM_FIELDS.timesStart;
-
-  const timesEnd =
-    createGoalsForm.timesEnd ?? DEFAULT_GOALS_FORM_FIELDS.timesEnd;
-
-  const timesStep =
-    createGoalsForm.timesStep ?? DEFAULT_GOALS_FORM_FIELDS.timesStep;
-
-  let startDate = createGoalsForm.startDate;
-  let endDate = createGoalsForm.endDate;
-
-  const startDay =
-    createGoalsForm.startDay ?? DEFAULT_GOALS_FORM_FIELDS.startDay;
-  const endDay = createGoalsForm.endDay ?? DEFAULT_GOALS_FORM_FIELDS.endDay;
-
   if (selectedPeriod.value === PERIOD_TYPES.MONTH) {
     switch (selectedPeriodFilter.value) {
       default:
       case PERIOD_FILTERS.ALL:
-        await Promise.all(
-          Array.from({ length: 12 }, (_, index) => {
-            const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
-
-            startDate = new Date(
-              CURRENT_YEAR,
-              index,
-              startDay > lastDay ? lastDay : startDay
-            );
-
-            endDate = new Date(
-              CURRENT_YEAR,
-              index,
-              endDay > lastDay ? lastDay : endDay
-            );
-
-            return createOneGoal();
-          })
-        );
-
+        await createMonthGoal();
         break;
 
       case PERIOD_FILTERS.EVEN:
-        await Promise.all(
-          Array.from({ length: 12 }, (_, index) => {
-            if (index % 2 === 0) {
-              const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
-
-              startDate = new Date(
-                CURRENT_YEAR,
-                index,
-                startDay > lastDay ? lastDay : startDay
-              );
-
-              endDate = new Date(
-                CURRENT_YEAR,
-                index,
-                endDay > lastDay ? lastDay : endDay
-              );
-
-              return createOneGoal();
-            }
-          })
-        );
-
+        await createMonthGoal(MONTH_INDEXES.filter((month) => month % 2 === 0));
         break;
 
       case PERIOD_FILTERS.ODD:
-        await Promise.all(
-          Array.from({ length: 12 }, (_, index) => {
-            if (index % 2) {
-              const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
-
-              startDate = new Date(
-                CURRENT_YEAR,
-                index,
-                startDay > lastDay ? lastDay : startDay
-              );
-
-              endDate = new Date(
-                CURRENT_YEAR,
-                index,
-                endDay > lastDay ? lastDay : endDay
-              );
-
-              return createOneGoal();
-            }
-          })
-        );
+        await createMonthGoal(MONTH_INDEXES.filter((month) => month % 2));
 
         break;
 
       case PERIOD_FILTERS.CHOOSE:
-        await Promise.all(
-          (selectedMonthChooseFilter.value.length
-            ? selectedMonthChooseFilter.value
-            : new Array(12).fill(null)
-          ).map((_, index) => {
-            const lastDay = new Date(CURRENT_YEAR, index + 1, 0).getDate();
-
-            startDate = new Date(
-              CURRENT_YEAR,
-              index,
-              startDay > lastDay ? lastDay : startDay
-            );
-
-            endDate = new Date(
-              CURRENT_YEAR,
-              index,
-              endDay > lastDay ? lastDay : endDay
-            );
-
-            return createOneGoal();
-          })
-        );
+        console.log(selectedMonthChooseFilter.value);
+        await createMonthGoal(selectedMonthChooseFilter.value);
         break;
     }
   } else {
-    await createOneGoal();
+    await createYearGoal();
   }
 
   resetDialog();
-
-  async function createOneGoal() {
-    return await createGoal({
-      title: createGoalsForm.title,
-      description: createGoalsForm.description,
-      timesSuffix: createGoalsForm.timesSuffix,
-      startDate,
-      endDate,
-      timesStart,
-      timesEnd,
-      timesStep,
-      timesCurrent: timesStart,
-      isCompleted: false,
-    });
-  }
 };
 </script>
 
