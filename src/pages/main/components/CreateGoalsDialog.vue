@@ -90,7 +90,6 @@ const handleCreateGoals = async () => {
         break;
 
       case PERIOD_FILTERS.CHOOSE:
-        console.log(selectedMonthChooseFilter.value);
         await createMonthGoal(selectedMonthChooseFilter.value);
         break;
     }

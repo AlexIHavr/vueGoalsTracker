@@ -42,18 +42,18 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
     const endDay = createGoalsForm.endDay ?? DEFAULT_GOALS_FORM_FIELDS.endDay;
 
     await Promise.all(
-      (months.length ? months : MONTH_INDEXES).map((month) => {
-        const lastDay = new Date(CURRENT_YEAR, month, 0).getDate();
+      (months.length ? months : MONTH_INDEXES).map((monthIndex) => {
+        const lastDay = new Date(CURRENT_YEAR, monthIndex + 1, 0).getDate();
 
         const startDate = new Date(
           CURRENT_YEAR,
-          month - 1,
+          monthIndex,
           startDay > lastDay ? lastDay : startDay
         );
 
         const endDate = new Date(
           CURRENT_YEAR,
-          month - 1,
+          monthIndex,
           endDay > lastDay ? lastDay : endDay
         );
 
@@ -61,6 +61,28 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
       })
     );
   };
+
+  // const createDayGoal = async (days: number[] = []) => {
+  //   await Promise.all(
+  //     (days.length ? days : MONTH_INDEXES).map((month) => {
+  //       const lastDay = new Date(CURRENT_YEAR, month, 0).getDate();
+
+  //       const startDate = new Date(
+  //         CURRENT_YEAR,
+  //         month - 1,
+  //         startDay > lastDay ? lastDay : startDay
+  //       );
+
+  //       const endDate = new Date(
+  //         CURRENT_YEAR,
+  //         month - 1,
+  //         endDay > lastDay ? lastDay : endDay
+  //       );
+
+  //       return createYearGoal(startDate, endDate);
+  //     })
+  //   );
+  // };
 
   return { createYearGoal, createMonthGoal };
 }

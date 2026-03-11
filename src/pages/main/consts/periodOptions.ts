@@ -11,6 +11,7 @@ export const MONTHS_IN_YEAR = 12;
 export const PERIOD_TYPES = {
   YEAR: 'year',
   MONTH: 'month',
+  DAY: 'day',
 } as const;
 
 export const PERIOD_FILTERS = {
@@ -28,6 +29,10 @@ export const PERIOD_TYPES_OPTIONS: PeriodTypesOptions = [
   {
     label: 'Месяц',
     value: PERIOD_TYPES.MONTH,
+  },
+  {
+    label: 'День',
+    value: PERIOD_TYPES.DAY,
   },
 ] as const;
 
@@ -52,11 +57,11 @@ export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
 
 export const MONTH_INDEXES = Array.from(
   { length: MONTHS_IN_YEAR },
-  (_, index) => index + 1
+  (_, index) => index
 );
 
 export const MONTH_CHOOSE_FILTERS_OPTIONS: MonthChooseFiltersOptions =
   MONTH_INDEXES.map((month) => ({
-    label: MONTH_NAMES[month - 1]!,
+    label: MONTH_NAMES[month]!,
     value: month,
   }));
