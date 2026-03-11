@@ -21,5 +21,7 @@ export const MONTH_NAMES_LOWERCASE = MONTH_NAMES.map((month) =>
 
 export const MONTHS_IN_YEAR = 12;
 
+export const MAX_DAYS_IN_MONTH = 31;
+
 export const DAYS_IN_YEAR =
   new Date(CURRENT_YEAR, 1, 29).getDate() === 29 ? 366 : 365;

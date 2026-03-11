@@ -1,6 +1,7 @@
 import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { date, number, object, ObjectSchema, ref, string } from 'yup';
 
+import { MAX_DAYS_IN_MONTH } from 'shared/consts';
 import { getLocaleNumberString } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
@@ -17,7 +18,6 @@ const MAX_TIMES = 1_000_000;
 const MAX_TIMES_SUFFIX_LENGTH = 5;
 
 const MIN_DAY = 1;
-const MAX_DAY = 31;
 
 const getNumberScheme = ({
   field,
@@ -88,14 +88,14 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
     field: 'startDay',
     name: 'День начала',
     errorVerb: 'должен',
-    maxValue: MAX_DAY,
+    maxValue: MAX_DAYS_IN_MONTH,
   }).lessThan(ref('endDay'), 'День начала должно быть меньше дня окончания'),
   endDay: getNumberScheme({
     field: 'endDay',
     name: 'День окончания',
     errorVerb: 'должен',
     minValue: MIN_DAY,
-    maxValue: MAX_DAY,
+    maxValue: MAX_DAYS_IN_MONTH,
   }).moreThan(ref('startDay'), 'День окончания должен быть больше дня начала'),
 });
 

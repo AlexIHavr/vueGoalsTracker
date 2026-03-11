@@ -1,4 +1,4 @@
-import { CURRENT_YEAR, MONTHS_IN_YEAR } from 'shared/consts';
+import { CURRENT_YEAR, MAX_DAYS_IN_MONTH, MONTHS_IN_YEAR } from 'shared/consts';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { NotNullableObject } from 'shared/types';
@@ -17,5 +17,5 @@ export const DEFAULT_GOALS_FORM_FIELDS: NotNullableObject<CreateGoalsFormFields>
     startDate: MIN_START_DATE,
     endDate: MAX_START_DATE,
     startDay: 1,
-    endDay: 31,
+    endDay: MAX_DAYS_IN_MONTH,
   } as const;

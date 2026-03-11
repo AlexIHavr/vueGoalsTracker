@@ -12,7 +12,7 @@ import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
@@ -38,6 +38,7 @@ import {
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
+import { getDayChooseFilterOptions } from '../utils/getDayChooseFilterOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type {
@@ -54,6 +55,11 @@ const createGoalsFormRef = ref<BaseFormExpose>();
 const selectedPeriod = ref<PeriodTypeValue>(PERIOD_TYPES.YEAR);
 const selectedPeriodFilter = ref<PeriodFilterValue>(PERIOD_FILTERS.ALL);
 const selectedMonthChooseFilter = ref<number[]>([]);
+const selectedDayChooseFilter = ref<number[]>([]);
+
+const dayChooseFilterOptions = computed(() =>
+  getDayChooseFilterOptions(selectedMonthChooseFilter)
+);
 
 const { createYearGoal, createMonthGoal, createDayGoal } =
   useCreatePeriodGoal(createGoalsForm);
@@ -107,7 +113,14 @@ const handleCreateGoals = async () => {
         break;
 
       case PERIOD_FILTERS.CHOOSE:
-        await createMonthGoal(selectedMonthChooseFilter.value);
+        if (isSelectedMonth) {
+          await createMonthGoal(selectedMonthChooseFilter.value);
+        } else {
+          await createDayGoal(
+            selectedDayChooseFilter.value,
+            selectedMonthChooseFilter.value
+          );
+        }
         break;
     }
   }
@@ -201,6 +214,17 @@ const handleCreateGoals = async () => {
                   option-value="value"
                   placeholder="Все месяцы"
                   :options="MONTH_CHOOSE_FILTERS_OPTIONS"
+                  :disabled="!!createGoalsFormRef?.isLoading"
+                />
+
+                <MultiSelect
+                  v-if="
+                    selectedPeriodFilter === PERIOD_FILTERS.CHOOSE &&
+                    selectedPeriod === PERIOD_TYPES.DAY
+                  "
+                  v-model="selectedDayChooseFilter"
+                  placeholder="Все дни"
+                  :options="dayChooseFilterOptions"
                   :disabled="!!createGoalsFormRef?.isLoading"
                 />
               </div>
@@ -354,6 +378,7 @@ const handleCreateGoals = async () => {
 
 .period-settings {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
