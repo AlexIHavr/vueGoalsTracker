@@ -368,14 +368,19 @@ const handleCreateGoals = async () => {
 }
 
 .p-multiselect {
-  width: 150px;
+  width: 170px;
 
   .p-multiselect-label {
     padding-right: 0;
   }
 }
 
-.p-multiselect-overlay .p-multiselect-header {
-  display: none;
+.p-multiselect-header .p-checkbox {
+  width: 100%;
+
+  &::after {
+    margin-left: var(--p-multiselect-option-gap);
+    content: 'Выбрать все';
+  }
 }
 </style>

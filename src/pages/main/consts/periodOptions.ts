@@ -1,3 +1,5 @@
+import { MONTH_NAMES } from 'shared/consts';
+
 import type {
   MonthChooseFiltersOptions,
   PeriodFiltersOptions,
@@ -48,21 +50,6 @@ export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
   },
 ] as const;
 
-export const MONTH_CHOOSE_FILTERS_LABELS = [
-  'Январь',
-  'Февраль',
-  'Март',
-  'Апрель',
-  'Май',
-  'Июнь',
-  'Июль',
-  'Август',
-  'Сентябрь',
-  'Октябрь',
-  'Ноябрь',
-  'Декабрь',
-] as const;
-
 export const MONTH_INDEXES = Array.from(
   { length: MONTHS_IN_YEAR },
   (_, index) => index + 1
@@ -70,6 +57,6 @@ export const MONTH_INDEXES = Array.from(
 
 export const MONTH_CHOOSE_FILTERS_OPTIONS: MonthChooseFiltersOptions =
   MONTH_INDEXES.map((month) => ({
-    label: MONTH_CHOOSE_FILTERS_LABELS[month - 1]!,
+    label: MONTH_NAMES[month - 1]!,
     value: month,
   }));

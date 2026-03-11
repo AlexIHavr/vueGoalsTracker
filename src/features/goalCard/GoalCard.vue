@@ -122,8 +122,8 @@ const handleUpdateTimes = () => {
 .goal-card {
   width: 300px;
   min-width: 300px;
-  height: 300px;
-  min-height: 300px;
+  height: 320px;
+  min-height: 320px;
 }
 
 .title-wrapper {

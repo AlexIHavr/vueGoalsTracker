@@ -1,4 +1,6 @@
-import { parseTimestamp, isFullYear, isFullMonth } from './parseTimestamp';
+import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
+
+import { isFullYear, isFullMonth, getDateLocalString } from './parseTimestamp';
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
 import type { GoalStatus } from '../types/goalStatus';
@@ -13,16 +15,19 @@ export const getGoalDates = (
     return '';
   }
 
-  const startDateString = parseTimestamp(goal.startDate);
-  const endDateString = parseTimestamp(goal.endDate);
+  const startDate = goal.startDate.toDate();
+  const endDate = goal.endDate.toDate();
 
-  if (isFullYear(goal.startDate, goal.endDate)) {
-    return 'Целый год';
+  if (isFullYear(startDate, endDate)) {
+    return 'Весь год';
   }
 
-  if (isFullMonth(goal.startDate, goal.endDate)) {
-    return 'Целый месяц';
+  if (isFullMonth(startDate, endDate)) {
+    return `Весь ${MONTH_NAMES_LOWERCASE[startDate.getMonth()]}`;
   }
+
+  const startDateString = getDateLocalString(startDate);
+  const endDateString = getDateLocalString(endDate);
 
   if (goalStatus.value === GOAL_STATUSES.TO_DO) {
     return `От ${startDateString}`;

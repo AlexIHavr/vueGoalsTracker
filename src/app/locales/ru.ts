@@ -1,3 +1,5 @@
+import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
+
 export const ruLocale = {
   monthNames: [
     'января',
@@ -14,20 +16,7 @@ export const ruLocale = {
     'декабря',
   ],
 
-  monthNamesShort: [
-    'январь',
-    'февраль',
-    'март',
-    'апрель',
-    'май',
-    'июнь',
-    'июль',
-    'август',
-    'сентябрь',
-    'октябрь',
-    'ноябрь',
-    'декабрь',
-  ],
+  monthNamesShort: MONTH_NAMES_LOWERCASE,
 
   dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
   firstDayOfWeek: 1,
