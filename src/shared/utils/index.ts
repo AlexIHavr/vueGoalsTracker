@@ -1,2 +1,6 @@
 export { appLocalStorage } from './appLocalStorage';
-export { getLocaleNumberString } from './numbers';
+export {
+  getLocaleNumberString,
+  getEvenNumbers,
+  getOddNumbers,
+} from './numbers';

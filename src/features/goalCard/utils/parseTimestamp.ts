@@ -14,7 +14,9 @@ export const isFullYear = (startDate: Date, endDate: Date) => {
 };
 
 export const isFullMonth = (startDate: Date, endDate: Date) => {
-  if (startDate.getMonth() !== endDate.getMonth()) {
+  const isSameMonth = startDate.getMonth() === endDate.getMonth();
+
+  if (!isSameMonth) {
     return false;
   }
 
@@ -29,4 +31,14 @@ export const isFullMonth = (startDate: Date, endDate: Date) => {
   const isEndMonth = endDate.getDate() === lastDayOfMonth;
 
   return isStartMonth && isEndMonth;
+};
+
+export const isFullDay = (startDate: Date, endDate: Date) => {
+  const isSameMonth = startDate.getMonth() === endDate.getMonth();
+
+  if (!isSameMonth) {
+    return false;
+  }
+
+  return endDate.getDate() - startDate.getDate() === 1;
 };

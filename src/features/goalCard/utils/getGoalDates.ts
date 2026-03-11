@@ -1,6 +1,11 @@
 import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
 
-import { isFullYear, isFullMonth, getDateLocalString } from './parseTimestamp';
+import {
+  isFullYear,
+  isFullMonth,
+  getDateLocalString,
+  isFullDay,
+} from './parseTimestamp';
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
 import type { GoalStatus } from '../types/goalStatus';
@@ -35,6 +40,10 @@ export const getGoalDates = (
 
   if (goalStatus.value === GOAL_STATUSES.EXPIRED) {
     return `До ${endDateString}`;
+  }
+
+  if (isFullDay(startDate, endDate)) {
+    return startDateString;
   }
 
   return `${startDateString} - ${endDateString}`;

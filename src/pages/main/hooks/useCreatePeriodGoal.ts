@@ -2,7 +2,7 @@ import { CURRENT_YEAR } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
-import { MONTH_INDEXES } from '../consts/periodOptions';
+import { DAY_NUMBERS, MONTH_INDEXES } from '../consts/periodOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
@@ -62,27 +62,16 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
     );
   };
 
-  // const createDayGoal = async (days: number[] = []) => {
-  //   await Promise.all(
-  //     (days.length ? days : MONTH_INDEXES).map((month) => {
-  //       const lastDay = new Date(CURRENT_YEAR, month, 0).getDate();
+  const createDayGoal = async (days: number[] = []) => {
+    await Promise.all(
+      (days.length ? days : DAY_NUMBERS).map((dayNumber) => {
+        const startDate = new Date(CURRENT_YEAR, 0, dayNumber);
+        const endDate = new Date(CURRENT_YEAR, 0, dayNumber + 1);
 
-  //       const startDate = new Date(
-  //         CURRENT_YEAR,
-  //         month - 1,
-  //         startDay > lastDay ? lastDay : startDay
-  //       );
+        return createYearGoal(startDate, endDate);
+      })
+    );
+  };
 
-  //       const endDate = new Date(
-  //         CURRENT_YEAR,
-  //         month - 1,
-  //         endDay > lastDay ? lastDay : endDay
-  //       );
-
-  //       return createYearGoal(startDate, endDate);
-  //     })
-  //   );
-  // };
-
-  return { createYearGoal, createMonthGoal };
+  return { createYearGoal, createMonthGoal, createDayGoal };
 }

@@ -159,19 +159,20 @@ h6 {
     opacity: var(--p-disabled-opacity);
   }
 
+  .p-select-label {
+    --p-select-color: var(--p-button-primary-color);
+    --p-select-placeholder-color: var(--p-button-primary-color);
+    --p-select-disabled-color: var(--p-button-primary-color);
+
+    padding-right: 0;
+    font-weight: var(--p-button-label-font-weight);
+  }
+
   @media (hover: hover) {
     &:hover {
       background-color: var(--p-button-primary-hover-background);
     }
   }
-}
-
-.p-select-label {
-  --p-select-color: var(--p-button-primary-color);
-  --p-select-placeholder-color: var(--p-button-primary-color);
-  --p-select-disabled-color: var(--p-button-primary-color);
-
-  font-weight: var(--p-button-label-font-weight);
 }
 
 .p-select-dropdown {
@@ -195,6 +196,15 @@ h6 {
     opacity: var(--p-disabled-opacity);
   }
 
+  .p-multiselect-label {
+    --p-multiselect-color: var(--p-button-primary-color);
+    --p-multiselect-placeholder-color: var(--p-button-primary-color);
+    --p-multiselect-disabled-color: var(--p-button-primary-color);
+
+    padding-right: 0;
+    font-weight: var(--p-button-label-font-weight);
+  }
+
   @media (hover: hover) {
     &:hover {
       background-color: var(--p-button-primary-hover-background);
@@ -202,14 +212,16 @@ h6 {
   }
 }
 
-.p-multiselect-label {
-  --p-multiselect-color: var(--p-button-primary-color);
-  --p-multiselect-placeholder-color: var(--p-button-primary-color);
-  --p-multiselect-disabled-color: var(--p-button-primary-color);
-
-  font-weight: var(--p-button-label-font-weight);
-}
-
 .p-multiselect-dropdown {
   --p-multiselect-dropdown-color: var(--p-button-primary-color);
+}
+
+.p-multiselect-header .p-checkbox {
+  width: 100%;
+
+  &::after {
+    margin-left: var(--p-multiselect-option-gap);
+    font-weight: var(--p-button-label-font-weight);
+    content: 'Выбрать все';
+  }
 }

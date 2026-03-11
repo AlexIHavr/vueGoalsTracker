@@ -18,6 +18,7 @@ import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
 import { ALL_EXCEPT_NUMBERS_REGEX, CURRENT_YEAR } from 'shared/consts';
 import { selectedYearRef } from 'shared/store';
+import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
 import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
 import {
@@ -26,6 +27,7 @@ import {
   MIN_START_DATE,
 } from '../consts/goalsFormFields';
 import {
+  DAY_NUMBERS,
   MONTH_CHOOSE_FILTERS_OPTIONS,
   MONTH_INDEXES,
   PERIOD_FILTERS,
@@ -53,7 +55,7 @@ const selectedPeriod = ref<PeriodTypeValue>(PERIOD_TYPES.YEAR);
 const selectedPeriodFilter = ref<PeriodFilterValue>(PERIOD_FILTERS.ALL);
 const selectedMonthChooseFilter = ref<number[]>([]);
 
-const { createYearGoal, createMonthGoal } =
+const { createYearGoal, createMonthGoal, createDayGoal } =
   useCreatePeriodGoal(createGoalsForm);
 
 useWatchFormRefs(createGoalsFormRef);
@@ -73,19 +75,34 @@ const resetDialog = () => {
 };
 
 const handleCreateGoals = async () => {
-  if (selectedPeriod.value === PERIOD_TYPES.MONTH) {
+  const isSelectedMonth = selectedPeriod.value === PERIOD_TYPES.MONTH;
+  if (selectedPeriod.value === PERIOD_TYPES.YEAR) {
+    await createYearGoal();
+  } else {
     switch (selectedPeriodFilter.value) {
       default:
       case PERIOD_FILTERS.ALL:
-        await createMonthGoal();
+        if (isSelectedMonth) {
+          await createMonthGoal();
+        } else {
+          await createDayGoal();
+        }
         break;
 
       case PERIOD_FILTERS.EVEN:
-        await createMonthGoal(MONTH_INDEXES.filter((month) => month % 2 === 0));
+        if (isSelectedMonth) {
+          await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
+        } else {
+          await createDayGoal(getEvenNumbers(DAY_NUMBERS));
+        }
         break;
 
       case PERIOD_FILTERS.ODD:
-        await createMonthGoal(MONTH_INDEXES.filter((month) => month % 2));
+        if (isSelectedMonth) {
+          await createMonthGoal(getOddNumbers(MONTH_INDEXES));
+        } else {
+          await createDayGoal(getOddNumbers(DAY_NUMBERS));
+        }
 
         break;
 
@@ -93,8 +110,6 @@ const handleCreateGoals = async () => {
         await createMonthGoal(selectedMonthChooseFilter.value);
         break;
     }
-  } else {
-    await createYearGoal();
   }
 
   resetDialog();
@@ -360,26 +375,9 @@ const handleCreateGoals = async () => {
 
 .p-select {
   width: 135px;
-
-  .p-select-label {
-    padding-right: 0;
-  }
 }
 
 .p-multiselect {
   width: 170px;
-
-  .p-multiselect-label {
-    padding-right: 0;
-  }
-}
-
-.p-multiselect-header .p-checkbox {
-  width: 100%;
-
-  &::after {
-    margin-left: var(--p-multiselect-option-gap);
-    content: 'Выбрать все';
-  }
 }
 </style>

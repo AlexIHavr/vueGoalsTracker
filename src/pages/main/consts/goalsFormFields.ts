@@ -1,6 +1,4 @@
-import { CURRENT_YEAR } from 'shared/consts';
-
-import { MONTHS_IN_YEAR } from './periodOptions';
+import { CURRENT_YEAR, MONTHS_IN_YEAR } from 'shared/consts';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { NotNullableObject } from 'shared/types';

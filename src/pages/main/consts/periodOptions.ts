@@ -1,12 +1,10 @@
-import { MONTH_NAMES } from 'shared/consts';
+import { DAYS_IN_YEAR, MONTH_NAMES, MONTHS_IN_YEAR } from 'shared/consts';
 
 import type {
   MonthChooseFiltersOptions,
   PeriodFiltersOptions,
   PeriodTypesOptions,
 } from '../types/periodOptions';
-
-export const MONTHS_IN_YEAR = 12;
 
 export const PERIOD_TYPES = {
   YEAR: 'year',
@@ -65,3 +63,8 @@ export const MONTH_CHOOSE_FILTERS_OPTIONS: MonthChooseFiltersOptions =
     label: MONTH_NAMES[month]!,
     value: month,
   }));
+
+export const DAY_NUMBERS = Array.from(
+  { length: DAYS_IN_YEAR },
+  (_, i) => i + 1
+);
