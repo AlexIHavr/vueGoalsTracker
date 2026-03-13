@@ -32,15 +32,17 @@ export const getGoalDates = (
   const startTime = getTimeLocalString(startDate);
   const endTime = getTimeLocalString(endDate);
 
-  const getNotInProgressString = () => {
+  const getNotInProgressString = (timeString?: string) => {
     if (goalStatus.value === GOAL_STATUSES.TO_DO) {
-      const startTimeString = isStartTime(startDate) ? '' : ` ${startTime}`;
+      const startTimeString =
+        timeString ?? (isStartTime(startDate) ? '' : ` ${startTime}`);
 
       return `От ${startDateString}${startTimeString}`;
     }
 
     if (goalStatus.value === GOAL_STATUSES.EXPIRED) {
-      const endTimeString = isEndTime(endDate) ? '' : ` ${endTime}`;
+      const endTimeString =
+        timeString ?? (isEndTime(endDate) ? '' : ` ${endTime}`);
 
       return `До ${endDateString}${endTimeString}`;
     }
@@ -59,7 +61,7 @@ export const getGoalDates = (
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getNotInProgressString();
+      return getNotInProgressString('');
 
     case PERIOD_TYPES.MONTH:
       if (isFullMonth(startDate, endDate)) {
@@ -70,7 +72,7 @@ export const getGoalDates = (
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getNotInProgressString();
+      return getNotInProgressString('');
 
     case PERIOD_TYPES.DAY:
       if (isFullDay(startDate, endDate)) {

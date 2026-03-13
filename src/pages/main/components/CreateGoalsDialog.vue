@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { InputIcon } from 'primevue';
 import Accordion from 'primevue/accordion';
 import AccordionContent from 'primevue/accordioncontent';
 import AccordionHeader from 'primevue/accordionheader';
@@ -68,8 +69,16 @@ const { createYearGoal, createMonthGoal, createDayGoal } =
 
 useWatchFormRefs(createGoalsFormRef);
 
+const resetCreateGoalsForm = () => {
+  Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
+};
+
 watch(selectedPeriod, () => {
   selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
+
+  resetCreateGoalsForm();
+
+  createGoalsFormRef.value?.formRef?.reset();
 });
 
 watch(selectedPeriodFilter, () => {
@@ -85,7 +94,7 @@ const handleShowDialog = () => {
 };
 
 const resetDialog = () => {
-  Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
+  resetCreateGoalsForm();
 
   selectedPeriod.value = PERIOD_TYPES.YEAR;
   selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
@@ -321,6 +330,7 @@ const handleCreateGoals = async () => {
                     icon-display="input"
                     fluid
                     show-icon
+                    :disabled-dates="[createGoalsForm.startDate]"
                     :date-format="DATE_FIELD_FORMAT"
                     :manual-input="false"
                     :min-date="MIN_START_DATE"
@@ -340,6 +350,7 @@ const handleCreateGoals = async () => {
                     icon-display="input"
                     fluid
                     show-icon
+                    :disabled-dates="[createGoalsForm.endDate]"
                     :date-format="DATE_FIELD_FORMAT"
                     :manual-input="false"
                     :min-date="MIN_START_DATE"
@@ -389,6 +400,7 @@ const handleCreateGoals = async () => {
                     fluid
                   />
                   <label for="goals-startTime">Время начала</label>
+                  <InputIcon class="pi pi-clock time-icon" />
                 </BaseFormField>
 
                 <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -404,6 +416,7 @@ const handleCreateGoals = async () => {
                     fluid
                   />
                   <label for="goals-endTime">Время окончания</label>
+                  <InputIcon class="pi pi-clock time-icon" />
                 </BaseFormField>
               </template>
             </div>
@@ -464,5 +477,18 @@ const handleCreateGoals = async () => {
 .p-select,
 .p-multiselect {
   width: 170px;
+}
+
+.time-icon {
+  position: absolute;
+  top: 50%;
+  right: 11px;
+  margin-top: -0.5rem;
+  color: var(--p-datepicker-input-icon-color);
+}
+
+.p-inputmask {
+  --p-inputtext-padding-x: var(--p-form-field-padding-x)
+    calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
 }
 </style>

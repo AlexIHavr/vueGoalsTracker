@@ -43,6 +43,7 @@
 
   .p-datepicker-day {
     --p-datepicker-date-hover-background: #b5ffb3;
+    --p-datepicker-today-background: #83ee80;
   }
 
   .p-datepicker-select-month {
@@ -99,6 +100,7 @@
 
   .p-datepicker-day {
     --p-datepicker-date-hover-background: #008c5b;
+    --p-datepicker-today-background: #00a46b;
   }
 
   .p-datepicker-select-month {
@@ -140,6 +142,11 @@ h6 {
 
 .p-datepicker-select-year {
   font-size: 1rem;
+}
+
+.p-datepicker-day[aria-selected='true'] {
+  background-color: var(--p-datepicker-date-hover-background);
+  opacity: 1;
 }
 
 // p-select
