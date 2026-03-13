@@ -1,16 +1,15 @@
-import { DAYS_IN_YEAR, MONTH_NAMES, MONTHS_IN_YEAR } from 'shared/consts';
+import {
+  DAYS_IN_YEAR,
+  MONTH_NAMES,
+  MONTHS_IN_YEAR,
+  PERIOD_TYPES,
+} from 'shared/consts';
 
 import type {
   MonthChooseFiltersOptions,
   PeriodFiltersOptions,
   PeriodTypesOptions,
 } from '../types/periodOptions';
-
-export const PERIOD_TYPES = {
-  YEAR: 'year',
-  MONTH: 'month',
-  DAY: 'day',
-} as const;
 
 export const PERIOD_FILTERS = {
   ALL: 'all',

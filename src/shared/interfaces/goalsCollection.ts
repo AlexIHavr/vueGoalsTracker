@@ -1,4 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { PeriodTypeValue } from 'shared/types';
 
 export interface GoalSettings {
   title: string;
@@ -11,6 +12,7 @@ export interface GoalSettings {
   timesStep: number;
   timesCurrent: number;
   timesSuffix?: string;
+  periodType: PeriodTypeValue;
 }
 
 export interface GoalSettingsParams extends Omit<

@@ -11,4 +11,5 @@ export {
   MAX_DAYS_IN_MONTH,
   MAX_HOURS,
   MAX_MINUTES,
+  PERIOD_TYPES,
 } from './dates.ts';

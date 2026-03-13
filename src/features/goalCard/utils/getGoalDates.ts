@@ -1,4 +1,4 @@
-import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
+import { MONTH_NAMES_LOWERCASE, PERIOD_TYPES } from 'shared/consts';
 
 import {
   isFullYear,
@@ -8,7 +8,6 @@ import {
   isStartTime,
   getTimeLocalString,
   isEndTime,
-  isSameDay,
 } from './parseDates';
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
@@ -27,39 +26,61 @@ export const getGoalDates = (
   const startDate = goal.startDate.toDate();
   const endDate = goal.endDate.toDate();
 
-  if (isFullYear(startDate, endDate)) {
-    return 'Весь год';
-  }
-
-  if (isFullMonth(startDate, endDate)) {
-    return `Весь ${MONTH_NAMES_LOWERCASE[startDate.getMonth()]}`;
-  }
-
   const startDateString = getDateLocalString(startDate);
   const endDateString = getDateLocalString(endDate);
 
   const startTime = getTimeLocalString(startDate);
   const endTime = getTimeLocalString(endDate);
 
-  if (goalStatus.value === GOAL_STATUSES.TO_DO) {
-    const startTimeString = isStartTime(startDate) ? '' : ` ${startTime}`;
+  const getNotInProgressString = () => {
+    if (goalStatus.value === GOAL_STATUSES.TO_DO) {
+      const startTimeString = isStartTime(startDate) ? '' : ` ${startTime}`;
 
-    return `От ${startDateString}${startTimeString}`;
+      return `От ${startDateString}${startTimeString}`;
+    }
+
+    if (goalStatus.value === GOAL_STATUSES.EXPIRED) {
+      const endTimeString = isEndTime(endDate) ? '' : ` ${endTime}`;
+
+      return `До ${endDateString}${endTimeString}`;
+    }
+
+    return '';
+  };
+
+  switch (goal.periodType) {
+    default:
+    case PERIOD_TYPES.YEAR:
+      if (isFullYear(startDate, endDate)) {
+        return 'Весь год';
+      }
+
+      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+        return `${startDateString} - ${endDateString}`;
+      }
+
+      return getNotInProgressString();
+
+    case PERIOD_TYPES.MONTH:
+      if (isFullMonth(startDate, endDate)) {
+        return `Весь ${MONTH_NAMES_LOWERCASE[startDate.getMonth()]}`;
+      }
+
+      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+        return `${startDateString} - ${endDateString}`;
+      }
+
+      return getNotInProgressString();
+
+    case PERIOD_TYPES.DAY:
+      if (isFullDay(startDate, endDate)) {
+        return startDateString;
+      }
+
+      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+        return `${startDateString} ${startTime} - ${endTime}`;
+      }
+
+      return getNotInProgressString();
   }
-
-  if (goalStatus.value === GOAL_STATUSES.EXPIRED) {
-    const endTimeString = isEndTime(endDate) ? '' : ` ${endTime}`;
-
-    return `До ${endDateString}${endTimeString}`;
-  }
-
-  if (isFullDay(startDate, endDate)) {
-    return startDateString;
-  }
-
-  if (isSameDay(startDate, endDate)) {
-    return `${startDateString} ${startTime} - ${endTime}`;
-  }
-
-  return `${startDateString} - ${endDateString}`;
 };

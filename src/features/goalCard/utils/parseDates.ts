@@ -66,10 +66,6 @@ export const isEndTime = (date: Date) => {
   return date.getHours() === MAX_HOURS && date.getMinutes() === MAX_MINUTES;
 };
 
-export const isSameDay = (startDate: Date, endDate: Date) => {
-  return startDate.getDate() === endDate.getDate();
-};
-
 export const isFullDay = (startDate: Date, endDate: Date) => {
   const isSameMonth = startDate.getMonth() === endDate.getMonth();
 
@@ -77,7 +73,9 @@ export const isFullDay = (startDate: Date, endDate: Date) => {
     return false;
   }
 
-  if (!isSameDay(startDate, endDate)) {
+  const isSameDay = startDate.getDate() === endDate.getDate();
+
+  if (!isSameDay) {
     return false;
   }
 

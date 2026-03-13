@@ -17,7 +17,11 @@ import { computed, reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
-import { ALL_EXCEPT_NUMBERS_REGEX, CURRENT_YEAR } from 'shared/consts';
+import {
+  ALL_EXCEPT_NUMBERS_REGEX,
+  CURRENT_YEAR,
+  PERIOD_TYPES,
+} from 'shared/consts';
 import { selectedYearRef } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
@@ -33,7 +37,6 @@ import {
   MONTH_INDEXES,
   PERIOD_FILTERS,
   PERIOD_FILTERS_OPTIONS,
-  PERIOD_TYPES,
   PERIOD_TYPES_OPTIONS,
 } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
@@ -42,10 +45,8 @@ import { createGoalsResolver } from '../schemas/createGoalsResolver';
 import { getDayChooseFilterOptions } from '../utils/getDayChooseFilterOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
-import type {
-  PeriodFilterValue,
-  PeriodTypeValue,
-} from '../types/periodOptions';
+import type { PeriodFilterValue } from '../types/periodOptions';
+import type { PeriodTypeValue } from 'shared/types';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
   ...DEFAULT_GOALS_FORM_FIELDS,
