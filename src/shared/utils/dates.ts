@@ -6,3 +6,7 @@ export const getLastDayOfMonth = (
 ) => {
   return new Date(year, monthIndex + 1, 0).getDate();
 };
+
+export const parseTime = (time: string, separator = ':') => {
+  return time.split(separator).map(Number);
+};

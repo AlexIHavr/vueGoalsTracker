@@ -1,6 +1,6 @@
 import { CURRENT_YEAR } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
-import { getLastDayOfMonth } from 'shared/utils';
+import { getLastDayOfMonth, parseTime } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 import { DAY_NUMBERS, MONTH_INDEXES } from '../consts/periodOptions';
@@ -71,8 +71,25 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
         const lastDay = getLastDayOfMonth(monthIndex);
         const day = dayNumber > lastDay ? lastDay : dayNumber;
 
-        const startDate = new Date(CURRENT_YEAR, monthIndex, day);
-        const endDate = new Date(CURRENT_YEAR, monthIndex, day, 23, 59, 59);
+        const [startHours, startMinutes] = parseTime(createGoalsForm.startTime);
+
+        const [endHours, endMinutes] = parseTime(createGoalsForm.endTime);
+
+        const startDate = new Date(
+          CURRENT_YEAR,
+          monthIndex,
+          day,
+          startHours,
+          startMinutes
+        );
+        const endDate = new Date(
+          CURRENT_YEAR,
+          monthIndex,
+          day,
+          endHours,
+          endMinutes,
+          59
+        );
 
         daysGoal.push(createYearGoal(startDate, endDate));
       });

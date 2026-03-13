@@ -4,4 +4,4 @@ export {
   getEvenNumbers,
   getOddNumbers,
 } from './numbers';
-export { getLastDayOfMonth } from './dates';
+export { getLastDayOfMonth, parseTime } from './dates';

@@ -7,6 +7,7 @@ import Button from 'primevue/button';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
+import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
@@ -379,18 +380,13 @@ const handleCreateGoals = async () => {
                   name="startTime"
                   :initial-value="DEFAULT_GOALS_FORM_FIELDS.startTime"
                 >
-                  <DatePicker
+                  <InputMask
                     id="goals-startTime"
                     v-model="createGoalsForm.startTime"
-                    icon-display="input"
-                    time-only
+                    mask="99:99"
+                    placeholder="чч:мм"
                     fluid
-                    show-icon
-                  >
-                    <template #inputicon="slotProps">
-                      <i class="pi pi-clock" @click="slotProps.clickCallback" />
-                    </template>
-                  </DatePicker>
+                  />
                   <label for="goals-startTime">Время начала</label>
                 </BaseFormField>
 
@@ -399,18 +395,13 @@ const handleCreateGoals = async () => {
                   name="endTime"
                   :initial-value="DEFAULT_GOALS_FORM_FIELDS.endTime"
                 >
-                  <DatePicker
+                  <InputMask
                     id="goals-endTime"
                     v-model="createGoalsForm.endTime"
-                    icon-display="input"
-                    time-only
+                    mask="99:99"
+                    placeholder="чч:мм"
                     fluid
-                    show-icon
-                  >
-                    <template #inputicon="slotProps">
-                      <i class="pi pi-clock" @click="slotProps.clickCallback" />
-                    </template>
-                  </DatePicker>
+                  />
                   <label for="goals-endTime">Время окончания</label>
                 </BaseFormField>
               </template>

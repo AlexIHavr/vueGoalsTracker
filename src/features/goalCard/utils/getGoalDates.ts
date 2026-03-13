@@ -5,7 +5,11 @@ import {
   isFullMonth,
   getDateLocalString,
   isFullDay,
-} from './parseTimestamp';
+  isStartTime,
+  getTimeLocalString,
+  isEndTime,
+  isSameDay,
+} from './parseDates';
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
 import type { GoalStatus } from '../types/goalStatus';
@@ -34,16 +38,27 @@ export const getGoalDates = (
   const startDateString = getDateLocalString(startDate);
   const endDateString = getDateLocalString(endDate);
 
+  const startTime = getTimeLocalString(startDate);
+  const endTime = getTimeLocalString(endDate);
+
   if (goalStatus.value === GOAL_STATUSES.TO_DO) {
-    return `От ${startDateString}`;
+    const startTimeString = isStartTime(startDate) ? '' : ` ${startTime}`;
+
+    return `От ${startDateString}${startTimeString}`;
   }
 
   if (goalStatus.value === GOAL_STATUSES.EXPIRED) {
-    return `До ${endDateString}`;
+    const endTimeString = isEndTime(endDate) ? '' : ` ${endTime}`;
+
+    return `До ${endDateString}${endTimeString}`;
   }
 
   if (isFullDay(startDate, endDate)) {
     return startDateString;
+  }
+
+  if (isSameDay(startDate, endDate)) {
+    return `${startDateString} ${startTime} - ${endTime}`;
   }
 
   return `${startDateString} - ${endDateString}`;

@@ -9,4 +9,6 @@ export {
   MONTHS_IN_YEAR,
   DAYS_IN_YEAR,
   MAX_DAYS_IN_MONTH,
+  MAX_HOURS,
+  MAX_MINUTES,
 } from './dates.ts';

@@ -2,6 +2,7 @@ import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { date, number, object, ObjectSchema, ref, string } from 'yup';
 
 import { MAX_DAYS_IN_MONTH } from 'shared/consts';
+import { TIME_24_REGEX } from 'shared/consts/regex';
 import { getLocaleNumberString } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
@@ -97,14 +98,26 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
     minValue: MIN_DAY,
     maxValue: MAX_DAYS_IN_MONTH,
   }).moreThan(ref('startDay'), 'День окончания должен быть больше дня начала'),
-  startTime: date()
-    .typeError('Некорректный формат времени')
+  startTime: string()
     .required('Время начала обязательно')
-    .max(ref('endTime'), 'Время начала должно быть меньше конца действия'),
-  endTime: date()
-    .typeError('Некорректный формат времени')
+    .matches(TIME_24_REGEX, 'Некорректный формат времени')
+    .test(
+      'is-less-than-endTime',
+      'Время начала должно быть меньше времени окончания',
+      function (startTime) {
+        return startTime < this.parent.endTime;
+      }
+    ),
+  endTime: string()
     .required('Время окончания обязательно')
-    .max(ref('endTime'), 'Время окончания должно быть больше времени начала'),
+    .matches(TIME_24_REGEX, 'Некорректный формат времени')
+    .test(
+      'is-greater-than-startTime',
+      'Время окончания должно быть больше времени начала',
+      function (endTime) {
+        return endTime > this.parent.startTime;
+      }
+    ),
 });
 
 export const createGoalsResolver = yupResolver(createGoalsSchema);
