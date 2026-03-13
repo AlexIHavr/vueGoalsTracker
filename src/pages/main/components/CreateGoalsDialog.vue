@@ -316,6 +316,7 @@ const handleCreateGoals = async () => {
                   <DatePicker
                     id="goals-startDate"
                     v-model="createGoalsForm.startDate"
+                    icon-display="input"
                     fluid
                     show-icon
                     :date-format="DATE_FIELD_FORMAT"
@@ -334,6 +335,7 @@ const handleCreateGoals = async () => {
                   <DatePicker
                     id="goals-endDate"
                     v-model="createGoalsForm.endDate"
+                    icon-display="input"
                     fluid
                     show-icon
                     :date-format="DATE_FIELD_FORMAT"
@@ -368,6 +370,48 @@ const handleCreateGoals = async () => {
                     :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
                   />
                   <label for="goals-endDay">День окончания</label>
+                </BaseFormField>
+              </template>
+
+              <template v-if="selectedPeriod === PERIOD_TYPES.DAY">
+                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+                <BaseFormField
+                  name="startTime"
+                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.startTime"
+                >
+                  <DatePicker
+                    id="goals-startTime"
+                    v-model="createGoalsForm.startTime"
+                    icon-display="input"
+                    time-only
+                    fluid
+                    show-icon
+                  >
+                    <template #inputicon="slotProps">
+                      <i class="pi pi-clock" @click="slotProps.clickCallback" />
+                    </template>
+                  </DatePicker>
+                  <label for="goals-startTime">Время начала</label>
+                </BaseFormField>
+
+                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+                <BaseFormField
+                  name="endTime"
+                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.endTime"
+                >
+                  <DatePicker
+                    id="goals-endTime"
+                    v-model="createGoalsForm.endTime"
+                    icon-display="input"
+                    time-only
+                    fluid
+                    show-icon
+                  >
+                    <template #inputicon="slotProps">
+                      <i class="pi pi-clock" @click="slotProps.clickCallback" />
+                    </template>
+                  </DatePicker>
+                  <label for="goals-endTime">Время окончания</label>
                 </BaseFormField>
               </template>
             </div>

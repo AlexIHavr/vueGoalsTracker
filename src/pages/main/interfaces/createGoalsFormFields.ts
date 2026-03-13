@@ -12,4 +12,6 @@ export interface CreateGoalsFormFields extends CreateGoalsFormNumberFields {
   timesSuffix?: string;
   startDate: Date;
   endDate: Date;
+  startTime: Date;
+  endTime: Date;
 }

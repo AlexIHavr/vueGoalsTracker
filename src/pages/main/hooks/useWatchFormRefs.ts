@@ -70,4 +70,26 @@ export function useWatchFormRefs(
       }
     }
   );
+
+  watch(
+    () => createGoalsFormRef.value?.formRef?.states.startTime?.value,
+    () => {
+      const formRefValue = createGoalsFormRef.value?.formRef;
+
+      if (formRefValue?.states.endTime?.invalid) {
+        formRefValue?.validate('endTime');
+      }
+    }
+  );
+
+  watch(
+    () => createGoalsFormRef.value?.formRef?.states.endTime?.value,
+    () => {
+      const formRefValue = createGoalsFormRef.value?.formRef;
+
+      if (formRefValue?.states.startTime?.invalid) {
+        formRefValue?.validate('startTime');
+      }
+    }
+  );
 }

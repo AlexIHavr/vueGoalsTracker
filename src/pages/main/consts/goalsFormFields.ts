@@ -6,6 +6,9 @@ import type { NotNullableObject } from 'shared/types';
 export const MIN_START_DATE = new Date(CURRENT_YEAR, 0);
 export const MAX_START_DATE = new Date(CURRENT_YEAR, MONTHS_IN_YEAR, 0);
 
+const MIN_TIME = MIN_START_DATE;
+const MAX_TIME = new Date(CURRENT_YEAR, 0, 1, 23, 59, 59);
+
 export const DEFAULT_GOALS_FORM_FIELDS: NotNullableObject<CreateGoalsFormFields> =
   {
     title: '',
@@ -18,4 +21,6 @@ export const DEFAULT_GOALS_FORM_FIELDS: NotNullableObject<CreateGoalsFormFields>
     endDate: MAX_START_DATE,
     startDay: 1,
     endDay: MAX_DAYS_IN_MONTH,
+    startTime: MIN_TIME,
+    endTime: MAX_TIME,
   } as const;

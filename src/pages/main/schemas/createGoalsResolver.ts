@@ -79,11 +79,11 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
   startDate: date()
     .typeError('Некорректный формат даты')
     .required('Начало действия обязательно')
-    .max(ref('endDate'), 'Начало действия должно быть больше конца действия'),
+    .max(ref('endDate'), 'Начало действия должно быть меньше конца действия'),
   endDate: date()
     .typeError('Некорректный формат даты')
     .required('Конец действия обязателен')
-    .min(ref('startDate'), 'Конец действия должен быть меньше начала действия'),
+    .min(ref('startDate'), 'Конец действия должен быть больше начала действия'),
   startDay: getNumberScheme({
     field: 'startDay',
     name: 'День начала',
@@ -97,6 +97,14 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
     minValue: MIN_DAY,
     maxValue: MAX_DAYS_IN_MONTH,
   }).moreThan(ref('startDay'), 'День окончания должен быть больше дня начала'),
+  startTime: date()
+    .typeError('Некорректный формат времени')
+    .required('Время начала обязательно')
+    .max(ref('endTime'), 'Время начала должно быть меньше конца действия'),
+  endTime: date()
+    .typeError('Некорректный формат времени')
+    .required('Время окончания обязательно')
+    .max(ref('endTime'), 'Время окончания должно быть больше времени начала'),
 });
 
 export const createGoalsResolver = yupResolver(createGoalsSchema);
