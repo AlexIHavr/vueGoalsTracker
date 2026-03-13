@@ -66,6 +66,14 @@ const { createYearGoal, createMonthGoal, createDayGoal } =
 
 useWatchFormRefs(createGoalsFormRef);
 
+watch(selectedPeriod, () => {
+  selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
+});
+
+watch(selectedPeriodFilter, () => {
+  selectedMonthChooseFilter.value = [];
+});
+
 watch(selectedMonthChooseFilter, () => {
   selectedDayChooseFilter.value = [];
 });
@@ -205,37 +213,40 @@ const handleCreateGoals = async () => {
                   />
 
                   <Select
-                    v-if="selectedPeriod !== PERIOD_TYPES.YEAR"
                     v-model="selectedPeriodFilter"
                     option-label="label"
                     option-value="value"
                     :options="PERIOD_FILTERS_OPTIONS"
-                    :disabled="!!createGoalsFormRef?.isLoading"
+                    :disabled="
+                      selectedPeriod === PERIOD_TYPES.YEAR ||
+                      !!createGoalsFormRef?.isLoading
+                    "
                   />
                 </div>
 
-                <div
-                  v-if="
-                    selectedPeriodFilter === PERIOD_FILTERS.CHOOSE &&
-                    selectedPeriod !== PERIOD_TYPES.YEAR
-                  "
-                  class="period-settings"
-                >
+                <div class="period-settings">
                   <MultiSelect
                     v-model="selectedMonthChooseFilter"
                     option-label="label"
                     option-value="value"
                     placeholder="Все месяцы"
                     :options="MONTH_CHOOSE_FILTERS_OPTIONS"
-                    :disabled="!!createGoalsFormRef?.isLoading"
+                    :disabled="
+                      selectedPeriod === PERIOD_TYPES.YEAR ||
+                      selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
+                      !!createGoalsFormRef?.isLoading
+                    "
                   />
 
                   <MultiSelect
-                    v-if="selectedPeriod === PERIOD_TYPES.DAY"
                     v-model="selectedDayChooseFilter"
                     placeholder="Все дни"
                     :options="dayChooseFilterOptions"
-                    :disabled="!!createGoalsFormRef?.isLoading"
+                    :disabled="
+                      selectedPeriod !== PERIOD_TYPES.DAY ||
+                      selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
+                      !!createGoalsFormRef?.isLoading
+                    "
                   />
                 </div>
               </div>

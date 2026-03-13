@@ -48,7 +48,7 @@ export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
     value: PERIOD_FILTERS.ODD,
   },
   {
-    label: 'Выборка',
+    label: 'Выбрать',
     value: PERIOD_FILTERS.CHOOSE,
   },
 ] as const;
