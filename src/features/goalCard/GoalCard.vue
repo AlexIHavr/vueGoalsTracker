@@ -31,7 +31,9 @@ const goalAttrs = useGoalStatusAttrs(goalStatus);
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,
-    timesCurrent: goal.timesStart,
+    ...(goalStatus.value === GOAL_STATUSES.IN_PROGRESS && {
+      timesCurrent: goal.timesStart,
+    }),
   });
 };
 
@@ -87,10 +89,10 @@ const handleUpdateTimes = () => {
       <div class="footer-wrapper">
         <Message
           v-if="goalTimes"
-          severity="success"
           size="small"
           class="goal-times-message"
           variant="outlined"
+          :severity="goalAttrs.messageSeverity"
         >
           {{ goalTimes }}
         </Message>

@@ -10,7 +10,10 @@ export const getGoalTimes = (
   goalStatus: ComputedRef<GoalStatus>,
   goal: GoalDocument
 ) => {
-  if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
+  if (
+    goalStatus.value == GOAL_STATUSES.TO_DO ||
+    goalStatus.value == GOAL_STATUSES.COMPLETED
+  ) {
     return '';
   }
 
