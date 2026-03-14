@@ -240,3 +240,20 @@ h6 {
 .p-multiselect-list {
   --p-multiselect-list-padding: 0;
 }
+
+// accordion
+.p-accordionheader {
+  --p-accordion-header-padding: 0 0 20px 0;
+}
+
+.p-accordionpanel {
+  --p-accordion-panel-border-width: 0;
+}
+
+.p-accordioncontent-content {
+  --p-accordion-content-padding: 0;
+}
+
+.p-divider-horizontal {
+  --p-divider-horizontal-margin: 0;
+}

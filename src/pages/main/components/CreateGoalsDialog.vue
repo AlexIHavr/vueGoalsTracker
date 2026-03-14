@@ -6,9 +6,7 @@ import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
-import MultiSelect from 'primevue/multiselect';
-import Select from 'primevue/select';
-import { computed, reactive, ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { CURRENT_YEAR, PERIOD_TYPES } from 'shared/consts';
@@ -18,21 +16,18 @@ import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 import {
   DAY_NUMBERS,
-  MONTH_CHOOSE_FILTERS_OPTIONS,
   MONTH_INDEXES,
   PERIOD_FILTERS,
-  PERIOD_FILTERS_OPTIONS,
-  PERIOD_TYPES_OPTIONS,
 } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 import CommonGoalFields from '../ui/CommonGoalFields.vue';
 import DayDateFields from '../ui/DayDateFields.vue';
+import ExtraSettings from '../ui/ExtraSettings.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
 import TimesFields from '../ui/TimesFields.vue';
 import YearDateFields from '../ui/YearDateFields.vue';
-import { getDayChooseFilterOptions } from '../utils/getDayChooseFilterOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { PeriodFilterValue } from '../types/periodOptions';
@@ -43,15 +38,13 @@ const createGoalsForm = reactive<CreateGoalsFormFields>({
 });
 
 const isDialogVisible = ref<boolean>(false);
+
 const createGoalsFormRef = ref<BaseFormExpose>();
+
 const selectedPeriod = ref<PeriodTypeValue>(PERIOD_TYPES.YEAR);
 const selectedPeriodFilter = ref<PeriodFilterValue>(PERIOD_FILTERS.ALL);
 const selectedMonthChooseFilter = ref<number[]>([]);
 const selectedDayChooseFilter = ref<number[]>([]);
-
-const dayChooseFilterOptions = computed(() =>
-  getDayChooseFilterOptions(selectedMonthChooseFilter)
-);
 
 const { createYearGoal, createMonthGoal, createDayGoal } =
   useCreatePeriodGoal(createGoalsForm);
@@ -180,55 +173,13 @@ const handleCreateGoals = async () => {
           <AccordionHeader>Дополнительные параметры</AccordionHeader>
           <AccordionContent>
             <div class="extra-settings-wrapper">
-              <div class="extra-settings">
-                <Select
-                  v-model="selectedPeriod"
-                  class="period-select"
-                  option-label="label"
-                  option-value="value"
-                  :options="PERIOD_TYPES_OPTIONS"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
-
-                <div class="period-settings">
-                  <Select
-                    v-model="selectedPeriodFilter"
-                    option-label="label"
-                    option-value="value"
-                    :options="PERIOD_FILTERS_OPTIONS"
-                    :disabled="
-                      selectedPeriod === PERIOD_TYPES.YEAR ||
-                      !!createGoalsFormRef?.isLoading
-                    "
-                  />
-
-                  <MultiSelect
-                    v-model="selectedMonthChooseFilter"
-                    input-id="month-choose-filter"
-                    option-label="label"
-                    option-value="value"
-                    placeholder="Все месяцы"
-                    :options="MONTH_CHOOSE_FILTERS_OPTIONS"
-                    :disabled="
-                      selectedPeriod === PERIOD_TYPES.YEAR ||
-                      selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
-                      !!createGoalsFormRef?.isLoading
-                    "
-                  />
-
-                  <MultiSelect
-                    v-model="selectedDayChooseFilter"
-                    input-id="day-choose-filter"
-                    placeholder="Все дни"
-                    :options="dayChooseFilterOptions"
-                    :disabled="
-                      selectedPeriod !== PERIOD_TYPES.DAY ||
-                      selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
-                      !!createGoalsFormRef?.isLoading
-                    "
-                  />
-                </div>
-              </div>
+              <ExtraSettings
+                v-model:selected-period="selectedPeriod"
+                v-model:selected-period-filter="selectedPeriodFilter"
+                v-model:selected-month-choose-filter="selectedMonthChooseFilter"
+                v-model:selected-day-choose-filter="selectedDayChooseFilter"
+                :is-loading="!!createGoalsFormRef?.isLoading"
+              />
 
               <Divider />
 
@@ -280,41 +231,5 @@ const handleCreateGoals = async () => {
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-.extra-settings {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.period-settings {
-  display: flex;
-  gap: 10px;
-}
-
-.p-accordionheader {
-  --p-accordion-header-padding: 0 0 20px 0;
-}
-
-.p-accordionpanel {
-  --p-accordion-panel-border-width: 0;
-}
-
-.p-accordioncontent-content {
-  --p-accordion-content-padding: 0;
-}
-
-.p-divider-horizontal {
-  --p-divider-horizontal-margin: 0;
-}
-
-.p-select,
-.p-multiselect {
-  width: 162px;
-}
-
-.period-select {
-  width: 100%;
 }
 </style>
