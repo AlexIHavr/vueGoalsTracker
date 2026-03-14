@@ -4,11 +4,8 @@ import AccordionContent from 'primevue/accordioncontent';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
-import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
-import InputIcon from 'primevue/inputicon';
-import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
@@ -26,12 +23,7 @@ import {
 import { selectedYearRef } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
-import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
-import {
-  DEFAULT_GOALS_FORM_FIELDS,
-  MAX_START_DATE,
-  MIN_START_DATE,
-} from '../consts/goalsFormFields';
+import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 import {
   DAY_NUMBERS,
   MONTH_CHOOSE_FILTERS_OPTIONS,
@@ -43,6 +35,9 @@ import {
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
+import DayDateFields from '../ui/DayDateFields.vue';
+import MonthDateFields from '../ui/MonthDateFields.vue';
+import YearDateFields from '../ui/YearDateFields.vue';
 import { getDayChooseFilterOptions } from '../utils/getDayChooseFilterOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
@@ -321,105 +316,24 @@ const handleCreateGoals = async () => {
               </BaseFormField>
 
               <template v-if="selectedPeriod === PERIOD_TYPES.YEAR">
-                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-                <BaseFormField
-                  name="startDate"
-                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.startDate"
-                >
-                  <DatePicker
-                    v-model="createGoalsForm.startDate"
-                    input-id="goals-startDate"
-                    icon-display="input"
-                    fluid
-                    show-icon
-                    :disabled-dates="[createGoalsForm.startDate]"
-                    :date-format="DATE_FIELD_FORMAT"
-                    :manual-input="false"
-                    :min-date="MIN_START_DATE"
-                    :max-date="MAX_START_DATE"
-                  />
-                  <label for="goals-startDate">Начало действия*</label>
-                </BaseFormField>
-
-                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-                <BaseFormField
-                  name="endDate"
-                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.endDate"
-                >
-                  <DatePicker
-                    v-model="createGoalsForm.endDate"
-                    input-id="goals-endDate"
-                    icon-display="input"
-                    fluid
-                    show-icon
-                    :disabled-dates="[createGoalsForm.endDate]"
-                    :date-format="DATE_FIELD_FORMAT"
-                    :manual-input="false"
-                    :min-date="MIN_START_DATE"
-                    :max-date="MAX_START_DATE"
-                  />
-                  <label for="goals-endDate">Конец действия*</label>
-                </BaseFormField>
+                <YearDateFields
+                  v-model:start-date="createGoalsForm.startDate"
+                  v-model:end-date="createGoalsForm.endDate"
+                />
               </template>
 
               <template v-if="selectedPeriod === PERIOD_TYPES.MONTH">
-                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-                <BaseFormField name="startDay">
-                  <InputNumber
-                    v-model="createGoalsForm.startDay"
-                    input-id="goals-startDay"
-                    fluid
-                    show-clear
-                    :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
-                  />
-                  <label for="goals-startDay">День начала*</label>
-                </BaseFormField>
-
-                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-                <BaseFormField name="endDay">
-                  <InputNumber
-                    v-model="createGoalsForm.endDay"
-                    input-id="goals-endDay"
-                    fluid
-                    show-clear
-                    :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
-                  />
-                  <label for="goals-endDay">День окончания*</label>
-                </BaseFormField>
+                <MonthDateFields
+                  v-model:start-day="createGoalsForm.startDay"
+                  v-model:end-day="createGoalsForm.endDay"
+                />
               </template>
 
               <template v-if="selectedPeriod === PERIOD_TYPES.DAY">
-                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-                <BaseFormField
-                  name="startTime"
-                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.startTime"
-                >
-                  <InputMask
-                    id="goals-startTime"
-                    v-model="createGoalsForm.startTime"
-                    mask="99:99"
-                    placeholder="чч:мм"
-                    fluid
-                  />
-                  <label for="goals-startTime">Время начала*</label>
-                  <InputIcon class="pi pi-clock time-icon" />
-                </BaseFormField>
-
-                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-                <BaseFormField
-                  name="endTime"
-                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.endTime"
-                >
-                  <InputMask
-                    id="goals-endTime"
-                    v-model="createGoalsForm.endTime"
-                    mask="99:99"
-                    placeholder="чч:мм"
-                    fluid
-                  />
-                  <label for="goals-endTime">Время окончания*</label>
-                  <InputIcon class="pi pi-clock time-icon" />
-                </BaseFormField>
+                <DayDateFields
+                  v-model:start-time="createGoalsForm.startTime"
+                  v-model:end-time="createGoalsForm.endTime"
+                />
               </template>
             </div>
           </AccordionContent>
@@ -483,18 +397,5 @@ const handleCreateGoals = async () => {
 
 .period-select {
   width: 100%;
-}
-
-.time-icon {
-  position: absolute;
-  top: 50%;
-  right: 11px;
-  margin-top: -0.5rem;
-  color: var(--p-datepicker-input-icon-color);
-}
-
-.p-inputmask {
-  --p-inputtext-padding-x: var(--p-form-field-padding-x)
-    calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
 }
 </style>
