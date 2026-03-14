@@ -27,7 +27,8 @@ export function useGoals() {
   const goalsCollection = collection(db, COLLECTIONS_NAMES.GOALS);
 
   const data = useCollection<GoalDocument>(
-    query(goalsCollection, where(USER_ID, '==', user.value?.uid))
+    query(goalsCollection, where(USER_ID, '==', user.value?.uid)),
+    { ssrKey: 'goals-collection' }
   );
 
   const createGoal = async (goalSettings: GoalSettingsParams) => {
@@ -69,7 +70,9 @@ export function useGoals() {
   };
 
   const getGoal = (id: string) => {
-    return useDocument(doc(db, COLLECTIONS_NAMES.GOALS, id));
+    return useDocument(doc(db, COLLECTIONS_NAMES.GOALS, id), {
+      ssrKey: `goal-${id}`,
+    });
   };
 
   return {

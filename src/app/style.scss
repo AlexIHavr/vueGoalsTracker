@@ -223,12 +223,37 @@ h6 {
   --p-multiselect-dropdown-color: var(--p-button-primary-color);
 }
 
-.p-multiselect-header .p-checkbox {
-  width: 100%;
+.p-multiselect-header {
+  --p-multiselect-list-header-padding: var(--p-multiselect-option-padding);
 
-  &::after {
-    margin-left: var(--p-multiselect-option-gap);
-    font-weight: var(--p-button-label-font-weight);
-    content: 'Выбрать все';
+  .p-checkbox {
+    width: 100%;
+
+    &::after {
+      margin-left: var(--p-multiselect-option-gap);
+      font-weight: var(--p-button-label-font-weight);
+      content: 'Выбрать все';
+    }
   }
+}
+
+.p-multiselect-list {
+  --p-multiselect-list-padding: 0;
+}
+
+// accordion
+.p-accordionheader {
+  --p-accordion-header-padding: 0 0 20px 0;
+}
+
+.p-accordionpanel {
+  --p-accordion-panel-border-width: 0;
+}
+
+.p-accordioncontent-content {
+  --p-accordion-content-padding: 0;
+}
+
+.p-divider-horizontal {
+  --p-divider-horizontal-margin: 0;
 }
