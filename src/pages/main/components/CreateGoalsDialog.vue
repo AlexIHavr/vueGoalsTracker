@@ -58,9 +58,20 @@ const resetCreateGoalsForm = () => {
 watch(selectedPeriod, () => {
   selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
 
-  resetCreateGoalsForm();
+  const title = createGoalsForm.title;
+  const description = createGoalsForm.description;
 
   createGoalsFormRef.value?.formRef?.reset();
+
+  resetCreateGoalsForm();
+
+  createGoalsForm.title = title;
+  createGoalsForm.description = description;
+
+  createGoalsFormRef.value?.formRef?.setValues({
+    title,
+    description,
+  } as CreateGoalsFormFields);
 });
 
 watch(selectedPeriodFilter, () => {
