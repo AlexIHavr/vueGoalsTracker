@@ -6,7 +6,6 @@ import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
-import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
@@ -15,11 +14,7 @@ import { computed, reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
-import {
-  ALL_EXCEPT_NUMBERS_REGEX,
-  CURRENT_YEAR,
-  PERIOD_TYPES,
-} from 'shared/consts';
+import { CURRENT_YEAR, PERIOD_TYPES } from 'shared/consts';
 import { selectedYearRef } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
@@ -37,6 +32,7 @@ import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
 import DayDateFields from '../ui/DayDateFields.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
+import TimesFields from '../ui/TimesFields.vue';
 import YearDateFields from '../ui/YearDateFields.vue';
 import { getDayChooseFilterOptions } from '../utils/getDayChooseFilterOptions';
 
@@ -261,59 +257,12 @@ const handleCreateGoals = async () => {
 
               <Divider />
 
-              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-              <BaseFormField
-                name="timesSuffix"
-                :initial-value="DEFAULT_GOALS_FORM_FIELDS.timesSuffix"
-              >
-                <InputText
-                  id="goals-timesSuffix"
-                  v-model="createGoalsForm.timesSuffix"
-                  v-keyfilter="ALL_EXCEPT_NUMBERS_REGEX"
-                  fluid
-                  show-clear
-                />
-                <label for="goals-timesSuffix">Наименование количества</label>
-              </BaseFormField>
-
-              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-              <BaseFormField name="timesStart">
-                <InputNumber
-                  v-model="createGoalsForm.timesStart"
-                  input-id="goals-timesStart"
-                  fluid
-                  show-clear
-                  :suffix="createGoalsForm.timesSuffix"
-                  :min="DEFAULT_GOALS_FORM_FIELDS.timesStart"
-                />
-                <label for="goals-timesStart">Начальное количество*</label>
-              </BaseFormField>
-
-              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-              <BaseFormField name="timesEnd">
-                <InputNumber
-                  v-model="createGoalsForm.timesEnd"
-                  input-id="goals-timesEnd"
-                  fluid
-                  show-clear
-                  :suffix="createGoalsForm.timesSuffix"
-                  :min="DEFAULT_GOALS_FORM_FIELDS.timesEnd"
-                />
-                <label for="goals-timesEnd">Количество*</label>
-              </BaseFormField>
-
-              <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-              <BaseFormField name="timesStep">
-                <InputNumber
-                  v-model="createGoalsForm.timesStep"
-                  input-id="goals-timesStep"
-                  fluid
-                  show-clear
-                  :suffix="createGoalsForm.timesSuffix"
-                  :min="DEFAULT_GOALS_FORM_FIELDS.timesStep"
-                />
-                <label for="goals-timesStep">Шаг*</label>
-              </BaseFormField>
+              <TimesFields
+                v-model:times-suffix="createGoalsForm.timesSuffix"
+                v-model:times-start="createGoalsForm.timesStart"
+                v-model:times-end="createGoalsForm.timesEnd"
+                v-model:times-step="createGoalsForm.timesStep"
+              />
 
               <template v-if="selectedPeriod === PERIOD_TYPES.YEAR">
                 <YearDateFields
