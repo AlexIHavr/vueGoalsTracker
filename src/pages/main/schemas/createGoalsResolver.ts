@@ -33,12 +33,10 @@ const getNumberScheme = ({
   minValue?: number;
   maxValue?: number;
 }) => {
-  const defaultField = DEFAULT_GOALS_FORM_FIELDS[field];
-  const min = minValue ?? defaultField;
+  const min = minValue ?? DEFAULT_GOALS_FORM_FIELDS[field];
 
   return number()
-    .transform((value) => (value === null ? defaultField : value))
-    .default(defaultField)
+    .required(`${name} обязательно`)
     .min(min, `${name} не ${errorVerb} быть меньше ${min}`)
     .max(
       maxValue,
