@@ -43,6 +43,7 @@
 
   .p-datepicker-day {
     --p-datepicker-date-hover-background: #b5ffb3;
+    --p-datepicker-today-background: #83ee80;
   }
 
   .p-datepicker-select-month {
@@ -99,6 +100,7 @@
 
   .p-datepicker-day {
     --p-datepicker-date-hover-background: #008c5b;
+    --p-datepicker-today-background: #00a46b;
   }
 
   .p-datepicker-select-month {
@@ -142,6 +144,11 @@ h6 {
   font-size: 1rem;
 }
 
+.p-datepicker-day[aria-selected='true'] {
+  background-color: var(--p-datepicker-date-hover-background);
+  opacity: 1;
+}
+
 // p-select
 .p-select {
   --p-select-background: var(--p-button-primary-background);
@@ -159,19 +166,20 @@ h6 {
     opacity: var(--p-disabled-opacity);
   }
 
+  .p-select-label {
+    --p-select-color: var(--p-button-primary-color);
+    --p-select-placeholder-color: var(--p-button-primary-color);
+    --p-select-disabled-color: var(--p-button-primary-color);
+
+    padding-right: 0;
+    font-weight: var(--p-button-label-font-weight);
+  }
+
   @media (hover: hover) {
     &:hover {
       background-color: var(--p-button-primary-hover-background);
     }
   }
-}
-
-.p-select-label {
-  --p-select-color: var(--p-button-primary-color);
-  --p-select-placeholder-color: var(--p-button-primary-color);
-  --p-select-disabled-color: var(--p-button-primary-color);
-
-  font-weight: var(--p-button-label-font-weight);
 }
 
 .p-select-dropdown {
@@ -195,6 +203,15 @@ h6 {
     opacity: var(--p-disabled-opacity);
   }
 
+  .p-multiselect-label {
+    --p-multiselect-color: var(--p-button-primary-color);
+    --p-multiselect-placeholder-color: var(--p-button-primary-color);
+    --p-multiselect-disabled-color: var(--p-button-primary-color);
+
+    padding-right: 0;
+    font-weight: var(--p-button-label-font-weight);
+  }
+
   @media (hover: hover) {
     &:hover {
       background-color: var(--p-button-primary-hover-background);
@@ -202,14 +219,16 @@ h6 {
   }
 }
 
-.p-multiselect-label {
-  --p-multiselect-color: var(--p-button-primary-color);
-  --p-multiselect-placeholder-color: var(--p-button-primary-color);
-  --p-multiselect-disabled-color: var(--p-button-primary-color);
-
-  font-weight: var(--p-button-label-font-weight);
-}
-
 .p-multiselect-dropdown {
   --p-multiselect-dropdown-color: var(--p-button-primary-color);
+}
+
+.p-multiselect-header .p-checkbox {
+  width: 100%;
+
+  &::after {
+    margin-left: var(--p-multiselect-option-gap);
+    font-weight: var(--p-button-label-font-weight);
+    content: 'Выбрать все';
+  }
 }

@@ -1,9 +1,8 @@
-import { PERIOD_FILTERS, PERIOD_TYPES } from '../consts/periodOptions';
+import { PERIOD_FILTERS } from '../consts/periodOptions';
 
 import type { MONTH_NAMES } from 'shared/consts';
-import type { ValueOf } from 'shared/types';
+import type { PeriodTypeValue, ValueOf } from 'shared/types';
 
-export type PeriodTypeValue = ValueOf<typeof PERIOD_TYPES>;
 export type PeriodFilterValue = ValueOf<typeof PERIOD_FILTERS>;
 export type MonthChooseFilterLabel = ValueOf<typeof MONTH_NAMES>;
 

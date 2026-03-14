@@ -1,2 +1,7 @@
 export { appLocalStorage } from './appLocalStorage';
-export { getLocaleNumberString } from './numbers';
+export {
+  getLocaleNumberString,
+  getEvenNumbers,
+  getOddNumbers,
+} from './numbers';
+export { getLastDayOfMonth, parseTime } from './dates';

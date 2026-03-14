@@ -1,6 +1,8 @@
 import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { date, number, object, ObjectSchema, ref, string } from 'yup';
 
+import { MAX_DAYS_IN_MONTH } from 'shared/consts';
+import { TIME_24_REGEX } from 'shared/consts/regex';
 import { getLocaleNumberString } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
@@ -17,7 +19,6 @@ const MAX_TIMES = 1_000_000;
 const MAX_TIMES_SUFFIX_LENGTH = 5;
 
 const MIN_DAY = 1;
-const MAX_DAY = 31;
 
 const getNumberScheme = ({
   field,
@@ -79,24 +80,44 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
   startDate: date()
     .typeError('Некорректный формат даты')
     .required('Начало действия обязательно')
-    .max(ref('endDate'), 'Начало действия должно быть больше конца действия'),
+    .max(ref('endDate'), 'Начало действия должно быть меньше конца действия'),
   endDate: date()
     .typeError('Некорректный формат даты')
     .required('Конец действия обязателен')
-    .min(ref('startDate'), 'Конец действия должен быть меньше начала действия'),
+    .min(ref('startDate'), 'Конец действия должен быть больше начала действия'),
   startDay: getNumberScheme({
     field: 'startDay',
     name: 'День начала',
     errorVerb: 'должен',
-    maxValue: MAX_DAY,
+    maxValue: MAX_DAYS_IN_MONTH,
   }).lessThan(ref('endDay'), 'День начала должно быть меньше дня окончания'),
   endDay: getNumberScheme({
     field: 'endDay',
     name: 'День окончания',
     errorVerb: 'должен',
     minValue: MIN_DAY,
-    maxValue: MAX_DAY,
+    maxValue: MAX_DAYS_IN_MONTH,
   }).moreThan(ref('startDay'), 'День окончания должен быть больше дня начала'),
+  startTime: string()
+    .required('Время начала обязательно')
+    .matches(TIME_24_REGEX, 'Некорректный формат времени')
+    .test(
+      'is-less-than-endTime',
+      'Время начала должно быть меньше времени окончания',
+      function (startTime) {
+        return startTime < this.parent.endTime;
+      }
+    ),
+  endTime: string()
+    .required('Время окончания обязательно')
+    .matches(TIME_24_REGEX, 'Некорректный формат времени')
+    .test(
+      'is-greater-than-startTime',
+      'Время окончания должно быть больше времени начала',
+      function (endTime) {
+        return endTime > this.parent.startTime;
+      }
+    ),
 });
 
 export const createGoalsResolver = yupResolver(createGoalsSchema);

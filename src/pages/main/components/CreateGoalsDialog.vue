@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { InputIcon } from 'primevue';
 import Accordion from 'primevue/accordion';
 import AccordionContent from 'primevue/accordioncontent';
 import AccordionHeader from 'primevue/accordionheader';
@@ -7,17 +8,23 @@ import Button from 'primevue/button';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
+import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { BaseFormField } from 'features/baseFormField';
-import { ALL_EXCEPT_NUMBERS_REGEX, CURRENT_YEAR } from 'shared/consts';
+import {
+  ALL_EXCEPT_NUMBERS_REGEX,
+  CURRENT_YEAR,
+  PERIOD_TYPES,
+} from 'shared/consts';
 import { selectedYearRef } from 'shared/store';
+import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
 import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
 import {
@@ -26,22 +33,21 @@ import {
   MIN_START_DATE,
 } from '../consts/goalsFormFields';
 import {
+  DAY_NUMBERS,
   MONTH_CHOOSE_FILTERS_OPTIONS,
   MONTH_INDEXES,
   PERIOD_FILTERS,
   PERIOD_FILTERS_OPTIONS,
-  PERIOD_TYPES,
   PERIOD_TYPES_OPTIONS,
 } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
+import { getDayChooseFilterOptions } from '../utils/getDayChooseFilterOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
-import type {
-  PeriodFilterValue,
-  PeriodTypeValue,
-} from '../types/periodOptions';
+import type { PeriodFilterValue } from '../types/periodOptions';
+import type { PeriodTypeValue } from 'shared/types';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
   ...DEFAULT_GOALS_FORM_FIELDS,
@@ -52,50 +58,95 @@ const createGoalsFormRef = ref<BaseFormExpose>();
 const selectedPeriod = ref<PeriodTypeValue>(PERIOD_TYPES.YEAR);
 const selectedPeriodFilter = ref<PeriodFilterValue>(PERIOD_FILTERS.ALL);
 const selectedMonthChooseFilter = ref<number[]>([]);
+const selectedDayChooseFilter = ref<number[]>([]);
 
-const { createYearGoal, createMonthGoal } =
+const dayChooseFilterOptions = computed(() =>
+  getDayChooseFilterOptions(selectedMonthChooseFilter)
+);
+
+const { createYearGoal, createMonthGoal, createDayGoal } =
   useCreatePeriodGoal(createGoalsForm);
 
 useWatchFormRefs(createGoalsFormRef);
+
+const resetCreateGoalsForm = () => {
+  Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
+};
+
+watch(selectedPeriod, () => {
+  selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
+
+  resetCreateGoalsForm();
+
+  createGoalsFormRef.value?.formRef?.reset();
+});
+
+watch(selectedPeriodFilter, () => {
+  selectedMonthChooseFilter.value = [];
+});
+
+watch(selectedMonthChooseFilter, () => {
+  selectedDayChooseFilter.value = [];
+});
 
 const handleShowDialog = () => {
   isDialogVisible.value = true;
 };
 
 const resetDialog = () => {
-  Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
+  resetCreateGoalsForm();
 
   selectedPeriod.value = PERIOD_TYPES.YEAR;
   selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
   selectedMonthChooseFilter.value = [];
+  selectedDayChooseFilter.value = [];
 
   isDialogVisible.value = false;
 };
 
 const handleCreateGoals = async () => {
-  if (selectedPeriod.value === PERIOD_TYPES.MONTH) {
+  const isSelectedMonth = selectedPeriod.value === PERIOD_TYPES.MONTH;
+  if (selectedPeriod.value === PERIOD_TYPES.YEAR) {
+    await createYearGoal();
+  } else {
     switch (selectedPeriodFilter.value) {
       default:
       case PERIOD_FILTERS.ALL:
-        await createMonthGoal();
+        if (isSelectedMonth) {
+          await createMonthGoal();
+        } else {
+          await createDayGoal();
+        }
         break;
 
       case PERIOD_FILTERS.EVEN:
-        await createMonthGoal(MONTH_INDEXES.filter((month) => month % 2 === 0));
+        if (isSelectedMonth) {
+          await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
+        } else {
+          await createDayGoal(getEvenNumbers(DAY_NUMBERS));
+        }
         break;
 
       case PERIOD_FILTERS.ODD:
-        await createMonthGoal(MONTH_INDEXES.filter((month) => month % 2));
+        if (isSelectedMonth) {
+          await createMonthGoal(getOddNumbers(MONTH_INDEXES));
+        } else {
+          await createDayGoal(getOddNumbers(DAY_NUMBERS));
+        }
 
         break;
 
       case PERIOD_FILTERS.CHOOSE:
-        console.log(selectedMonthChooseFilter.value);
-        await createMonthGoal(selectedMonthChooseFilter.value);
+        if (isSelectedMonth) {
+          await createMonthGoal(selectedMonthChooseFilter.value);
+        } else {
+          await createDayGoal(
+            selectedDayChooseFilter.value,
+            selectedMonthChooseFilter.value
+          );
+        }
         break;
     }
-  } else {
-    await createYearGoal();
   }
 
   resetDialog();
@@ -162,33 +213,53 @@ const handleCreateGoals = async () => {
           <AccordionHeader>Дополнительные параметры</AccordionHeader>
           <AccordionContent>
             <div class="extra-settings-wrapper">
-              <div class="period-settings">
-                <Select
-                  v-model="selectedPeriod"
-                  option-label="label"
-                  option-value="value"
-                  :options="PERIOD_TYPES_OPTIONS"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
+              <div class="period-settings-wrapper">
+                <div class="period-settings">
+                  <Select
+                    v-model="selectedPeriod"
+                    option-label="label"
+                    option-value="value"
+                    :options="PERIOD_TYPES_OPTIONS"
+                    :disabled="!!createGoalsFormRef?.isLoading"
+                  />
 
-                <Select
-                  v-if="selectedPeriod !== PERIOD_TYPES.YEAR"
-                  v-model="selectedPeriodFilter"
-                  option-label="label"
-                  option-value="value"
-                  :options="PERIOD_FILTERS_OPTIONS"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
+                  <Select
+                    v-model="selectedPeriodFilter"
+                    option-label="label"
+                    option-value="value"
+                    :options="PERIOD_FILTERS_OPTIONS"
+                    :disabled="
+                      selectedPeriod === PERIOD_TYPES.YEAR ||
+                      !!createGoalsFormRef?.isLoading
+                    "
+                  />
+                </div>
 
-                <MultiSelect
-                  v-if="selectedPeriodFilter === PERIOD_FILTERS.CHOOSE"
-                  v-model="selectedMonthChooseFilter"
-                  option-label="label"
-                  option-value="value"
-                  placeholder="Все месяцы"
-                  :options="MONTH_CHOOSE_FILTERS_OPTIONS"
-                  :disabled="!!createGoalsFormRef?.isLoading"
-                />
+                <div class="period-settings">
+                  <MultiSelect
+                    v-model="selectedMonthChooseFilter"
+                    option-label="label"
+                    option-value="value"
+                    placeholder="Все месяцы"
+                    :options="MONTH_CHOOSE_FILTERS_OPTIONS"
+                    :disabled="
+                      selectedPeriod === PERIOD_TYPES.YEAR ||
+                      selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
+                      !!createGoalsFormRef?.isLoading
+                    "
+                  />
+
+                  <MultiSelect
+                    v-model="selectedDayChooseFilter"
+                    placeholder="Все дни"
+                    :options="dayChooseFilterOptions"
+                    :disabled="
+                      selectedPeriod !== PERIOD_TYPES.DAY ||
+                      selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
+                      !!createGoalsFormRef?.isLoading
+                    "
+                  />
+                </div>
               </div>
 
               <Divider />
@@ -256,8 +327,10 @@ const handleCreateGoals = async () => {
                   <DatePicker
                     id="goals-startDate"
                     v-model="createGoalsForm.startDate"
+                    icon-display="input"
                     fluid
                     show-icon
+                    :disabled-dates="[createGoalsForm.startDate]"
                     :date-format="DATE_FIELD_FORMAT"
                     :manual-input="false"
                     :min-date="MIN_START_DATE"
@@ -274,8 +347,10 @@ const handleCreateGoals = async () => {
                   <DatePicker
                     id="goals-endDate"
                     v-model="createGoalsForm.endDate"
+                    icon-display="input"
                     fluid
                     show-icon
+                    :disabled-dates="[createGoalsForm.endDate]"
                     :date-format="DATE_FIELD_FORMAT"
                     :manual-input="false"
                     :min-date="MIN_START_DATE"
@@ -310,6 +385,40 @@ const handleCreateGoals = async () => {
                   <label for="goals-endDay">День окончания</label>
                 </BaseFormField>
               </template>
+
+              <template v-if="selectedPeriod === PERIOD_TYPES.DAY">
+                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+                <BaseFormField
+                  name="startTime"
+                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.startTime"
+                >
+                  <InputMask
+                    id="goals-startTime"
+                    v-model="createGoalsForm.startTime"
+                    mask="99:99"
+                    placeholder="чч:мм"
+                    fluid
+                  />
+                  <label for="goals-startTime">Время начала</label>
+                  <InputIcon class="pi pi-clock time-icon" />
+                </BaseFormField>
+
+                <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+                <BaseFormField
+                  name="endTime"
+                  :initial-value="DEFAULT_GOALS_FORM_FIELDS.endTime"
+                >
+                  <InputMask
+                    id="goals-endTime"
+                    v-model="createGoalsForm.endTime"
+                    mask="99:99"
+                    placeholder="чч:мм"
+                    fluid
+                  />
+                  <label for="goals-endTime">Время окончания</label>
+                  <InputIcon class="pi pi-clock time-icon" />
+                </BaseFormField>
+              </template>
             </div>
           </AccordionContent>
         </AccordionPanel>
@@ -338,6 +447,12 @@ const handleCreateGoals = async () => {
   gap: 20px;
 }
 
+.period-settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .period-settings {
   display: flex;
   gap: 10px;
@@ -359,28 +474,21 @@ const handleCreateGoals = async () => {
   --p-divider-horizontal-margin: 0;
 }
 
-.p-select {
-  width: 135px;
-
-  .p-select-label {
-    padding-right: 0;
-  }
-}
-
+.p-select,
 .p-multiselect {
   width: 170px;
-
-  .p-multiselect-label {
-    padding-right: 0;
-  }
 }
 
-.p-multiselect-header .p-checkbox {
-  width: 100%;
+.time-icon {
+  position: absolute;
+  top: 50%;
+  right: 11px;
+  margin-top: -0.5rem;
+  color: var(--p-datepicker-input-icon-color);
+}
 
-  &::after {
-    margin-left: var(--p-multiselect-option-gap);
-    content: 'Выбрать все';
-  }
+.p-inputmask {
+  --p-inputtext-padding-x: var(--p-form-field-padding-x)
+    calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
 }
 </style>

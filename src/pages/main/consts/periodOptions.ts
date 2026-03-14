@@ -1,17 +1,15 @@
-import { MONTH_NAMES } from 'shared/consts';
+import {
+  DAYS_IN_YEAR,
+  MONTH_NAMES,
+  MONTHS_IN_YEAR,
+  PERIOD_TYPES,
+} from 'shared/consts';
 
 import type {
   MonthChooseFiltersOptions,
   PeriodFiltersOptions,
   PeriodTypesOptions,
 } from '../types/periodOptions';
-
-export const MONTHS_IN_YEAR = 12;
-
-export const PERIOD_TYPES = {
-  YEAR: 'year',
-  MONTH: 'month',
-} as const;
 
 export const PERIOD_FILTERS = {
   ALL: 'all',
@@ -29,6 +27,10 @@ export const PERIOD_TYPES_OPTIONS: PeriodTypesOptions = [
     label: 'Месяц',
     value: PERIOD_TYPES.MONTH,
   },
+  {
+    label: 'День',
+    value: PERIOD_TYPES.DAY,
+  },
 ] as const;
 
 export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
@@ -45,18 +47,23 @@ export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
     value: PERIOD_FILTERS.ODD,
   },
   {
-    label: 'Выбор',
+    label: 'Выбрать',
     value: PERIOD_FILTERS.CHOOSE,
   },
 ] as const;
 
 export const MONTH_INDEXES = Array.from(
   { length: MONTHS_IN_YEAR },
-  (_, index) => index + 1
+  (_, index) => index
 );
 
 export const MONTH_CHOOSE_FILTERS_OPTIONS: MonthChooseFiltersOptions =
   MONTH_INDEXES.map((month) => ({
-    label: MONTH_NAMES[month - 1]!,
+    label: MONTH_NAMES[month]!,
     value: month,
   }));
+
+export const DAY_NUMBERS = Array.from(
+  { length: DAYS_IN_YEAR },
+  (_, i) => i + 1
+);
