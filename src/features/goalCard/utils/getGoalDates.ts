@@ -19,10 +19,6 @@ export const getGoalDates = (
   goalStatus: ComputedRef<GoalStatus>,
   goal: GoalDocument
 ) => {
-  if (goalStatus.value === GOAL_STATUSES.COMPLETED) {
-    return '';
-  }
-
   const startDate = goal.startDate.toDate();
   const endDate = goal.endDate.toDate();
 
@@ -32,7 +28,11 @@ export const getGoalDates = (
   const startTime = getTimeLocalString(startDate);
   const endTime = getTimeLocalString(endDate);
 
-  const getNotInProgressString = (timeString?: string) => {
+  const isInProgressOrCompleted =
+    goalStatus.value === GOAL_STATUSES.IN_PROGRESS ||
+    goalStatus.value === GOAL_STATUSES.COMPLETED;
+
+  const getToDoOrExpiredString = (timeString?: string) => {
     if (goalStatus.value === GOAL_STATUSES.TO_DO) {
       const startTimeString =
         timeString ?? (isStartTime(startDate) ? '' : ` ${startTime}`);
@@ -57,32 +57,32 @@ export const getGoalDates = (
         return 'Весь год';
       }
 
-      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+      if (isInProgressOrCompleted) {
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getNotInProgressString('');
+      return getToDoOrExpiredString('');
 
     case PERIOD_TYPES.MONTH:
       if (isFullMonth(startDate, endDate)) {
         return `Весь ${MONTH_NAMES_LOWERCASE[startDate.getMonth()]}`;
       }
 
-      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+      if (isInProgressOrCompleted) {
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getNotInProgressString('');
+      return getToDoOrExpiredString('');
 
     case PERIOD_TYPES.DAY:
       if (isFullDay(startDate, endDate)) {
         return startDateString;
       }
 
-      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+      if (isInProgressOrCompleted) {
         return `${startDateString} ${startTime} - ${endTime}`;
       }
 
-      return getNotInProgressString();
+      return getToDoOrExpiredString();
   }
 };
