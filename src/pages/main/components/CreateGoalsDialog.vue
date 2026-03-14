@@ -238,6 +238,7 @@ const handleCreateGoals = async () => {
                 <div class="period-settings">
                   <MultiSelect
                     v-model="selectedMonthChooseFilter"
+                    input-id="month-choose-filter"
                     option-label="label"
                     option-value="value"
                     placeholder="Все месяцы"
@@ -251,6 +252,7 @@ const handleCreateGoals = async () => {
 
                   <MultiSelect
                     v-model="selectedDayChooseFilter"
+                    input-id="day-choose-filter"
                     placeholder="Все дни"
                     :options="dayChooseFilterOptions"
                     :disabled="
@@ -282,8 +284,8 @@ const handleCreateGoals = async () => {
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
               <BaseFormField name="timesStart">
                 <InputNumber
-                  id="goals-timesStart"
                   v-model="createGoalsForm.timesStart"
+                  input-id="goals-timesStart"
                   fluid
                   show-clear
                   :suffix="createGoalsForm.timesSuffix"
@@ -295,8 +297,8 @@ const handleCreateGoals = async () => {
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
               <BaseFormField name="timesEnd">
                 <InputNumber
-                  id="goals-timesEnd"
                   v-model="createGoalsForm.timesEnd"
+                  input-id="goals-timesEnd"
                   fluid
                   show-clear
                   :suffix="createGoalsForm.timesSuffix"
@@ -308,8 +310,8 @@ const handleCreateGoals = async () => {
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
               <BaseFormField name="timesStep">
                 <InputNumber
-                  id="goals-timesStep"
                   v-model="createGoalsForm.timesStep"
+                  input-id="goals-timesStep"
                   fluid
                   show-clear
                   :suffix="createGoalsForm.timesSuffix"
@@ -325,8 +327,8 @@ const handleCreateGoals = async () => {
                   :initial-value="DEFAULT_GOALS_FORM_FIELDS.startDate"
                 >
                   <DatePicker
-                    id="goals-startDate"
                     v-model="createGoalsForm.startDate"
+                    input-id="goals-startDate"
                     icon-display="input"
                     fluid
                     show-icon
@@ -345,8 +347,8 @@ const handleCreateGoals = async () => {
                   :initial-value="DEFAULT_GOALS_FORM_FIELDS.endDate"
                 >
                   <DatePicker
-                    id="goals-endDate"
                     v-model="createGoalsForm.endDate"
+                    input-id="goals-endDate"
                     icon-display="input"
                     fluid
                     show-icon
@@ -364,8 +366,8 @@ const handleCreateGoals = async () => {
                 <!-- @vue-generic {keyof CreateGoalsFormFields} -->
                 <BaseFormField name="startDay">
                   <InputNumber
-                    id="goals-startDay"
                     v-model="createGoalsForm.startDay"
+                    input-id="goals-startDay"
                     fluid
                     show-clear
                     :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
@@ -376,8 +378,8 @@ const handleCreateGoals = async () => {
                 <!-- @vue-generic {keyof CreateGoalsFormFields} -->
                 <BaseFormField name="endDay">
                   <InputNumber
-                    id="goals-endDay"
                     v-model="createGoalsForm.endDay"
+                    input-id="goals-endDay"
                     fluid
                     show-clear
                     :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
