@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { InputIcon } from 'primevue';
 import Accordion from 'primevue/accordion';
 import AccordionContent from 'primevue/accordioncontent';
 import AccordionHeader from 'primevue/accordionheader';
@@ -8,6 +7,7 @@ import Button from 'primevue/button';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
+import InputIcon from 'primevue/inputicon';
 import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
@@ -106,6 +106,7 @@ const resetDialog = () => {
 
 const handleCreateGoals = async () => {
   const isSelectedMonth = selectedPeriod.value === PERIOD_TYPES.MONTH;
+
   if (selectedPeriod.value === PERIOD_TYPES.YEAR) {
     await createYearGoal();
   } else {
@@ -213,16 +214,17 @@ const handleCreateGoals = async () => {
           <AccordionHeader>Дополнительные параметры</AccordionHeader>
           <AccordionContent>
             <div class="extra-settings-wrapper">
-              <div class="period-settings-wrapper">
-                <div class="period-settings">
-                  <Select
-                    v-model="selectedPeriod"
-                    option-label="label"
-                    option-value="value"
-                    :options="PERIOD_TYPES_OPTIONS"
-                    :disabled="!!createGoalsFormRef?.isLoading"
-                  />
+              <div class="extra-settings">
+                <Select
+                  v-model="selectedPeriod"
+                  class="period-select"
+                  option-label="label"
+                  option-value="value"
+                  :options="PERIOD_TYPES_OPTIONS"
+                  :disabled="!!createGoalsFormRef?.isLoading"
+                />
 
+                <div class="period-settings">
                   <Select
                     v-model="selectedPeriodFilter"
                     option-label="label"
@@ -233,9 +235,7 @@ const handleCreateGoals = async () => {
                       !!createGoalsFormRef?.isLoading
                     "
                   />
-                </div>
 
-                <div class="period-settings">
                   <MultiSelect
                     v-model="selectedMonthChooseFilter"
                     input-id="month-choose-filter"
@@ -291,7 +291,7 @@ const handleCreateGoals = async () => {
                   :suffix="createGoalsForm.timesSuffix"
                   :min="DEFAULT_GOALS_FORM_FIELDS.timesStart"
                 />
-                <label for="goals-timesStart">Начальное количество</label>
+                <label for="goals-timesStart">Начальное количество*</label>
               </BaseFormField>
 
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -304,7 +304,7 @@ const handleCreateGoals = async () => {
                   :suffix="createGoalsForm.timesSuffix"
                   :min="DEFAULT_GOALS_FORM_FIELDS.timesEnd"
                 />
-                <label for="goals-timesEnd">Количество</label>
+                <label for="goals-timesEnd">Количество*</label>
               </BaseFormField>
 
               <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -317,7 +317,7 @@ const handleCreateGoals = async () => {
                   :suffix="createGoalsForm.timesSuffix"
                   :min="DEFAULT_GOALS_FORM_FIELDS.timesStep"
                 />
-                <label for="goals-timesStep">Шаг</label>
+                <label for="goals-timesStep">Шаг*</label>
               </BaseFormField>
 
               <template v-if="selectedPeriod === PERIOD_TYPES.YEAR">
@@ -338,7 +338,7 @@ const handleCreateGoals = async () => {
                     :min-date="MIN_START_DATE"
                     :max-date="MAX_START_DATE"
                   />
-                  <label for="goals-startDate">Начало действия</label>
+                  <label for="goals-startDate">Начало действия*</label>
                 </BaseFormField>
 
                 <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -358,7 +358,7 @@ const handleCreateGoals = async () => {
                     :min-date="MIN_START_DATE"
                     :max-date="MAX_START_DATE"
                   />
-                  <label for="goals-endDate">Конец действия</label>
+                  <label for="goals-endDate">Конец действия*</label>
                 </BaseFormField>
               </template>
 
@@ -372,7 +372,7 @@ const handleCreateGoals = async () => {
                     show-clear
                     :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
                   />
-                  <label for="goals-startDay">День начала</label>
+                  <label for="goals-startDay">День начала*</label>
                 </BaseFormField>
 
                 <!-- @vue-generic {keyof CreateGoalsFormFields} -->
@@ -384,7 +384,7 @@ const handleCreateGoals = async () => {
                     show-clear
                     :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
                   />
-                  <label for="goals-endDay">День окончания</label>
+                  <label for="goals-endDay">День окончания*</label>
                 </BaseFormField>
               </template>
 
@@ -401,7 +401,7 @@ const handleCreateGoals = async () => {
                     placeholder="чч:мм"
                     fluid
                   />
-                  <label for="goals-startTime">Время начала</label>
+                  <label for="goals-startTime">Время начала*</label>
                   <InputIcon class="pi pi-clock time-icon" />
                 </BaseFormField>
 
@@ -417,7 +417,7 @@ const handleCreateGoals = async () => {
                     placeholder="чч:мм"
                     fluid
                   />
-                  <label for="goals-endTime">Время окончания</label>
+                  <label for="goals-endTime">Время окончания*</label>
                   <InputIcon class="pi pi-clock time-icon" />
                 </BaseFormField>
               </template>
@@ -449,7 +449,7 @@ const handleCreateGoals = async () => {
   gap: 20px;
 }
 
-.period-settings-wrapper {
+.extra-settings {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -478,7 +478,11 @@ const handleCreateGoals = async () => {
 
 .p-select,
 .p-multiselect {
-  width: 170px;
+  width: 162px;
+}
+
+.period-select {
+  width: 100%;
 }
 
 .time-icon {
