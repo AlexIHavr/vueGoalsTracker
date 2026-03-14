@@ -6,14 +6,11 @@ import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
-import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
-import Textarea from 'primevue/textarea';
 import { computed, reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
-import { BaseFormField } from 'features/baseFormField';
 import { CURRENT_YEAR, PERIOD_TYPES } from 'shared/consts';
 import { selectedYearRef } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
@@ -30,6 +27,7 @@ import {
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
+import CommonGoalFields from '../ui/CommonGoalFields.vue';
 import DayDateFields from '../ui/DayDateFields.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
 import TimesFields from '../ui/TimesFields.vue';
@@ -163,6 +161,7 @@ const handleCreateGoals = async () => {
     <template #header>
       <h2>Создать цели</h2>
     </template>
+
     <BaseForm
       ref="createGoalsFormRef"
       submit-button-label="Создать"
@@ -171,34 +170,10 @@ const handleCreateGoals = async () => {
       :resolver="createGoalsResolver"
       :form-submit="handleCreateGoals"
     >
-      <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-      <BaseFormField
-        name="title"
-        :initial-value="DEFAULT_GOALS_FORM_FIELDS.title"
-      >
-        <InputText
-          id="goals-title"
-          v-model="createGoalsForm.title"
-          size="large"
-          fluid
-        />
-        <label for="goals-title">Название*</label>
-      </BaseFormField>
-
-      <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-      <BaseFormField
-        name="description"
-        :initial-value="DEFAULT_GOALS_FORM_FIELDS.description"
-      >
-        <Textarea
-          id="goals-description"
-          v-model="createGoalsForm.description"
-          size="large"
-          class="goals-description"
-          fluid
-        />
-        <label for="goals-description">Описание</label>
-      </BaseFormField>
+      <CommonGoalFields
+        v-model:title="createGoalsForm.title"
+        v-model:description="createGoalsForm.description"
+      />
 
       <Accordion>
         <AccordionPanel value="extraSettings">
@@ -299,11 +274,6 @@ const handleCreateGoals = async () => {
   gap: 15px;
   width: 500px;
   padding-top: 5px;
-}
-
-.goals-description {
-  height: 100px;
-  resize: none;
 }
 
 .extra-settings-wrapper {
