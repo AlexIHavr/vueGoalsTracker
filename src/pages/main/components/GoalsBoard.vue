@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
-import { GoalCard } from 'features/goalCard';
+import { getGoalStatus, GoalCard, type GoalStatus } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
 import { selectedYearRef } from 'shared/store';
 
+import GoalsFilters from '../ui/GoalsFilters.vue';
+
 const { data } = useGoals();
+
+const statusFilters = ref<GoalStatus[]>([]);
 
 const dataInYear = computed(() =>
   data.value
@@ -18,15 +22,40 @@ const dataInYear = computed(() =>
         firstGoal.startDate.seconds - secondGoal.startDate.seconds
     )
 );
+
+const isActiveStatus = (status: GoalStatus) => {
+  return statusFilters.value.includes(status);
+};
+
+const filteredDataInYear = computed(() => {
+  if (!statusFilters.value.length) {
+    return dataInYear.value;
+  }
+
+  return dataInYear.value.filter((goal) => isActiveStatus(getGoalStatus(goal)));
+});
 </script>
 
 <template>
-  <TransitionGroup name="goal-cards" tag="main" class="goals-board">
-    <GoalCard v-for="goal in dataInYear" :key="goal.id" :goal="goal" />
-  </TransitionGroup>
+  <div class="goal-board-wrapper">
+    <GoalsFilters v-model="statusFilters" :is-active-status="isActiveStatus" />
+
+    <TransitionGroup name="goal-cards" tag="main" class="goals-board">
+      <GoalCard
+        v-for="goal in filteredDataInYear"
+        :key="goal.id"
+        :goal="goal"
+      />
+    </TransitionGroup>
+  </div>
 </template>
 
 <style lang="scss">
+.goal-board-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
 .goals-board {
   display: flex;
   flex-wrap: wrap;

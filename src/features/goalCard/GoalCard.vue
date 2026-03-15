@@ -64,7 +64,6 @@ const handleUpdateTimes = () => {
       <div class="title-wrapper">
         <h3>{{ goal.title }}</h3>
         <Button
-          aria-label="status"
           size="small"
           rounded
           :icon="goalAttrs.statusIcon"
@@ -109,7 +108,6 @@ const handleUpdateTimes = () => {
 
           <Button
             icon="pi pi-trash"
-            aria-label="Save"
             severity="danger"
             raised
             @click="removeGoal(goal.id)"
@@ -122,8 +120,8 @@ const handleUpdateTimes = () => {
 
 <style lang="scss">
 .goal-card {
-  width: 300px;
-  min-width: 300px;
+  width: 335px;
+  min-width: 335px;
   height: 320px;
   min-height: 320px;
 }

@@ -2,10 +2,11 @@ import { reactive, watchEffect, type ComputedRef } from 'vue';
 
 import { GOAL_STATUSES } from '../consts/goalStatuses';
 
+import type { GoalStatus } from '../types/goalStatus';
 import type { MessageProps } from 'primevue';
 import type { ButtonProps } from 'primevue/button';
 
-export function useGoalStatusAttrs(status: ComputedRef<string>) {
+export function useGoalStatusAttrs(status: ComputedRef<GoalStatus>) {
   const goalAttrs = reactive<{
     statusIcon: string;
     completeButtonLabel: string;
