@@ -1,4 +1,4 @@
-type LOCAL_STORAGE_KEY = 'is-dark-theme';
+type LOCAL_STORAGE_KEY = 'is-dark-theme' | 'selected-status-filters';
 
 export const appLocalStorage = {
   get: (key: LOCAL_STORAGE_KEY) =>

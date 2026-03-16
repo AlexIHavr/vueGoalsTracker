@@ -2,9 +2,10 @@
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import Popover from 'primevue/popover';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 import { selectedStatusFilters } from 'shared/store';
+import { appLocalStorage } from 'shared/utils';
 
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
 
@@ -34,6 +35,14 @@ const onShowPopover = () => {
 const onHidePopover = () => {
   isVisiblePopover.value = false;
 };
+
+watch(
+  selectedStatusFilters,
+  (value) => {
+    appLocalStorage.set('selected-status-filters', value);
+  },
+  { deep: true }
+);
 </script>
 
 <template>
