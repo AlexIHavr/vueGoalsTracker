@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
+import Checkbox from 'primevue/checkbox';
+import Popover from 'primevue/popover';
+import { ref } from 'vue';
 
 import { selectedStatusFilters } from 'shared/store';
 
@@ -7,12 +10,15 @@ import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
 
 import type { GoalStatus } from 'shared/types';
 
-const isActiveStatus = (status: GoalStatus) => {
-  return selectedStatusFilters.value.includes(status);
+const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
+const isVisiblePopover = ref<boolean>(false);
+
+const handleToggleFiltersPopover = (event: PointerEvent) => {
+  filtersPopoverRef.value?.toggle(event);
 };
 
 const handleToggleStatusFilter = (status: GoalStatus) => {
-  if (isActiveStatus(status)) {
+  if (selectedStatusFilters.value.includes(status)) {
     selectedStatusFilters.value = selectedStatusFilters.value.filter(
       (statusFilter) => statusFilter !== status
     );
@@ -20,61 +26,80 @@ const handleToggleStatusFilter = (status: GoalStatus) => {
     selectedStatusFilters.value.push(status);
   }
 };
+
+const onShowPopover = () => {
+  isVisiblePopover.value = true;
+};
+
+const onHidePopover = () => {
+  isVisiblePopover.value = false;
+};
 </script>
 
 <template>
-  <div class="goals-filters">
-    <Button
-      v-for="{ icon, label, status, severity } in STATUS_FILTERS_BUTTONS_PROPS"
-      :key="status"
-      raised
-      fluid
-      :icon="icon"
-      :label="label"
-      :severity="severity"
-      :class="['status-filter-button', { active: isActiveStatus(status) }]"
-      @click="handleToggleStatusFilter(status)"
-    />
-  </div>
+  <Button
+    type="button"
+    icon="pi pi-filter"
+    raised
+    :class="['toggle-popover-button', { active: isVisiblePopover }]"
+    @click="handleToggleFiltersPopover"
+  />
+
+  <Popover ref="filtersPopoverRef" @show="onShowPopover" @hide="onHidePopover">
+    <div class="status-filters-wrapper">
+      <h4>Статусы целей</h4>
+
+      <div
+        v-for="{
+          icon,
+          label,
+          status,
+          severity,
+        } in STATUS_FILTERS_BUTTONS_PROPS"
+        :key="status"
+        class="status-filters"
+      >
+        <Checkbox
+          v-model="selectedStatusFilters"
+          name="category"
+          :input-id="label"
+          :value="status"
+        />
+        <Button
+          size="small"
+          icon-pos="right"
+          class="status-filter-button"
+          :severity="severity"
+          :icon="icon"
+          :label="label"
+          @click="handleToggleStatusFilter(status)"
+        />
+      </div>
+    </div>
+  </Popover>
 </template>
 
 <style lang="scss">
-.goals-filters {
+.p-button.toggle-popover-button.active:not(:disabled) {
+  color: var(--p-button-primary-active-color);
+  background: var(--p-button-primary-active-background);
+  border: 1px solid var(--p-button-primary-active-border-color);
+}
+
+.status-filters-wrapper {
   display: flex;
   flex-direction: column;
   gap: 10px;
-
-  .p-button {
-    justify-content: flex-start;
-    width: 170px;
-  }
 }
 
-.status-filter-button.active:not(:disabled) {
-  box-shadow: none;
+.status-filters {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
 
-  &.p-button-success {
-    color: var(--p-button-success-active-color);
-    background: var(--p-button-success-active-background);
-    border: 1px solid var(--p-button-success-active-border-color);
-  }
-
-  &.p-button {
-    color: var(--p-button-primary-active-color);
-    background: var(--p-button-primary-active-background);
-    border: 1px solid var(--p-button-primary-active-border-color);
-  }
-
-  &.p-button-info {
-    color: var(--p-button-info-active-color);
-    background: var(--p-button-info-active-background);
-    border: 1px solid var(--p-button-info-active-border-color);
-  }
-
-  &.p-button-danger {
-    color: var(--p-button-danger-active-color);
-    background: var(--p-button-danger-active-background);
-    border: 1px solid var(--p-button-danger-active-border-color);
-  }
+.p-button.status-filter-button {
+  justify-content: space-between;
+  width: 150px;
 }
 </style>

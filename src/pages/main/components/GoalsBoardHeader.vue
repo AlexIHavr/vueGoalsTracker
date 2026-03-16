@@ -7,6 +7,7 @@ import { useGoals } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 
 import CreateGoalsDialog from './CreateGoalsDialog.vue';
+import GoalsFilters from '../ui/GoalsFilters.vue';
 
 const { data } = useGoals();
 
@@ -30,6 +31,7 @@ const yearSelectOptions = computed(() =>
       :default-value="selectedYear"
       :placeholder="selectedYear.toString()"
     />
+    <GoalsFilters />
   </div>
 </template>
 

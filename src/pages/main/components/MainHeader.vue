@@ -11,8 +11,6 @@ import { ROUTES_PATHS, DARK_THEME_CLASS } from 'shared/consts';
 import { useNotification } from 'shared/hooks';
 import { appLocalStorage } from 'shared/utils';
 
-import GoalsFilters from '../ui/GoalsFilters.vue';
-
 const isLoading = ref<boolean>(false);
 const isDarkTheme = ref<boolean>(appLocalStorage.get('is-dark-theme'));
 
@@ -66,7 +64,6 @@ const handleToggleTheme = () => {
       @click="handleToggleTheme"
     />
 
-    <GoalsFilters />
     <Message class="welcome-message" severity="secondary">
       <h4>Добро пожаловать {{ user?.email }}</h4>
     </Message>
