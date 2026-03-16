@@ -15,7 +15,7 @@ export const getSortedGoals = (goals: GoalDocument[]) => {
         );
 
       case 'title':
-        return sortOrderK === -1
+        return sortOrderK === 1
           ? firstGoal.title.localeCompare(secondGoal.title)
           : secondGoal.title.localeCompare(firstGoal.title);
 

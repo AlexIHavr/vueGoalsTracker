@@ -39,7 +39,7 @@ const onHidePopover = () => {
 watch(
   selectedStatusFilters,
   (value) => {
-    appLocalStorage.set('selected-status-filters', value);
+    appLocalStorage.set('selectedStatusFilters', value);
   },
   { deep: true }
 );
