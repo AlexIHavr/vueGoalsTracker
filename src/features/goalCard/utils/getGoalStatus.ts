@@ -1,7 +1,7 @@
-import { GOAL_STATUSES } from '../consts/goalStatuses';
+import { GOAL_STATUSES } from 'shared/consts';
 
-import type { GoalStatus } from '../types/goalStatus';
 import type { GoalDocument } from 'shared/interfaces';
+import type { GoalStatus } from 'shared/types';
 
 export const getGoalStatus = ({
   isCompleted,

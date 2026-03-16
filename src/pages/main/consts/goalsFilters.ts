@@ -1,4 +1,4 @@
-import { GOAL_STATUSES } from 'features/goalCard';
+import { GOAL_STATUSES } from 'shared/consts';
 
 import type { StatusFiltersButtonsProps } from '../types/goalsFilters';
 

@@ -10,7 +10,7 @@ import { reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { CURRENT_YEAR, PERIOD_TYPES } from 'shared/consts';
-import { selectedYearRef } from 'shared/store';
+import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
@@ -152,7 +152,7 @@ const handleCreateGoals = async () => {
     label="Добавить цели"
     icon="pi pi-plus"
     raised
-    :disabled="selectedYearRef !== CURRENT_YEAR"
+    :disabled="selectedYear !== CURRENT_YEAR"
     @click="handleShowDialog"
   />
 

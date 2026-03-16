@@ -1,9 +1,8 @@
+import { GOAL_STATUSES } from 'shared/consts';
 import { getLocaleNumberString } from 'shared/utils';
 
-import { GOAL_STATUSES } from '../consts/goalStatuses';
-
-import type { GoalStatus } from '../types/goalStatus';
 import type { GoalDocument } from 'shared/interfaces';
+import type { GoalStatus } from 'shared/types';
 import type { ComputedRef } from 'vue';
 
 export const getGoalTimes = (

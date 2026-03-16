@@ -1,4 +1,8 @@
-import { MONTH_NAMES_LOWERCASE, PERIOD_TYPES } from 'shared/consts';
+import {
+  GOAL_STATUSES,
+  MONTH_NAMES_LOWERCASE,
+  PERIOD_TYPES,
+} from 'shared/consts';
 
 import {
   isFullYear,
@@ -9,10 +13,9 @@ import {
   getTimeLocalString,
   isEndTime,
 } from './parseDates';
-import { GOAL_STATUSES } from '../consts/goalStatuses';
 
-import type { GoalStatus } from '../types/goalStatus';
 import type { GoalDocument } from 'shared/interfaces';
+import type { GoalStatus } from 'shared/types';
 import type { ComputedRef } from 'vue';
 
 export const getGoalDates = (

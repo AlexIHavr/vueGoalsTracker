@@ -4,9 +4,9 @@ import Card from 'primevue/card';
 import Message from 'primevue/message';
 import { computed } from 'vue';
 
+import { GOAL_STATUSES } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 
-import { GOAL_STATUSES } from './consts/goalStatuses';
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
 import { getGoalDates } from './utils/getGoalDates';
 import { getGoalStatus } from './utils/getGoalStatus';

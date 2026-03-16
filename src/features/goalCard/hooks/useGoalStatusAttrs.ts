@@ -1,10 +1,10 @@
 import { reactive, watchEffect, type ComputedRef } from 'vue';
 
-import { GOAL_STATUSES } from '../consts/goalStatuses';
+import { GOAL_STATUSES } from 'shared/consts';
 
-import type { GoalStatus } from '../types/goalStatus';
 import type { MessageProps } from 'primevue';
 import type { ButtonProps } from 'primevue/button';
+import type { GoalStatus } from 'shared/types';
 
 export function useGoalStatusAttrs(status: ComputedRef<GoalStatus>) {
   const goalAttrs = reactive<{

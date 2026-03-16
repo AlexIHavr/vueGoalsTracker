@@ -13,3 +13,4 @@ export {
   MAX_MINUTES,
   PERIOD_TYPES,
 } from './dates.ts';
+export { GOAL_STATUSES } from './goalStatuses.ts';

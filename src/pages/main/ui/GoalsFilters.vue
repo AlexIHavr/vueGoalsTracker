@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 
+import { selectedStatusFilters } from 'shared/store';
+
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
 
-import type { GoalStatus } from 'features/goalCard';
+import type { GoalStatus } from 'shared/types';
 
-const { isActiveStatus } = defineProps<{
-  isActiveStatus: (status: GoalStatus) => boolean;
-}>();
-
-const statusFilters = defineModel<GoalStatus[]>({
-  required: true,
-});
+const isActiveStatus = (status: GoalStatus) => {
+  return selectedStatusFilters.value.includes(status);
+};
 
 const handleToggleStatusFilter = (status: GoalStatus) => {
   if (isActiveStatus(status)) {
-    statusFilters.value = statusFilters.value.filter(
+    selectedStatusFilters.value = selectedStatusFilters.value.filter(
       (statusFilter) => statusFilter !== status
     );
   } else {
-    statusFilters.value.push(status);
+    selectedStatusFilters.value.push(status);
   }
 };
 </script>

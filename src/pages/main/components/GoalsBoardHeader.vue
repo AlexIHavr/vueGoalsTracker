@@ -4,7 +4,7 @@ import { computed } from 'vue';
 
 import { CURRENT_YEAR } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
-import { selectedYearRef } from 'shared/store';
+import { selectedYear } from 'shared/store';
 
 import CreateGoalsDialog from './CreateGoalsDialog.vue';
 
@@ -25,10 +25,10 @@ const yearSelectOptions = computed(() =>
   <div class="goals-board-header">
     <CreateGoalsDialog />
     <Select
-      v-model="selectedYearRef"
+      v-model="selectedYear"
       :options="yearSelectOptions"
-      :default-value="selectedYearRef"
-      :placeholder="selectedYearRef.toString()"
+      :default-value="selectedYear"
+      :placeholder="selectedYear.toString()"
     />
   </div>
 </template>
