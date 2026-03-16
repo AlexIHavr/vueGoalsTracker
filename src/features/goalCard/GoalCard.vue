@@ -4,7 +4,6 @@ import Card from 'primevue/card';
 import Message from 'primevue/message';
 import { computed } from 'vue';
 
-import { GOAL_STATUSES } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
@@ -31,14 +30,14 @@ const goalAttrs = useGoalStatusAttrs(goalStatus);
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,
-    ...(goalStatus.value === GOAL_STATUSES.IN_PROGRESS && {
+    ...(goalStatus.value === 'in-progress' && {
       timesCurrent: goal.timesStart,
     }),
   });
 };
 
 const handleUpdateTimes = () => {
-  if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
+  if (goalStatus.value !== 'in-progress') {
     handleCompleteGoal();
     return;
   }

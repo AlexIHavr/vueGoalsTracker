@@ -1,4 +1,3 @@
-import { GOAL_STATUSES } from 'shared/consts';
 import { getLocaleNumberString } from 'shared/utils';
 
 import type { GoalDocument } from 'shared/interfaces';
@@ -16,7 +15,7 @@ export const getGoalTimes = (
   const timesCurrentString = `${getLocaleNumberString(goal.timesCurrent)}${goal.timesSuffix}`;
   const timesEndString = `${getLocaleNumberString(goal.timesEnd)}${goal.timesSuffix}`;
 
-  if (goalStatus.value == GOAL_STATUSES.COMPLETED) {
+  if (goalStatus.value == 'completed') {
     return `${timesEndString} из ${timesEndString}`;
   }
 

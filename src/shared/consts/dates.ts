@@ -28,9 +28,3 @@ export const MAX_MINUTES = 59;
 
 export const DAYS_IN_YEAR =
   new Date(CURRENT_YEAR, 1, 29).getDate() === 29 ? 366 : 365;
-
-export const PERIOD_TYPES = {
-  YEAR: 'year',
-  MONTH: 'month',
-  DAY: 'day',
-} as const;

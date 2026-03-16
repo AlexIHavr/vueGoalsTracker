@@ -1,9 +1,4 @@
-import {
-  DAYS_IN_YEAR,
-  MONTH_NAMES,
-  MONTHS_IN_YEAR,
-  PERIOD_TYPES,
-} from 'shared/consts';
+import { DAYS_IN_YEAR, MONTH_NAMES, MONTHS_IN_YEAR } from 'shared/consts';
 
 import type {
   MonthChooseFiltersOptions,
@@ -11,44 +6,37 @@ import type {
   PeriodTypesOptions,
 } from '../types/periodOptions';
 
-export const PERIOD_FILTERS = {
-  ALL: 'all',
-  EVEN: 'even',
-  ODD: 'odd',
-  CHOOSE: 'choose',
-} as const;
-
 export const PERIOD_TYPES_OPTIONS: PeriodTypesOptions = [
   {
     label: 'Год',
-    value: PERIOD_TYPES.YEAR,
+    value: 'year',
   },
   {
     label: 'Месяц',
-    value: PERIOD_TYPES.MONTH,
+    value: 'month',
   },
   {
     label: 'День',
-    value: PERIOD_TYPES.DAY,
+    value: 'day',
   },
 ] as const;
 
 export const PERIOD_FILTERS_OPTIONS: PeriodFiltersOptions = [
   {
     label: 'Все',
-    value: PERIOD_FILTERS.ALL,
+    value: 'all',
   },
   {
     label: 'Четные',
-    value: PERIOD_FILTERS.EVEN,
+    value: 'even',
   },
   {
     label: 'Нечетные',
-    value: PERIOD_FILTERS.ODD,
+    value: 'odd',
   },
   {
     label: 'Выбрать',
-    value: PERIOD_FILTERS.CHOOSE,
+    value: 'choose',
   },
 ] as const;
 

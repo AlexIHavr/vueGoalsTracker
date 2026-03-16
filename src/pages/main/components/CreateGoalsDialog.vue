@@ -9,16 +9,12 @@ import Divider from 'primevue/divider';
 import { reactive, ref, watch } from 'vue';
 
 import { BaseForm, type BaseFormExpose } from 'features/baseForm';
-import { CURRENT_YEAR, PERIOD_TYPES } from 'shared/consts';
+import { CURRENT_YEAR } from 'shared/consts';
 import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
-import {
-  DAY_NUMBERS,
-  MONTH_INDEXES,
-  PERIOD_FILTERS,
-} from '../consts/periodOptions';
+import { DAY_NUMBERS, MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
@@ -41,8 +37,8 @@ const isDialogVisible = ref<boolean>(false);
 
 const createGoalsFormRef = ref<BaseFormExpose>();
 
-const selectedPeriod = ref<PeriodTypeValue>(PERIOD_TYPES.YEAR);
-const selectedPeriodFilter = ref<PeriodFilterValue>(PERIOD_FILTERS.ALL);
+const selectedPeriod = ref<PeriodTypeValue>('year');
+const selectedPeriodFilter = ref<PeriodFilterValue>('all');
 const selectedMonthChooseFilter = ref<number[]>([]);
 const selectedDayChooseFilter = ref<number[]>([]);
 
@@ -56,7 +52,7 @@ const resetCreateGoalsForm = () => {
 };
 
 watch(selectedPeriod, () => {
-  selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
+  selectedPeriodFilter.value = 'all';
 
   const title = createGoalsForm.title;
   const description = createGoalsForm.description;
@@ -89,8 +85,8 @@ const handleShowDialog = () => {
 const resetDialog = () => {
   resetCreateGoalsForm();
 
-  selectedPeriod.value = PERIOD_TYPES.YEAR;
-  selectedPeriodFilter.value = PERIOD_FILTERS.ALL;
+  selectedPeriod.value = 'year';
+  selectedPeriodFilter.value = 'all';
   selectedMonthChooseFilter.value = [];
   selectedDayChooseFilter.value = [];
 
@@ -98,14 +94,14 @@ const resetDialog = () => {
 };
 
 const handleCreateGoals = async () => {
-  const isSelectedMonth = selectedPeriod.value === PERIOD_TYPES.MONTH;
+  const isSelectedMonth = selectedPeriod.value === 'month';
 
-  if (selectedPeriod.value === PERIOD_TYPES.YEAR) {
+  if (selectedPeriod.value === 'year') {
     await createYearGoal();
   } else {
     switch (selectedPeriodFilter.value) {
       default:
-      case PERIOD_FILTERS.ALL:
+      case 'all':
         if (isSelectedMonth) {
           await createMonthGoal();
         } else {
@@ -113,7 +109,7 @@ const handleCreateGoals = async () => {
         }
         break;
 
-      case PERIOD_FILTERS.EVEN:
+      case 'even':
         if (isSelectedMonth) {
           await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
         } else {
@@ -121,7 +117,7 @@ const handleCreateGoals = async () => {
         }
         break;
 
-      case PERIOD_FILTERS.ODD:
+      case 'odd':
         if (isSelectedMonth) {
           await createMonthGoal(getOddNumbers(MONTH_INDEXES));
         } else {
@@ -130,7 +126,7 @@ const handleCreateGoals = async () => {
 
         break;
 
-      case PERIOD_FILTERS.CHOOSE:
+      case 'choose':
         if (isSelectedMonth) {
           await createMonthGoal(selectedMonthChooseFilter.value);
         } else {
@@ -201,21 +197,21 @@ const handleCreateGoals = async () => {
                 v-model:times-step="createGoalsForm.timesStep"
               />
 
-              <template v-if="selectedPeriod === PERIOD_TYPES.YEAR">
+              <template v-if="selectedPeriod === 'year'">
                 <YearDateFields
                   v-model:start-date="createGoalsForm.startDate"
                   v-model:end-date="createGoalsForm.endDate"
                 />
               </template>
 
-              <template v-if="selectedPeriod === PERIOD_TYPES.MONTH">
+              <template v-if="selectedPeriod === 'month'">
                 <MonthDateFields
                   v-model:start-day="createGoalsForm.startDay"
                   v-model:end-day="createGoalsForm.endDay"
                 />
               </template>
 
-              <template v-if="selectedPeriod === PERIOD_TYPES.DAY">
+              <template v-if="selectedPeriod === 'day'">
                 <DayDateFields
                   v-model:start-time="createGoalsForm.startTime"
                   v-model:end-time="createGoalsForm.endTime"

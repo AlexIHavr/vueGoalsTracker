@@ -1,9 +1,7 @@
-import { PERIOD_FILTERS } from '../consts/periodOptions';
-
 import type { MONTH_NAMES } from 'shared/consts';
 import type { PeriodTypeValue, ValueOf } from 'shared/types';
 
-export type PeriodFilterValue = ValueOf<typeof PERIOD_FILTERS>;
+export type PeriodFilterValue = 'all' | 'even' | 'odd' | 'choose';
 export type MonthChooseFilterLabel = ValueOf<typeof MONTH_NAMES>;
 
 export type PeriodTypesOptions = Readonly<{

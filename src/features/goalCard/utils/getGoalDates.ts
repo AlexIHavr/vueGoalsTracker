@@ -1,8 +1,4 @@
-import {
-  GOAL_STATUSES,
-  MONTH_NAMES_LOWERCASE,
-  PERIOD_TYPES,
-} from 'shared/consts';
+import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
 
 import {
   isFullYear,
@@ -32,18 +28,17 @@ export const getGoalDates = (
   const endTime = getTimeLocalString(endDate);
 
   const isInProgressOrCompleted =
-    goalStatus.value === GOAL_STATUSES.IN_PROGRESS ||
-    goalStatus.value === GOAL_STATUSES.COMPLETED;
+    goalStatus.value === 'in-progress' || goalStatus.value === 'completed';
 
   const getToDoOrExpiredString = (timeString?: string) => {
-    if (goalStatus.value === GOAL_STATUSES.TO_DO) {
+    if (goalStatus.value === 'to-do') {
       const startTimeString =
         timeString ?? (isStartTime(startDate) ? '' : ` ${startTime}`);
 
       return `От ${startDateString}${startTimeString}`;
     }
 
-    if (goalStatus.value === GOAL_STATUSES.EXPIRED) {
+    if (goalStatus.value === 'expired') {
       const endTimeString =
         timeString ?? (isEndTime(endDate) ? '' : ` ${endTime}`);
 
@@ -55,7 +50,7 @@ export const getGoalDates = (
 
   switch (goal.periodType) {
     default:
-    case PERIOD_TYPES.YEAR:
+    case 'year':
       if (isFullYear(startDate, endDate)) {
         return 'Весь год';
       }
@@ -66,7 +61,7 @@ export const getGoalDates = (
 
       return getToDoOrExpiredString('');
 
-    case PERIOD_TYPES.MONTH:
+    case 'month':
       if (isFullMonth(startDate, endDate)) {
         return `Весь ${MONTH_NAMES_LOWERCASE[startDate.getMonth()]}`;
       }
@@ -77,7 +72,7 @@ export const getGoalDates = (
 
       return getToDoOrExpiredString('');
 
-    case PERIOD_TYPES.DAY:
+    case 'day':
       if (isFullDay(startDate, endDate)) {
         return startDateString;
       }
