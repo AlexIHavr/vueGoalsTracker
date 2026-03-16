@@ -117,7 +117,7 @@ const handleUpdateTimes = () => {
   </Card>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .goal-card {
   width: 335px;
   min-width: 335px;
@@ -153,13 +153,5 @@ const handleUpdateTimes = () => {
 
 .goal-times-message {
   width: fit-content;
-}
-
-.p-card-body {
-  height: 100%;
-}
-
-.p-card-footer {
-  margin-top: auto;
 }
 </style>

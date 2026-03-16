@@ -94,7 +94,7 @@ const dayChooseFilterOptions = computed(() =>
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .extra-settings {
   display: flex;
   flex-direction: column;

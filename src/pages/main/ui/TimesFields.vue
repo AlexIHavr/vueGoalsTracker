@@ -9,18 +9,23 @@ import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
-type TimesSuffix = Pick<CreateGoalsFormFields, 'timesSuffix'>['timesSuffix'];
-type TimesStart = Pick<CreateGoalsFormFields, 'timesStart'>['timesStart'];
-type TimesEnd = Pick<CreateGoalsFormFields, 'timesEnd'>['timesEnd'];
-type TimesStep = Pick<CreateGoalsFormFields, 'timesStep'>['timesStep'];
+const timesSuffix = defineModel<CreateGoalsFormFields['timesSuffix']>(
+  'timesSuffix',
+  { required: true }
+);
 
-const timesSuffix = defineModel<TimesSuffix>('timesSuffix', { required: true });
+const timesStart = defineModel<CreateGoalsFormFields['timesStart']>(
+  'timesStart',
+  { required: true }
+);
 
-const timesStart = defineModel<TimesStart>('timesStart', { required: true });
+const timesEnd = defineModel<CreateGoalsFormFields['timesEnd']>('timesEnd', {
+  required: true,
+});
 
-const timesEnd = defineModel<TimesEnd>('timesEnd', { required: true });
-
-const timesStep = defineModel<TimesStep>('timesStep', { required: true });
+const timesStep = defineModel<CreateGoalsFormFields['timesStep']>('timesStep', {
+  required: true,
+});
 </script>
 
 <template>

@@ -88,7 +88,7 @@ watch(
   </Popover>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .p-button.toggle-popover-button.active:not(:disabled) {
   color: var(--p-button-primary-active-color);
   background: var(--p-button-primary-active-background);

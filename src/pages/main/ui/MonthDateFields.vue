@@ -7,12 +7,13 @@ import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
-type StartDay = Pick<CreateGoalsFormFields, 'startDay'>['startDay'];
-type EndDay = Pick<CreateGoalsFormFields, 'endDay'>['endDay'];
+const startDay = defineModel<CreateGoalsFormFields['startDay']>('startDay', {
+  required: true,
+});
 
-const startDay = defineModel<StartDay>('startDay', { required: true });
-
-const endDay = defineModel<EndDay>('endDay', { required: true });
+const endDay = defineModel<CreateGoalsFormFields['endDay']>('endDay', {
+  required: true,
+});
 </script>
 
 <template>

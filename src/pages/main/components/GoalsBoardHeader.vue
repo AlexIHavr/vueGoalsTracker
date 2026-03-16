@@ -8,6 +8,7 @@ import { selectedYear } from 'shared/store';
 
 import CreateGoalsDialog from './CreateGoalsDialog.vue';
 import GoalsFilters from '../ui/GoalsFilters.vue';
+import GoalsSort from '../ui/GoalsSort.vue';
 
 const { data } = useGoals();
 
@@ -31,11 +32,12 @@ const yearSelectOptions = computed(() =>
       :default-value="selectedYear"
       :placeholder="selectedYear.toString()"
     />
+    <GoalsSort />
     <GoalsFilters />
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .goals-board-header {
   display: flex;
   gap: 10px;

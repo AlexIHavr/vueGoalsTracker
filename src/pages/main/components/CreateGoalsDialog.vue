@@ -225,7 +225,7 @@ const handleCreateGoals = async () => {
   </Dialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .create-goals-form {
   display: flex;
   flex-direction: column;
