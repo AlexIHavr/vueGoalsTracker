@@ -1,9 +1,18 @@
 <script setup lang="ts">
+import Button from 'primevue/button';
 import Select from 'primevue/select';
 
-import { selectedSortType } from 'shared/store';
+import { selectedSortOrder, selectedSortType } from 'shared/store';
 
 import { SORT_TYPES_OPTIONS } from '../consts/goalsSort';
+
+const handleToggleSortOrder = () => {
+  if (selectedSortOrder.value === 'asc') {
+    selectedSortOrder.value = 'desc';
+  } else {
+    selectedSortOrder.value = 'asc';
+  }
+};
 </script>
 
 <template>
@@ -12,6 +21,17 @@ import { SORT_TYPES_OPTIONS } from '../consts/goalsSort';
     option-label="label"
     option-value="value"
     :options="SORT_TYPES_OPTIONS"
+  />
+
+  <Button
+    raised
+    :icon="
+      'pi ' +
+      (selectedSortOrder === 'asc'
+        ? 'pi-sort-amount-down-alt'
+        : 'pi-sort-amount-up-alt')
+    "
+    @click="handleToggleSortOrder"
   />
 </template>
 

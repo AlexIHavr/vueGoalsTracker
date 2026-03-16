@@ -14,18 +14,24 @@ const timesSuffix = defineModel<CreateGoalsFormFields['timesSuffix']>(
   { required: true }
 );
 
-const timesStart = defineModel<CreateGoalsFormFields['timesStart']>(
+const timesStart = defineModel<CreateGoalsFormFields['timesStart'] | null>(
   'timesStart',
   { required: true }
 );
 
-const timesEnd = defineModel<CreateGoalsFormFields['timesEnd']>('timesEnd', {
-  required: true,
-});
+const timesEnd = defineModel<CreateGoalsFormFields['timesEnd'] | null>(
+  'timesEnd',
+  {
+    required: true,
+  }
+);
 
-const timesStep = defineModel<CreateGoalsFormFields['timesStep']>('timesStep', {
-  required: true,
-});
+const timesStep = defineModel<CreateGoalsFormFields['timesStep'] | null>(
+  'timesStep',
+  {
+    required: true,
+  }
+);
 </script>
 
 <template>

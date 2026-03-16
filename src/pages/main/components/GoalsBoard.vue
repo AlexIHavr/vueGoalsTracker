@@ -3,48 +3,26 @@ import { computed } from 'vue';
 
 import { getGoalStatus, GoalCard } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
-import {
-  selectedSortType,
-  selectedStatusFilters,
-  selectedYear,
-} from 'shared/store';
+import { selectedStatusFilters, selectedYear } from 'shared/store';
+
+import { getSortedGoals } from '../utils/getSortedGoals';
 
 const { data } = useGoals();
 
-const dataInYear = computed(() =>
+const goalsInYear = computed(() =>
   data.value.filter(
     ({ startDate }) => startDate.toDate().getFullYear() === selectedYear.value
   )
 );
 
-const sortedDataInYear = computed(() => {
-  switch (selectedSortType.value) {
-    default:
-    case 'startDate':
-      return dataInYear.value.toSorted(
-        (firstGoal, secondGoal) =>
-          secondGoal.startDate.seconds - firstGoal.startDate.seconds
-      );
-
-    case 'title':
-      return dataInYear.value.toSorted((firstGoal, secondGoal) =>
-        secondGoal.title.localeCompare(firstGoal.title)
-      );
-
-    case 'timesCurrent':
-      return dataInYear.value.toSorted(
-        (firstGoal, secondGoal) =>
-          secondGoal.timesCurrent - firstGoal.timesCurrent
-      );
-  }
-});
+const sortedGoalsInYear = computed(() => getSortedGoals(goalsInYear.value));
 
 const filteredDataInYear = computed(() => {
   if (!selectedStatusFilters?.value.length) {
-    return sortedDataInYear.value;
+    return sortedGoalsInYear.value;
   }
 
-  return sortedDataInYear.value.filter((goal) =>
+  return sortedGoalsInYear.value.filter((goal) =>
     selectedStatusFilters.value.includes(getGoalStatus(goal))
   );
 });
