@@ -1,7 +1,5 @@
-import { GOAL_STATUSES } from '../consts/goalStatuses';
-
-import type { GoalStatus } from '../types/goalStatus';
 import type { GoalDocument } from 'shared/interfaces';
+import type { GoalStatus } from 'shared/types';
 
 export const getGoalStatus = ({
   isCompleted,
@@ -13,16 +11,16 @@ export const getGoalStatus = ({
   const isInProgressStatus = startDate.toDate() <= now;
 
   if (isCompleted) {
-    return GOAL_STATUSES.COMPLETED;
+    return 'completed';
   }
 
   if (isExpiredStatus) {
-    return GOAL_STATUSES.EXPIRED;
+    return 'expired';
   }
 
   if (isInProgressStatus) {
-    return GOAL_STATUSES.IN_PROGRESS;
+    return 'in-progress';
   }
 
-  return GOAL_STATUSES.TO_DO;
+  return 'to-do';
 };

@@ -3,11 +3,8 @@ import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
 import { computed } from 'vue';
 
-import { PERIOD_TYPES } from 'shared/consts';
-
 import {
   MONTH_CHOOSE_FILTERS_OPTIONS,
-  PERIOD_FILTERS,
   PERIOD_FILTERS_OPTIONS,
   PERIOD_TYPES_OPTIONS,
 } from '../consts/periodOptions';
@@ -65,7 +62,7 @@ const dayChooseFilterOptions = computed(() =>
         option-label="label"
         option-value="value"
         :options="PERIOD_FILTERS_OPTIONS"
-        :disabled="selectedPeriod === PERIOD_TYPES.YEAR || isLoading"
+        :disabled="selectedPeriod === 'year' || isLoading"
       />
 
       <MultiSelect
@@ -76,8 +73,8 @@ const dayChooseFilterOptions = computed(() =>
         placeholder="Все месяцы"
         :options="MONTH_CHOOSE_FILTERS_OPTIONS"
         :disabled="
-          selectedPeriod === PERIOD_TYPES.YEAR ||
-          selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
+          selectedPeriod === 'year' ||
+          selectedPeriodFilter !== 'choose' ||
           isLoading
         "
       />
@@ -88,8 +85,8 @@ const dayChooseFilterOptions = computed(() =>
         placeholder="Все дни"
         :options="dayChooseFilterOptions"
         :disabled="
-          selectedPeriod !== PERIOD_TYPES.DAY ||
-          selectedPeriodFilter !== PERIOD_FILTERS.CHOOSE ||
+          selectedPeriod !== 'day' ||
+          selectedPeriodFilter !== 'choose' ||
           isLoading
         "
       />
@@ -97,7 +94,7 @@ const dayChooseFilterOptions = computed(() =>
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .extra-settings {
   display: flex;
   flex-direction: column;

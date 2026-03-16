@@ -6,7 +6,7 @@ import { DARK_THEME_CLASS } from 'shared/consts';
 import { appLocalStorage } from 'shared/utils';
 
 onMounted(() => {
-  const isDarkTheme = appLocalStorage.get('is-dark-theme');
+  const isDarkTheme = appLocalStorage.get('isDarkTheme');
 
   if (isDarkTheme) {
     document.documentElement.classList.add(DARK_THEME_CLASS);

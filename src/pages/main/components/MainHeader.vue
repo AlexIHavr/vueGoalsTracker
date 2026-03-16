@@ -12,7 +12,7 @@ import { useNotification } from 'shared/hooks';
 import { appLocalStorage } from 'shared/utils';
 
 const isLoading = ref<boolean>(false);
-const isDarkTheme = ref<boolean>(appLocalStorage.get('is-dark-theme'));
+const isDarkTheme = ref<boolean>(appLocalStorage.get('isDarkTheme'));
 
 const router = useRouter();
 const toast = useNotification();
@@ -41,7 +41,7 @@ const handleToggleTheme = () => {
 
   isDarkTheme.value = !isDarkTheme.value;
 
-  appLocalStorage.set('is-dark-theme', isDarkTheme.value);
+  appLocalStorage.set('isDarkTheme', isDarkTheme.value);
 };
 </script>
 
@@ -55,6 +55,7 @@ const handleToggleTheme = () => {
       :disabled="isLoading"
       @click="handleLogout"
     />
+
     <Button
       icon="pi pi-sync"
       severity="contrast"
@@ -62,6 +63,7 @@ const handleToggleTheme = () => {
       :label="isDarkTheme ? 'Светлая тема' : 'Темная тема'"
       @click="handleToggleTheme"
     />
+
     <Message class="welcome-message" severity="secondary">
       <h4>Добро пожаловать {{ user?.email }}</h4>
     </Message>

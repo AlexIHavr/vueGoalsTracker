@@ -12,12 +12,13 @@ import {
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
-type StartDate = Pick<CreateGoalsFormFields, 'startDate'>['startDate'];
-type EndDate = Pick<CreateGoalsFormFields, 'endDate'>['endDate'];
+const startDate = defineModel<CreateGoalsFormFields['startDate']>('startDate', {
+  required: true,
+});
 
-const startDate = defineModel<StartDate>('startDate', { required: true });
-
-const endDate = defineModel<EndDate>('endDate', { required: true });
+const endDate = defineModel<CreateGoalsFormFields['endDate']>('endDate', {
+  required: true,
+});
 </script>
 
 <template>

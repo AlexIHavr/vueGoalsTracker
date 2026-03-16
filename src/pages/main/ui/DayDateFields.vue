@@ -8,12 +8,13 @@ import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
-type StartTime = Pick<CreateGoalsFormFields, 'startTime'>['startTime'];
-type EndTime = Pick<CreateGoalsFormFields, 'endTime'>['endTime'];
+const startTime = defineModel<CreateGoalsFormFields['startTime']>('startTime', {
+  required: true,
+});
 
-const startTime = defineModel<StartTime>('startTime', { required: true });
-
-const endTime = defineModel<EndTime>('endTime', { required: true });
+const endTime = defineModel<CreateGoalsFormFields['endTime']>('endTime', {
+  required: true,
+});
 </script>
 
 <template>
@@ -50,17 +51,12 @@ const endTime = defineModel<EndTime>('endTime', { required: true });
   </BaseFormField>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .time-icon {
   position: absolute;
   top: 50%;
   right: 11px;
   margin-top: -0.5rem;
   color: var(--p-datepicker-input-icon-color);
-}
-
-.p-inputmask {
-  --p-inputtext-padding-x: var(--p-form-field-padding-x)
-    calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
 }
 </style>

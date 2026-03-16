@@ -8,12 +8,14 @@ import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 
-type Title = Pick<CreateGoalsFormFields, 'title'>['title'];
-type Description = Pick<CreateGoalsFormFields, 'description'>['description'];
+const title = defineModel<CreateGoalsFormFields['title']>('title', {
+  required: true,
+});
 
-const title = defineModel<Title>('title', { required: true });
-
-const description = defineModel<Description>('description', { required: true });
+const description = defineModel<CreateGoalsFormFields['description']>(
+  'description',
+  { required: true }
+);
 </script>
 
 <template>
@@ -39,7 +41,7 @@ const description = defineModel<Description>('description', { required: true });
   </BaseFormField>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .goals-description {
   height: 100px;
   resize: none;

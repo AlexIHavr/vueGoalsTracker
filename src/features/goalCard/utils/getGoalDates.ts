@@ -1,4 +1,4 @@
-import { MONTH_NAMES_LOWERCASE, PERIOD_TYPES } from 'shared/consts';
+import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
 
 import {
   isFullYear,
@@ -9,20 +9,15 @@ import {
   getTimeLocalString,
   isEndTime,
 } from './parseDates';
-import { GOAL_STATUSES } from '../consts/goalStatuses';
 
-import type { GoalStatus } from '../types/goalStatus';
 import type { GoalDocument } from 'shared/interfaces';
+import type { GoalStatus } from 'shared/types';
 import type { ComputedRef } from 'vue';
 
 export const getGoalDates = (
   goalStatus: ComputedRef<GoalStatus>,
   goal: GoalDocument
 ) => {
-  if (goalStatus.value === GOAL_STATUSES.COMPLETED) {
-    return '';
-  }
-
   const startDate = goal.startDate.toDate();
   const endDate = goal.endDate.toDate();
 
@@ -32,15 +27,18 @@ export const getGoalDates = (
   const startTime = getTimeLocalString(startDate);
   const endTime = getTimeLocalString(endDate);
 
-  const getNotInProgressString = (timeString?: string) => {
-    if (goalStatus.value === GOAL_STATUSES.TO_DO) {
+  const isInProgressOrCompleted =
+    goalStatus.value === 'in-progress' || goalStatus.value === 'completed';
+
+  const getToDoOrExpiredString = (timeString?: string) => {
+    if (goalStatus.value === 'to-do') {
       const startTimeString =
         timeString ?? (isStartTime(startDate) ? '' : ` ${startTime}`);
 
       return `От ${startDateString}${startTimeString}`;
     }
 
-    if (goalStatus.value === GOAL_STATUSES.EXPIRED) {
+    if (goalStatus.value === 'expired') {
       const endTimeString =
         timeString ?? (isEndTime(endDate) ? '' : ` ${endTime}`);
 
@@ -52,37 +50,37 @@ export const getGoalDates = (
 
   switch (goal.periodType) {
     default:
-    case PERIOD_TYPES.YEAR:
+    case 'year':
       if (isFullYear(startDate, endDate)) {
         return 'Весь год';
       }
 
-      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+      if (isInProgressOrCompleted) {
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getNotInProgressString('');
+      return getToDoOrExpiredString('');
 
-    case PERIOD_TYPES.MONTH:
+    case 'month':
       if (isFullMonth(startDate, endDate)) {
         return `Весь ${MONTH_NAMES_LOWERCASE[startDate.getMonth()]}`;
       }
 
-      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+      if (isInProgressOrCompleted) {
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getNotInProgressString('');
+      return getToDoOrExpiredString('');
 
-    case PERIOD_TYPES.DAY:
+    case 'day':
       if (isFullDay(startDate, endDate)) {
         return startDateString;
       }
 
-      if (goalStatus.value === GOAL_STATUSES.IN_PROGRESS) {
+      if (isInProgressOrCompleted) {
         return `${startDateString} ${startTime} - ${endTime}`;
       }
 
-      return getNotInProgressString();
+      return getToDoOrExpiredString();
   }
 };

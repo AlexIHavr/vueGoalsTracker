@@ -6,7 +6,6 @@ import { computed } from 'vue';
 
 import { useGoals } from 'shared/hooks';
 
-import { GOAL_STATUSES } from './consts/goalStatuses';
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
 import { getGoalDates } from './utils/getGoalDates';
 import { getGoalStatus } from './utils/getGoalStatus';
@@ -31,14 +30,14 @@ const goalAttrs = useGoalStatusAttrs(goalStatus);
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,
-    ...(goalStatus.value === GOAL_STATUSES.IN_PROGRESS && {
+    ...(goalStatus.value === 'in-progress' && {
       timesCurrent: goal.timesStart,
     }),
   });
 };
 
 const handleUpdateTimes = () => {
-  if (goalStatus.value !== GOAL_STATUSES.IN_PROGRESS) {
+  if (goalStatus.value !== 'in-progress') {
     handleCompleteGoal();
     return;
   }
@@ -64,7 +63,6 @@ const handleUpdateTimes = () => {
       <div class="title-wrapper">
         <h3>{{ goal.title }}</h3>
         <Button
-          aria-label="status"
           size="small"
           rounded
           :icon="goalAttrs.statusIcon"
@@ -109,7 +107,6 @@ const handleUpdateTimes = () => {
 
           <Button
             icon="pi pi-trash"
-            aria-label="Save"
             severity="danger"
             raised
             @click="removeGoal(goal.id)"
@@ -120,10 +117,10 @@ const handleUpdateTimes = () => {
   </Card>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .goal-card {
-  width: 300px;
-  min-width: 300px;
+  width: 335px;
+  min-width: 335px;
   height: 320px;
   min-height: 320px;
 }
@@ -156,13 +153,5 @@ const handleUpdateTimes = () => {
 
 .goal-times-message {
   width: fit-content;
-}
-
-.p-card-body {
-  height: 100%;
-}
-
-.p-card-footer {
-  margin-top: auto;
 }
 </style>

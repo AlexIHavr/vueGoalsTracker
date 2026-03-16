@@ -4,9 +4,11 @@ import { computed } from 'vue';
 
 import { CURRENT_YEAR } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
-import { selectedYearRef } from 'shared/store';
+import { selectedYear } from 'shared/store';
 
 import CreateGoalsDialog from './CreateGoalsDialog.vue';
+import GoalsFilters from '../ui/GoalsFilters.vue';
+import GoalsSort from '../ui/GoalsSort.vue';
 
 const { data } = useGoals();
 
@@ -25,15 +27,17 @@ const yearSelectOptions = computed(() =>
   <div class="goals-board-header">
     <CreateGoalsDialog />
     <Select
-      v-model="selectedYearRef"
+      v-model="selectedYear"
       :options="yearSelectOptions"
-      :default-value="selectedYearRef"
-      :placeholder="selectedYearRef.toString()"
+      :default-value="selectedYear"
+      :placeholder="selectedYear.toString()"
     />
+    <GoalsSort />
+    <GoalsFilters />
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .goals-board-header {
   display: flex;
   gap: 10px;

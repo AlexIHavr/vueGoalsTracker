@@ -1,10 +1,17 @@
-type LOCAL_STORAGE_KEY = 'is-dark-theme';
+import type { GoalStatus, SortOrder, SortTypes } from 'shared/types';
+
+interface LocalStorageKeys {
+  isDarkTheme: boolean;
+  selectedStatusFilters: GoalStatus[];
+  selectedSortType: SortTypes;
+  selectedSortOrder: SortOrder;
+}
 
 export const appLocalStorage = {
-  get: (key: LOCAL_STORAGE_KEY) =>
+  get: <T extends keyof LocalStorageKeys>(key: T): LocalStorageKeys[T] =>
     JSON.parse(localStorage.getItem(key) as string),
-  set: <T>(key: LOCAL_STORAGE_KEY, value: T) =>
+  set: <T extends keyof LocalStorageKeys>(key: T, value: LocalStorageKeys[T]) =>
     localStorage.setItem(key, JSON.stringify(value)),
-  remove: (key: LOCAL_STORAGE_KEY) => localStorage.removeItem(key),
+  remove: (key: keyof LocalStorageKeys) => localStorage.removeItem(key),
   clear: () => localStorage.clear(),
 };

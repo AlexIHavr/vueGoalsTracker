@@ -73,7 +73,7 @@
 
   .completed {
     &.p-card {
-      --p-card-background: #008330;
+      --p-card-background: #00461a;
     }
   }
 
@@ -256,4 +256,21 @@ h6 {
 
 .p-divider-horizontal {
   --p-divider-horizontal-margin: 0;
+}
+
+// inputmask
+.p-inputmask {
+  --p-inputtext-padding-x: var(--p-form-field-padding-x)
+    calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
+}
+
+// card
+.p-card {
+  .p-card-body {
+    height: 100%;
+  }
+
+  .p-card-footer {
+    margin-top: auto;
+  }
 }

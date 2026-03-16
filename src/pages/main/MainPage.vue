@@ -18,7 +18,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main-page {
   display: flex;
   flex-direction: column;
