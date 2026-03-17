@@ -8,7 +8,7 @@ import {
   PERIOD_FILTERS_OPTIONS,
   PERIOD_TYPES_OPTIONS,
 } from '../consts/periodOptions';
-import { getDayChooseFilterOptions } from '../utils/getDayChooseFilterOptions';
+import { getDaysInSelectedMonths } from '../utils/getDaysInSelectedMonths';
 
 import type { PeriodFilterValue } from '../types/periodOptions';
 import type { PeriodTypeValue } from 'shared/types';
@@ -41,7 +41,7 @@ const selectedDayChooseFilter = defineModel<number[]>(
 );
 
 const dayChooseFilterOptions = computed(() =>
-  getDayChooseFilterOptions(selectedMonthChooseFilter)
+  getDaysInSelectedMonths(selectedMonthChooseFilter.value)
 );
 </script>
 
@@ -74,7 +74,8 @@ const dayChooseFilterOptions = computed(() =>
         :options="MONTH_CHOOSE_FILTERS_OPTIONS"
         :disabled="
           selectedPeriod === 'year' ||
-          selectedPeriodFilter !== 'choose' ||
+          (selectedPeriod === 'month' && selectedPeriodFilter !== 'choose') ||
+          (selectedPeriod === 'day' && selectedPeriodFilter === 'all') ||
           isLoading
         "
       />

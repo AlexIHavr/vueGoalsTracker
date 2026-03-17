@@ -1,9 +1,9 @@
-import { CURRENT_YEAR } from 'shared/consts';
+import { CURRENT_YEAR, MAX_SECONDS } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 import { getLastDayOfMonth, parseTime } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
-import { DAY_NUMBERS, MONTH_INDEXES } from '../consts/periodOptions';
+import { DAYS_NUMBERS_IN_MONTHS, MONTH_INDEXES } from '../consts/periodOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { PeriodTypeValue } from 'shared/types';
@@ -67,36 +67,43 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
     );
   };
 
-  const createDayGoal = async (days: number[] = [], months: number[] = [0]) => {
+  const createDayGoal = async (
+    months: number[] = MONTH_INDEXES,
+    days: number[] = []
+  ) => {
     const daysGoal: Promise<void>[] = [];
 
     months.forEach((monthIndex) => {
-      (days.length ? days : DAY_NUMBERS).forEach((dayNumber) => {
-        const lastDay = getLastDayOfMonth(monthIndex);
-        const day = dayNumber > lastDay ? lastDay : dayNumber;
+      (days.length ? days : DAYS_NUMBERS_IN_MONTHS[monthIndex]!).forEach(
+        (dayNumber) => {
+          const lastDay = getLastDayOfMonth(monthIndex);
+          const day = dayNumber > lastDay ? lastDay : dayNumber;
 
-        const [startHours, startMinutes] = parseTime(createGoalsForm.startTime);
+          const [startHours, startMinutes] = parseTime(
+            createGoalsForm.startTime
+          );
 
-        const [endHours, endMinutes] = parseTime(createGoalsForm.endTime);
+          const [endHours, endMinutes] = parseTime(createGoalsForm.endTime);
 
-        const startDate = new Date(
-          CURRENT_YEAR,
-          monthIndex,
-          day,
-          startHours,
-          startMinutes
-        );
-        const endDate = new Date(
-          CURRENT_YEAR,
-          monthIndex,
-          day,
-          endHours,
-          endMinutes,
-          59
-        );
+          const startDate = new Date(
+            CURRENT_YEAR,
+            monthIndex,
+            day,
+            startHours,
+            startMinutes
+          );
+          const endDate = new Date(
+            CURRENT_YEAR,
+            monthIndex,
+            day,
+            endHours,
+            endMinutes,
+            MAX_SECONDS
+          );
 
-        daysGoal.push(createYearGoal(startDate, endDate, 'day'));
-      });
+          daysGoal.push(createYearGoal(startDate, endDate, 'day'));
+        }
+      );
     });
 
     await Promise.all(daysGoal);

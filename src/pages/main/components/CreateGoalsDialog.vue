@@ -14,7 +14,7 @@ import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
-import { DAY_NUMBERS, MONTH_INDEXES } from '../consts/periodOptions';
+import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
@@ -24,6 +24,7 @@ import ExtraSettings from '../ui/ExtraSettings.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
 import TimesFields from '../ui/TimesFields.vue';
 import YearDateFields from '../ui/YearDateFields.vue';
+import { getDaysInSelectedMonths } from '../utils/getDaysInSelectedMonths';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { PeriodFilterValue } from '../types/periodOptions';
@@ -114,7 +115,12 @@ const handleCreateGoals = async () => {
         if (isSelectedMonth) {
           await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
         } else {
-          await createDayGoal(getEvenNumbers(DAY_NUMBERS));
+          await createDayGoal(
+            selectedMonthChooseFilter.value,
+            getEvenNumbers(
+              getDaysInSelectedMonths(selectedMonthChooseFilter.value)
+            )
+          );
         }
         break;
 
@@ -122,7 +128,12 @@ const handleCreateGoals = async () => {
         if (isSelectedMonth) {
           await createMonthGoal(getOddNumbers(MONTH_INDEXES));
         } else {
-          await createDayGoal(getOddNumbers(DAY_NUMBERS));
+          await createDayGoal(
+            selectedMonthChooseFilter.value,
+            getOddNumbers(
+              getDaysInSelectedMonths(selectedMonthChooseFilter.value)
+            )
+          );
         }
 
         break;
@@ -132,8 +143,8 @@ const handleCreateGoals = async () => {
           await createMonthGoal(selectedMonthChooseFilter.value);
         } else {
           await createDayGoal(
-            selectedDayChooseFilter.value,
-            selectedMonthChooseFilter.value
+            selectedMonthChooseFilter.value,
+            selectedDayChooseFilter.value
           );
         }
         break;

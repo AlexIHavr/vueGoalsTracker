@@ -1,4 +1,5 @@
-import { DAYS_IN_YEAR, MONTH_NAMES, MONTHS_IN_YEAR } from 'shared/consts';
+import { MONTH_NAMES, MONTHS_IN_YEAR } from 'shared/consts';
+import { getLastDayOfMonth } from 'shared/utils';
 
 import type {
   MonthChooseFiltersOptions,
@@ -51,7 +52,11 @@ export const MONTH_CHOOSE_FILTERS_OPTIONS: MonthChooseFiltersOptions =
     value: month,
   }));
 
-export const DAY_NUMBERS = Array.from(
-  { length: DAYS_IN_YEAR },
-  (_, i) => i + 1
+export const DAYS_NUMBERS_IN_MONTHS = Array.from(
+  { length: MONTHS_IN_YEAR },
+  (_, monthIndex) =>
+    Array.from(
+      { length: getLastDayOfMonth(monthIndex) },
+      (_, index) => index + 1
+    )
 );

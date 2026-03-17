@@ -25,6 +25,4 @@ export const MAX_DAYS_IN_MONTH = 31;
 
 export const MAX_HOURS = 23;
 export const MAX_MINUTES = 59;
-
-export const DAYS_IN_YEAR =
-  new Date(CURRENT_YEAR, 1, 29).getDate() === 29 ? 366 : 365;
+export const MAX_SECONDS = 59;
