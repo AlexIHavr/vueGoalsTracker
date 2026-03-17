@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { CURRENT_YEAR } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
+import { getUniqueArr } from 'shared/utils';
 
 import CreateGoalsDialog from './CreateGoalsDialog.vue';
 import GoalsFilters from '../ui/GoalsFilters.vue';
@@ -13,12 +14,10 @@ import GoalsSort from '../ui/GoalsSort.vue';
 const { data } = useGoals();
 
 const yearSelectOptions = computed(() =>
-  Array.from(
-    new Set(
-      data.value
-        .map(({ startDate }) => startDate.toDate().getFullYear())
-        .concat(CURRENT_YEAR)
-    )
+  getUniqueArr(
+    data.value
+      .map(({ startDate }) => startDate.toDate().getFullYear())
+      .concat(CURRENT_YEAR)
   ).sort((firstYear, secondYear) => firstYear - secondYear)
 );
 </script>

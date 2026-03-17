@@ -25,7 +25,7 @@ const category = defineModel<CreateGoalsFormFields['category']>('category', {
 <template>
   <!-- @vue-generic {keyof CreateGoalsFormFields} -->
   <BaseFormField name="title" :initial-value="DEFAULT_GOALS_FORM_FIELDS.title">
-    <InputText id="goals-title" v-model="title" size="large" fluid />
+    <InputText id="goals-title" v-model.trim="title" size="large" fluid />
     <label for="goals-title">Название*</label>
   </BaseFormField>
 
@@ -36,7 +36,7 @@ const category = defineModel<CreateGoalsFormFields['category']>('category', {
   >
     <Textarea
       id="goals-description"
-      v-model="description"
+      v-model.trim="description"
       size="large"
       class="goals-description"
       fluid
@@ -49,7 +49,7 @@ const category = defineModel<CreateGoalsFormFields['category']>('category', {
     name="category"
     :initial-value="DEFAULT_GOALS_FORM_FIELDS.category"
   >
-    <InputText id="goals-category" v-model="category" size="large" fluid />
+    <InputText id="goals-category" v-model.trim="category" size="large" fluid />
     <label for="goals-category">Категория</label>
   </BaseFormField>
 </template>

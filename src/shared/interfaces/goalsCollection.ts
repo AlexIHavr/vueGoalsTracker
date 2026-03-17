@@ -3,8 +3,8 @@ import type { PeriodTypeValue } from 'shared/types';
 
 export interface GoalSettings {
   title: string;
-  description?: string;
-  category?: string;
+  description: string;
+  category: string;
   startDate: Timestamp;
   endDate: Timestamp;
   isCompleted: boolean;
@@ -12,7 +12,7 @@ export interface GoalSettings {
   timesEnd: number;
   timesStep: number;
   timesCurrent: number;
-  timesSuffix?: string;
+  timesSuffix: string;
   periodType: PeriodTypeValue;
 }
 

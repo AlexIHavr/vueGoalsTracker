@@ -1,3 +1,6 @@
 export { selectedYear } from './selectedYear';
-export { selectedStatusFilters } from './selectedFilters';
+export {
+  selectedStatusFilters,
+  selectedCategoryFilters,
+} from './selectedFilters';
 export { selectedSortOrder, selectedSortType } from './selectedSort';

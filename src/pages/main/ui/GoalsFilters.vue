@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
+import Chip from 'primevue/chip';
 import Popover from 'primevue/popover';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { selectedStatusFilters } from 'shared/store';
-import { appLocalStorage } from 'shared/utils';
+import { useGoals } from 'shared/hooks';
+import { selectedCategoryFilters, selectedStatusFilters } from 'shared/store';
+import { appLocalStorage, getUniqueArr } from 'shared/utils';
 
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
 
 import type { GoalStatus } from 'shared/types';
+
+const { data } = useGoals();
+
+const uniqueGoalCategories = computed(() =>
+  getUniqueArr(data.value.map(({ category }) => category))
+);
 
 const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
 const isVisiblePopover = ref<boolean>(false);
@@ -28,6 +36,16 @@ const handleToggleStatusFilter = (status: GoalStatus) => {
   }
 };
 
+const handleToggleCategoryFilter = (category: string) => {
+  if (selectedCategoryFilters.value.includes(category)) {
+    selectedCategoryFilters.value = selectedCategoryFilters.value.filter(
+      (categoryFilter) => categoryFilter !== category
+    );
+  } else {
+    selectedCategoryFilters.value.push(category);
+  }
+};
+
 const onShowPopover = () => {
   isVisiblePopover.value = true;
 };
@@ -40,6 +58,14 @@ watch(
   selectedStatusFilters,
   (value) => {
     appLocalStorage.set('selectedStatusFilters', value);
+  },
+  { deep: true }
+);
+
+watch(
+  selectedCategoryFilters,
+  (value) => {
+    appLocalStorage.set('selectedCategoryFilters', value);
   },
   { deep: true }
 );
@@ -84,6 +110,19 @@ watch(
           @click="handleToggleStatusFilter(status)"
         />
       </div>
+
+      <h4>Категории</h4>
+
+      <div class="categories-tags">
+        <Chip
+          v-for="category in uniqueGoalCategories"
+          :key="category"
+          class="category-tag"
+          :icon="category ? 'pi pi-tag' : ''"
+          :label="category ? category : 'Без категории'"
+          @click="handleToggleCategoryFilter(category)"
+        />
+      </div>
     </div>
   </Popover>
 </template>
@@ -110,5 +149,13 @@ watch(
 .p-button.status-filter-button {
   justify-content: space-between;
   width: 150px;
+}
+
+.categories-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  font-size: var(--p-button-sm-font-size);
 }
 </style>

@@ -3,7 +3,11 @@ import { computed } from 'vue';
 
 import { getGoalStatus, GoalCard } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
-import { selectedStatusFilters, selectedYear } from 'shared/store';
+import {
+  selectedCategoryFilters,
+  selectedStatusFilters,
+  selectedYear,
+} from 'shared/store';
 
 import { getSortedGoals } from '../utils/getSortedGoals';
 
@@ -18,13 +22,20 @@ const goalsInYear = computed(() =>
 const sortedGoalsInYear = computed(() => getSortedGoals(goalsInYear.value));
 
 const filteredDataInYear = computed(() => {
-  if (!selectedStatusFilters?.value.length) {
-    return sortedGoalsInYear.value;
-  }
+  const selectedStatusFiltersLength = selectedStatusFilters.value.length;
+  const selectedCategoryFiltersLength = selectedCategoryFilters.value.length;
 
-  return sortedGoalsInYear.value.filter((goal) =>
-    selectedStatusFilters.value.includes(getGoalStatus(goal))
-  );
+  return sortedGoalsInYear.value.filter((goal) => {
+    const isIncludesStatus = !selectedStatusFiltersLength
+      ? true
+      : selectedStatusFilters.value.includes(getGoalStatus(goal));
+
+    const isIncludesCategory = !selectedCategoryFiltersLength
+      ? true
+      : selectedCategoryFilters.value.includes(goal.category);
+
+    return isIncludesStatus && isIncludesCategory;
+  });
 });
 </script>
 
