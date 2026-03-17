@@ -14,6 +14,7 @@ import type {
 
 const MAX_TITLE_LENGTH = 20;
 const MAX_DESCRIPTION_LENGTH = 100;
+const MAX_CATEGORY_LENGTH = 20;
 
 const MAX_TIMES = 1_000_000;
 const MAX_TIMES_SUFFIX_LENGTH = 5;
@@ -54,6 +55,10 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
   description: string().max(
     MAX_DESCRIPTION_LENGTH,
     `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`
+  ),
+  category: string().max(
+    MAX_CATEGORY_LENGTH,
+    `Категория не должна превышать ${MAX_CATEGORY_LENGTH} символов`
   ),
   timesStart: getNumberScheme({
     field: 'timesStart',

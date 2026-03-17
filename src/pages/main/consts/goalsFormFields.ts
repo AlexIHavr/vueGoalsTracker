@@ -19,6 +19,7 @@ export const DEFAULT_GOALS_FORM_FIELDS: NotNullableObject<CreateGoalsFormFields>
   {
     title: '',
     description: '',
+    category: '',
     timesStart: 0,
     timesEnd: 1,
     timesStep: 1,

@@ -4,6 +4,7 @@ import type { PeriodTypeValue } from 'shared/types';
 export interface GoalSettings {
   title: string;
   description?: string;
+  category?: string;
   startDate: Timestamp;
   endDate: Timestamp;
   isCompleted: boolean;

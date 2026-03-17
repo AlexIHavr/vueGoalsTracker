@@ -18,7 +18,7 @@ import { DAY_NUMBERS, MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
-import CommonGoalFields from '../ui/CommonGoalFields.vue';
+import CommonGoalFields from '../ui/CommonGoalsFields.vue';
 import DayDateFields from '../ui/DayDateFields.vue';
 import ExtraSettings from '../ui/ExtraSettings.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
@@ -54,8 +54,7 @@ const resetCreateGoalsForm = () => {
 watch(selectedPeriod, () => {
   selectedPeriodFilter.value = 'all';
 
-  const title = createGoalsForm.title;
-  const description = createGoalsForm.description;
+  const { title, description, category } = createGoalsForm;
 
   createGoalsFormRef.value?.formRef?.reset();
 
@@ -63,10 +62,12 @@ watch(selectedPeriod, () => {
 
   createGoalsForm.title = title;
   createGoalsForm.description = description;
+  createGoalsForm.category = category;
 
   createGoalsFormRef.value?.formRef?.setValues({
     title,
     description,
+    category,
   } as CreateGoalsFormFields);
 });
 
@@ -173,6 +174,7 @@ const handleCreateGoals = async () => {
       <CommonGoalFields
         v-model:title="createGoalsForm.title"
         v-model:description="createGoalsForm.description"
+        v-model:category="createGoalsForm.category"
       />
 
       <Accordion>

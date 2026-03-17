@@ -28,6 +28,7 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
     await createGoal({
       title: createGoalsForm.title,
       description: createGoalsForm.description,
+      category: createGoalsForm.category,
       timesSuffix: createGoalsForm.timesSuffix,
       startDate,
       endDate,

@@ -16,6 +16,10 @@ const description = defineModel<CreateGoalsFormFields['description']>(
   'description',
   { required: true }
 );
+
+const category = defineModel<CreateGoalsFormFields['category']>('category', {
+  required: true,
+});
 </script>
 
 <template>
@@ -38,6 +42,15 @@ const description = defineModel<CreateGoalsFormFields['description']>(
       fluid
     />
     <label for="goals-description">Описание</label>
+  </BaseFormField>
+
+  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+  <BaseFormField
+    name="category"
+    :initial-value="DEFAULT_GOALS_FORM_FIELDS.category"
+  >
+    <InputText id="goals-category" v-model="category" size="large" fluid />
+    <label for="goals-category">Категория</label>
   </BaseFormField>
 </template>
 

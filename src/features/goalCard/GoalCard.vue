@@ -2,6 +2,7 @@
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Message from 'primevue/message';
+import Tag from 'primevue/tag';
 import { computed } from 'vue';
 
 import { useGoals } from 'shared/hooks';
@@ -60,8 +61,16 @@ const handleUpdateTimes = () => {
 <template>
   <Card :class="['goal-card', goalStatus]">
     <template #title>
+      <Tag
+        v-if="goal.category"
+        icon="pi pi-tag"
+        class="category-tag"
+        :value="goal.category"
+        :severity="goalAttrs.buttonSeverity"
+      />
+
       <div class="title-wrapper">
-        <h3>{{ goal.title }}</h3>
+        <h4>{{ goal.title }}</h4>
         <Button
           size="small"
           rounded
@@ -119,10 +128,19 @@ const handleUpdateTimes = () => {
 
 <style lang="scss" scoped>
 .goal-card {
-  width: 335px;
-  min-width: 335px;
-  height: 320px;
-  min-height: 320px;
+  position: relative;
+  width: 320px;
+  min-width: 320px;
+  height: 300px;
+  min-height: 300px;
+  padding-top: 10px;
+}
+
+.category-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--p-card-border-radius) 0;
 }
 
 .title-wrapper {
