@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Message from 'primevue/message';
+import ProgressSpinner from 'primevue/progressspinner';
 import { computed } from 'vue';
 
 import { getGoalStatus, GoalCard } from 'features/goalCard';
@@ -13,6 +14,8 @@ import {
 import { getSortedGoals } from '../utils/getSortedGoals';
 
 const { data } = useGoals();
+
+const isLoadingData = data.pending;
 
 const goalsInYear = computed(() =>
   data.value.filter(
@@ -41,7 +44,7 @@ const filteredDataInYear = computed(() => {
 </script>
 
 <template>
-  <div class="goal-board-wrapper">
+  <div v-if="!isLoadingData" class="goal-board-wrapper">
     <TransitionGroup name="goal-cards" tag="main" class="goals-board">
       <Message
         v-if="!filteredDataInYear.length && goalsInYear.length"
@@ -61,6 +64,7 @@ const filteredDataInYear = computed(() => {
       />
     </TransitionGroup>
   </div>
+  <ProgressSpinner v-else />
 </template>
 
 <style lang="scss" scoped>

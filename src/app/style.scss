@@ -287,9 +287,23 @@ h6 {
 .p-chip.p-component {
   cursor: pointer;
   background: var(--p-tag-primary-background);
-  transition: 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 
   .p-chip-icon {
-    transition: 0.2s;
+    transition:
+      background 0.2s,
+      color 0.2s;
   }
+}
+
+// progress spinner
+.p-progressspinner[role='progressbar'] {
+  width: 80px;
+  height: 80px;
+}
+
+.p-progressspinner-circle {
+  stroke: var(--p-button-primary-background) !important;
 }
