@@ -18,6 +18,7 @@ import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
+import CheckboxSettings from '../ui/CheckboxSettings.vue';
 import CommonGoalFields from '../ui/CommonGoalsFields.vue';
 import DayDateFields from '../ui/DayDateFields.vue';
 import ExtraSettings from '../ui/ExtraSettings.vue';
@@ -43,8 +44,12 @@ const selectedPeriodFilter = ref<PeriodFilterValue>('all');
 const selectedMonthChooseFilter = ref<number[]>([]);
 const selectedDayChooseFilter = ref<number[]>([]);
 
-const { createYearGoal, createMonthGoal, createDayGoal } =
-  useCreatePeriodGoal(createGoalsForm);
+const showOneTimes = ref<boolean>(false);
+
+const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
+  createGoalsForm,
+  showOneTimes
+);
 
 useWatchFormRefs(createGoalsFormRef);
 
@@ -91,6 +96,8 @@ const resetDialog = () => {
   selectedPeriodFilter.value = 'all';
   selectedMonthChooseFilter.value = [];
   selectedDayChooseFilter.value = [];
+
+  showOneTimes.value = false;
 
   isDialogVisible.value = false;
 };
@@ -230,6 +237,8 @@ const handleCreateGoals = async () => {
                   v-model:end-time="createGoalsForm.endTime"
                 />
               </template>
+
+              <CheckboxSettings v-model:show-one-times="showOneTimes" />
             </div>
           </AccordionContent>
         </AccordionPanel>

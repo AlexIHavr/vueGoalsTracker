@@ -7,8 +7,12 @@ import { DAYS_NUMBERS_IN_MONTHS, MONTH_INDEXES } from '../consts/periodOptions';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { PeriodTypeValue } from 'shared/types';
+import type { Ref } from 'vue';
 
-export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
+export function useCreatePeriodGoal(
+  createGoalsForm: CreateGoalsFormFields,
+  showOneTimes: Ref<boolean>
+) {
   const { createGoal } = useGoals();
 
   const createYearGoal = async (
@@ -37,6 +41,7 @@ export function useCreatePeriodGoal(createGoalsForm: CreateGoalsFormFields) {
       timesStep,
       timesCurrent: timesStart,
       isCompleted: false,
+      isShowOneTimes: showOneTimes.value,
       periodType,
     });
   };

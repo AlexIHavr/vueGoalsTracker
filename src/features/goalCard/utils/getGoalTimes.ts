@@ -8,7 +8,7 @@ export const getGoalTimes = (
   goalStatus: ComputedRef<GoalStatus>,
   goal: GoalDocument
 ) => {
-  if (goal.timesEnd === 1) {
+  if (!goal.isShowOneTimes && goal.timesEnd === 1) {
     return '';
   }
 

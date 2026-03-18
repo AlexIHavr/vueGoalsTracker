@@ -8,6 +8,7 @@ export interface GoalSettings {
   startDate: Timestamp;
   endDate: Timestamp;
   isCompleted: boolean;
+  isShowOneTimes: boolean;
   timesStart: number;
   timesEnd: number;
   timesStep: number;
