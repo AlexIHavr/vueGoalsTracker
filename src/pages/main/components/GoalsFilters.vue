@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
-import Checkbox from 'primevue/checkbox';
 import Chip from 'primevue/chip';
+import OverlayBadge from 'primevue/overlaybadge';
 import Popover from 'primevue/popover';
 import { computed, ref, watch } from 'vue';
 
@@ -17,6 +17,11 @@ const { data } = useGoals();
 
 const uniqueGoalCategories = computed(() =>
   getUniqueArr(data.value.map(({ category }) => category))
+);
+
+const goalsFiltersCount = computed(
+  () =>
+    selectedStatusFilters.value.length + selectedCategoryFilters.value.length
 );
 
 const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
@@ -72,7 +77,21 @@ watch(
 </script>
 
 <template>
+  <OverlayBadge
+    v-if="goalsFiltersCount"
+    size="small"
+    :value="goalsFiltersCount"
+  >
+    <Button
+      type="button"
+      icon="pi pi-filter"
+      raised
+      :class="['toggle-popover-button', { active: isVisiblePopover }]"
+      @click="handleToggleFiltersPopover"
+    />
+  </OverlayBadge>
   <Button
+    v-else
     type="button"
     icon="pi pi-filter"
     raised
@@ -94,16 +113,14 @@ watch(
         :key="status"
         class="status-filters"
       >
-        <Checkbox
-          v-model="selectedStatusFilters"
-          name="category"
-          :input-id="label"
-          :value="status"
-        />
         <Button
           size="small"
           icon-pos="right"
-          class="status-filter-button"
+          variant="outlined"
+          :class="[
+            'status-filter-button',
+            { active: selectedStatusFilters.includes(status) },
+          ]"
           :severity="severity"
           :icon="icon"
           :label="label"
@@ -111,29 +128,31 @@ watch(
         />
       </div>
 
-      <h4>Категории</h4>
+      <div v-if="uniqueGoalCategories.length">
+        <h4>Категории</h4>
 
-      <div class="categories-tags">
-        <Chip
-          v-for="category in uniqueGoalCategories"
-          :key="category"
-          class="category-tag"
-          :icon="category ? 'pi pi-tag' : ''"
-          :label="category ? category : 'Без категории'"
-          @click="handleToggleCategoryFilter(category)"
-        />
+        <div class="categories-tags">
+          <Chip
+            v-for="category in uniqueGoalCategories"
+            :key="category"
+            :class="[
+              'category-tag',
+              {
+                active: selectedCategoryFilters.includes(category),
+                'empty-category': !category,
+              },
+            ]"
+            :icon="category ? 'pi pi-tag' : ''"
+            :label="category ? category : 'Без категории'"
+            @click="handleToggleCategoryFilter(category)"
+          />
+        </div>
       </div>
     </div>
   </Popover>
 </template>
 
 <style lang="scss" scoped>
-.p-button.toggle-popover-button.active:not(:disabled) {
-  color: var(--p-button-primary-active-color);
-  background: var(--p-button-primary-active-background);
-  border: 1px solid var(--p-button-primary-active-border-color);
-}
-
 .status-filters-wrapper {
   display: flex;
   flex-direction: column;
@@ -149,13 +168,43 @@ watch(
 .p-button.status-filter-button {
   justify-content: space-between;
   width: 150px;
+
+  &.active:not(:disabled) {
+    background: var(--p-button-outlined-primary-active-background);
+
+    &.p-button-success {
+      background: var(--p-button-outlined-success-active-background);
+    }
+
+    &.p-button-info {
+      background: var(--p-button-outlined-info-active-background);
+    }
+
+    &.p-button-danger {
+      background: var(--p-button-outlined-danger-active-background);
+    }
+  }
 }
 
 .categories-tags {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 5px;
   align-items: flex-start;
+  margin-top: 10px;
   font-size: var(--p-button-sm-font-size);
+}
+
+.category-tag {
+  &.active {
+    color: var(--p-button-success-color);
+    background: var(--p-button-success-background);
+
+    --p-chip-icon-color: var(--p-button-success-color);
+  }
+
+  &.empty-category {
+    order: -1;
+  }
 }
 </style>

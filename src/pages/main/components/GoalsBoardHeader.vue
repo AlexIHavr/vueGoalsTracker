@@ -8,7 +8,7 @@ import { selectedYear } from 'shared/store';
 import { getUniqueArr } from 'shared/utils';
 
 import CreateGoalsDialog from './CreateGoalsDialog.vue';
-import GoalsFilters from '../ui/GoalsFilters.vue';
+import GoalsFilters from './GoalsFilters.vue';
 import GoalsSort from '../ui/GoalsSort.vue';
 
 const { data } = useGoals();

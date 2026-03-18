@@ -113,7 +113,7 @@ const handleCreateGoals = async () => {
 
       case 'even':
         if (isSelectedMonth) {
-          await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
+          await createMonthGoal(getOddNumbers(MONTH_INDEXES));
         } else {
           await createDayGoal(
             selectedMonthChooseFilter.value,
@@ -126,7 +126,7 @@ const handleCreateGoals = async () => {
 
       case 'odd':
         if (isSelectedMonth) {
-          await createMonthGoal(getOddNumbers(MONTH_INDEXES));
+          await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
         } else {
           await createDayGoal(
             selectedMonthChooseFilter.value,

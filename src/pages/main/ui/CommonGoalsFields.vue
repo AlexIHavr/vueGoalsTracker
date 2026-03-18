@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import AutoComplete, {
+  type AutoCompleteCompleteEvent,
+} from 'primevue/autocomplete';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
+import { computed, ref } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
+import { useGoals } from 'shared/hooks';
+import { getUniqueArr } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 
@@ -20,6 +26,24 @@ const description = defineModel<CreateGoalsFormFields['description']>(
 const category = defineModel<CreateGoalsFormFields['category']>('category', {
   required: true,
 });
+
+const { data } = useGoals();
+
+const uniqueGoalCategories = computed(() =>
+  getUniqueArr(data.value.map(({ category }) => category)).filter(Boolean)
+);
+
+const categorySuggestions = ref<string[] | undefined>();
+
+const handleComplete = (event: AutoCompleteCompleteEvent) => {
+  const filteredCategorySuggestions = uniqueGoalCategories.value.filter(
+    (category) => category.includes(event.query)
+  );
+
+  categorySuggestions.value = filteredCategorySuggestions.length
+    ? filteredCategorySuggestions
+    : undefined;
+};
 </script>
 
 <template>
@@ -49,7 +73,16 @@ const category = defineModel<CreateGoalsFormFields['category']>('category', {
     name="category"
     :initial-value="DEFAULT_GOALS_FORM_FIELDS.category"
   >
-    <InputText id="goals-category" v-model.trim="category" size="large" fluid />
+    <AutoComplete
+      v-model.trim="category"
+      input-id="goals-category"
+      size="large"
+      fluid
+      complete-on-focus
+      :suggestions="categorySuggestions"
+      :show-empty-message="false"
+      @complete="handleComplete"
+    />
     <label for="goals-category">Категория</label>
   </BaseFormField>
 </template>

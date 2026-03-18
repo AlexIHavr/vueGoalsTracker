@@ -6,6 +6,7 @@ import Tag from 'primevue/tag';
 import { computed } from 'vue';
 
 import { useGoals } from 'shared/hooks';
+import { selectedCategoryFilters } from 'shared/store';
 
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
 import { getGoalDates } from './utils/getGoalDates';
@@ -18,7 +19,7 @@ const { goal } = defineProps<{
   goal: GoalDocument;
 }>();
 
-const { updateGoal, removeGoal } = useGoals();
+const { data, updateGoal, removeGoal } = useGoals();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
@@ -35,6 +36,20 @@ const handleCompleteGoal = () => {
       timesCurrent: goal.timesStart,
     }),
   });
+};
+
+const handleRemoveGoal = async () => {
+  const isLastCategoryTag =
+    data.value.filter(({ category }) => category === goal.category).length ===
+    1;
+
+  await removeGoal(goal.id);
+
+  if (isLastCategoryTag) {
+    selectedCategoryFilters.value = selectedCategoryFilters.value.filter(
+      (category) => category !== goal.category
+    );
+  }
 };
 
 const handleUpdateTimes = () => {
@@ -62,7 +77,7 @@ const handleUpdateTimes = () => {
   <Card :class="['goal-card', goalStatus]">
     <template #title>
       <Tag
-        v-if="goal.category"
+        v-show="goal.category"
         icon="pi pi-tag"
         class="category-tag"
         :value="goal.category"
@@ -118,7 +133,7 @@ const handleUpdateTimes = () => {
             icon="pi pi-trash"
             severity="danger"
             raised
-            @click="removeGoal(goal.id)"
+            @click="handleRemoveGoal"
           />
         </div>
       </div>

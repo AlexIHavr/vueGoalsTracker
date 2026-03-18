@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Message from 'primevue/message';
 import { computed } from 'vue';
 
 import { getGoalStatus, GoalCard } from 'features/goalCard';
@@ -42,6 +43,17 @@ const filteredDataInYear = computed(() => {
 <template>
   <div class="goal-board-wrapper">
     <TransitionGroup name="goal-cards" tag="main" class="goals-board">
+      <Message
+        v-if="!filteredDataInYear.length && goalsInYear.length"
+        severity="success"
+      >
+        По данным фильтрам целей нет - поменяйте фильтры либо снимите их
+      </Message>
+
+      <Message v-if="!goalsInYear.length" severity="success">
+        Здесь будут ваши цели. Создайте первую цель
+      </Message>
+
       <GoalCard
         v-for="goal in filteredDataInYear"
         :key="goal.id"

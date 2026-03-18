@@ -275,3 +275,21 @@ h6 {
     margin-top: auto;
   }
 }
+
+// popover
+.p-popover {
+  max-width: 250px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+// chip
+.p-chip.p-component {
+  cursor: pointer;
+  background: var(--p-tag-primary-background);
+  transition: 0.2s;
+
+  .p-chip-icon {
+    transition: 0.2s;
+  }
+}

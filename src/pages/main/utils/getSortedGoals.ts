@@ -19,8 +19,8 @@ export const getSortedGoals = (goals: GoalDocument[]) => {
           ? firstGoal.title.localeCompare(secondGoal.title)
           : secondGoal.title.localeCompare(firstGoal.title);
 
-      case 'timesCurrent':
-        return (firstGoal.timesCurrent - secondGoal.timesCurrent) * sortOrderK;
+      case 'timesEnd':
+        return (firstGoal.timesEnd - secondGoal.timesEnd) * sortOrderK;
     }
   });
 };
