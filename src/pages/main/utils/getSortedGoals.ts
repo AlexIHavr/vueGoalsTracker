@@ -7,7 +7,6 @@ export const getSortedGoals = (goals: GoalDocument[]) => {
 
   return goals.toSorted((firstGoal, secondGoal) => {
     switch (selectedSortType.value) {
-      default:
       case 'startDate':
         return (
           (firstGoal.startDate.seconds - secondGoal.startDate.seconds) *
@@ -21,6 +20,11 @@ export const getSortedGoals = (goals: GoalDocument[]) => {
 
       case 'timesEnd':
         return (firstGoal.timesEnd - secondGoal.timesEnd) * sortOrderK;
+
+      default: {
+        const _: never = selectedSortType.value;
+        return _;
+      }
     }
   });
 };

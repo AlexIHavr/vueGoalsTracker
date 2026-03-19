@@ -24,32 +24,34 @@ export const getGoalDates = (
   const startDateString = getDateLocalString(startDate);
   const endDateString = getDateLocalString(endDate);
 
-  const startTime = getTimeLocalString(startDate);
-  const endTime = getTimeLocalString(endDate);
-
   const isInProgressOrCompleted =
     goalStatus.value === 'in-progress' || goalStatus.value === 'completed';
 
-  const getToDoOrExpiredString = (timeString?: string) => {
+  const getToDoOrExpiredString = (startTime?: string, endTime?: string) => {
     if (goalStatus.value === 'to-do') {
-      const startTimeString =
-        timeString ?? (isStartTime(startDate) ? '' : ` ${startTime}`);
+      if (startTime) {
+        const startTimeString = isStartTime(startDate) ? '' : ` ${startTime}`;
 
-      return `От ${startDateString}${startTimeString}`;
+        return `От ${startDateString}${startTimeString}`;
+      }
+
+      return `От ${startDateString}`;
     }
 
     if (goalStatus.value === 'expired') {
-      const endTimeString =
-        timeString ?? (isEndTime(endDate) ? '' : ` ${endTime}`);
+      if (endTime) {
+        const endTimeString = isEndTime(endDate) ? '' : ` ${endTime}`;
 
-      return `До ${endDateString}${endTimeString}`;
+        return `До ${endDateString}${endTimeString}`;
+      }
+
+      return `До ${endDateString}`;
     }
 
     return '';
   };
 
   switch (goal.periodType) {
-    default:
     case 'year':
       if (isFullYear(startDate, endDate)) {
         return 'Весь год';
@@ -59,7 +61,7 @@ export const getGoalDates = (
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getToDoOrExpiredString('');
+      return getToDoOrExpiredString();
 
     case 'month':
       if (isFullMonth(startDate, endDate)) {
@@ -70,17 +72,26 @@ export const getGoalDates = (
         return `${startDateString} - ${endDateString}`;
       }
 
-      return getToDoOrExpiredString('');
+      return getToDoOrExpiredString();
 
-    case 'day':
+    case 'day': {
       if (isFullDay(startDate, endDate)) {
         return startDateString;
       }
+
+      const startTime = getTimeLocalString(startDate);
+      const endTime = getTimeLocalString(endDate);
 
       if (isInProgressOrCompleted) {
         return `${startDateString} ${startTime} - ${endTime}`;
       }
 
-      return getToDoOrExpiredString();
+      return getToDoOrExpiredString(startTime, endTime);
+    }
+
+    default: {
+      const _: never = goal.periodType;
+      return _;
+    }
   }
 };

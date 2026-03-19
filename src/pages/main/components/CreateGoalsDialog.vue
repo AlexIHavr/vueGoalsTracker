@@ -109,7 +109,6 @@ const handleCreateGoals = async () => {
     await createYearGoal();
   } else {
     switch (selectedPeriodFilter.value) {
-      default:
       case 'all':
         if (isSelectedMonth) {
           await createMonthGoal();
@@ -155,6 +154,11 @@ const handleCreateGoals = async () => {
           );
         }
         break;
+
+      default: {
+        const _: never = selectedPeriodFilter.value;
+        return _;
+      }
     }
   }
 

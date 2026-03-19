@@ -96,6 +96,7 @@ export default [
         },
       ],
       'no-console': 'warn',
+      'default-case': ['error', { commentPattern: '^no default$' }],
     },
   },
 ];

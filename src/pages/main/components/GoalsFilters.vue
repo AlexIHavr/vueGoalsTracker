@@ -27,6 +27,11 @@ const goalsFiltersCount = computed(
 const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
 const isVisiblePopover = ref<boolean>(false);
 
+const filterButtonClasses = computed(() => [
+  'toggle-popover-button',
+  { active: isVisiblePopover },
+]);
+
 const handleToggleFiltersPopover = (event: PointerEvent) => {
   filtersPopoverRef.value?.toggle(event);
 };
@@ -86,7 +91,7 @@ watch(
       type="button"
       icon="pi pi-filter"
       raised
-      :class="['toggle-popover-button', { active: isVisiblePopover }]"
+      :class="filterButtonClasses"
       @click="handleToggleFiltersPopover"
     />
   </OverlayBadge>
@@ -95,7 +100,7 @@ watch(
     type="button"
     icon="pi pi-filter"
     raised
-    :class="['toggle-popover-button', { active: isVisiblePopover }]"
+    :class="filterButtonClasses"
     @click="handleToggleFiltersPopover"
   />
 
