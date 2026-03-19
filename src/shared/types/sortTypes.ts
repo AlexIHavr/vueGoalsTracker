@@ -2,7 +2,7 @@ import type { GoalSettings } from 'shared/interfaces';
 
 export type SortTypes = keyof Pick<
   GoalSettings,
-  'title' | 'startDate' | 'timesCurrent'
+  'title' | 'startDate' | 'timesEnd'
 >;
 
 export type SortOrder = 'asc' | 'desc';

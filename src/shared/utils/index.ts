@@ -5,3 +5,4 @@ export {
   getOddNumbers,
 } from './numbers';
 export { getLastDayOfMonth, parseTime } from './dates';
+export { getUniqueArr } from './arrays';

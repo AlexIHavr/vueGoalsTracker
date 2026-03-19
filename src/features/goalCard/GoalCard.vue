@@ -2,9 +2,11 @@
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Message from 'primevue/message';
+import Tag from 'primevue/tag';
 import { computed } from 'vue';
 
 import { useGoals } from 'shared/hooks';
+import { selectedCategoryFilters } from 'shared/store';
 
 import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
 import { getGoalDates } from './utils/getGoalDates';
@@ -17,7 +19,7 @@ const { goal } = defineProps<{
   goal: GoalDocument;
 }>();
 
-const { updateGoal, removeGoal } = useGoals();
+const { data, updateGoal, removeGoal } = useGoals();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
@@ -34,6 +36,20 @@ const handleCompleteGoal = () => {
       timesCurrent: goal.timesStart,
     }),
   });
+};
+
+const handleRemoveGoal = async () => {
+  const isLastCategoryTag =
+    data.value.filter(({ category }) => category === goal.category).length ===
+    1;
+
+  await removeGoal(goal.id);
+
+  if (isLastCategoryTag) {
+    selectedCategoryFilters.value = selectedCategoryFilters.value.filter(
+      (category) => category !== goal.category
+    );
+  }
 };
 
 const handleUpdateTimes = () => {
@@ -60,8 +76,16 @@ const handleUpdateTimes = () => {
 <template>
   <Card :class="['goal-card', goalStatus]">
     <template #title>
+      <Tag
+        v-show="goal.category"
+        icon="pi pi-tag"
+        class="category-tag"
+        :value="goal.category"
+        :severity="goalAttrs.buttonSeverity"
+      />
+
       <div class="title-wrapper">
-        <h3>{{ goal.title }}</h3>
+        <h4>{{ goal.title }}</h4>
         <Button
           size="small"
           rounded
@@ -109,7 +133,7 @@ const handleUpdateTimes = () => {
             icon="pi pi-trash"
             severity="danger"
             raised
-            @click="removeGoal(goal.id)"
+            @click="handleRemoveGoal"
           />
         </div>
       </div>
@@ -119,10 +143,19 @@ const handleUpdateTimes = () => {
 
 <style lang="scss" scoped>
 .goal-card {
-  width: 335px;
-  min-width: 335px;
-  height: 320px;
-  min-height: 320px;
+  position: relative;
+  width: 320px;
+  min-width: 320px;
+  height: 300px;
+  min-height: 300px;
+  padding-top: 10px;
+}
+
+.category-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--p-card-border-radius) 0;
 }
 
 .title-wrapper {

@@ -14,6 +14,7 @@ import type {
 
 const MAX_TITLE_LENGTH = 20;
 const MAX_DESCRIPTION_LENGTH = 100;
+const MAX_CATEGORY_LENGTH = 20;
 
 const MAX_TIMES = 1_000_000;
 const MAX_TIMES_SUFFIX_LENGTH = 5;
@@ -46,15 +47,26 @@ const getNumberScheme = ({
 
 const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
   title: string()
+    .trim()
     .required('Название обязательно')
     .max(
       MAX_TITLE_LENGTH,
       `Название не должно превышать ${MAX_TITLE_LENGTH} символов`
     ),
-  description: string().max(
-    MAX_DESCRIPTION_LENGTH,
-    `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`
-  ),
+  description: string()
+    .trim()
+    .max(
+      MAX_DESCRIPTION_LENGTH,
+      `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`
+    )
+    .defined(),
+  category: string()
+    .trim()
+    .max(
+      MAX_CATEGORY_LENGTH,
+      `Категория не должна превышать ${MAX_CATEGORY_LENGTH} символов`
+    )
+    .defined(),
   timesStart: getNumberScheme({
     field: 'timesStart',
     name: 'Начальное количество',
@@ -71,10 +83,12 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
     name: 'Шаг',
     errorVerb: 'должен',
   }),
-  timesSuffix: string().max(
-    MAX_TIMES_SUFFIX_LENGTH,
-    `Наименование количества не должно превышать ${MAX_TIMES_SUFFIX_LENGTH} символов`
-  ),
+  timesSuffix: string()
+    .max(
+      MAX_TIMES_SUFFIX_LENGTH,
+      `Наименование количества не должно превышать ${MAX_TIMES_SUFFIX_LENGTH} символов`
+    )
+    .defined(),
   startDate: date()
     .typeError('Некорректный формат даты')
     .required('Начало действия обязательно')

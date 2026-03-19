@@ -5,6 +5,7 @@ interface LocalStorageKeys {
   selectedStatusFilters: GoalStatus[];
   selectedSortType: SortTypes;
   selectedSortOrder: SortOrder;
+  selectedCategoryFilters: string[];
 }
 
 export const appLocalStorage = {

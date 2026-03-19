@@ -14,16 +14,18 @@ import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
-import { DAY_NUMBERS, MONTH_INDEXES } from '../consts/periodOptions';
+import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
-import CommonGoalFields from '../ui/CommonGoalFields.vue';
+import CheckboxSettings from '../ui/CheckboxSettings.vue';
+import CommonGoalFields from '../ui/CommonGoalsFields.vue';
 import DayDateFields from '../ui/DayDateFields.vue';
 import ExtraSettings from '../ui/ExtraSettings.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
 import TimesFields from '../ui/TimesFields.vue';
 import YearDateFields from '../ui/YearDateFields.vue';
+import { getDaysInSelectedMonths } from '../utils/getDaysInSelectedMonths';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { PeriodFilterValue } from '../types/periodOptions';
@@ -42,8 +44,12 @@ const selectedPeriodFilter = ref<PeriodFilterValue>('all');
 const selectedMonthChooseFilter = ref<number[]>([]);
 const selectedDayChooseFilter = ref<number[]>([]);
 
-const { createYearGoal, createMonthGoal, createDayGoal } =
-  useCreatePeriodGoal(createGoalsForm);
+const showOneTimes = ref<boolean>(false);
+
+const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
+  createGoalsForm,
+  showOneTimes
+);
 
 useWatchFormRefs(createGoalsFormRef);
 
@@ -54,8 +60,7 @@ const resetCreateGoalsForm = () => {
 watch(selectedPeriod, () => {
   selectedPeriodFilter.value = 'all';
 
-  const title = createGoalsForm.title;
-  const description = createGoalsForm.description;
+  const { title, description, category } = createGoalsForm;
 
   createGoalsFormRef.value?.formRef?.reset();
 
@@ -63,10 +68,12 @@ watch(selectedPeriod, () => {
 
   createGoalsForm.title = title;
   createGoalsForm.description = description;
+  createGoalsForm.category = category;
 
   createGoalsFormRef.value?.formRef?.setValues({
     title,
     description,
+    category,
   } as CreateGoalsFormFields);
 });
 
@@ -90,6 +97,8 @@ const resetDialog = () => {
   selectedMonthChooseFilter.value = [];
   selectedDayChooseFilter.value = [];
 
+  showOneTimes.value = false;
+
   isDialogVisible.value = false;
 };
 
@@ -111,17 +120,27 @@ const handleCreateGoals = async () => {
 
       case 'even':
         if (isSelectedMonth) {
-          await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
+          await createMonthGoal(getOddNumbers(MONTH_INDEXES));
         } else {
-          await createDayGoal(getEvenNumbers(DAY_NUMBERS));
+          await createDayGoal(
+            selectedMonthChooseFilter.value,
+            getEvenNumbers(
+              getDaysInSelectedMonths(selectedMonthChooseFilter.value)
+            )
+          );
         }
         break;
 
       case 'odd':
         if (isSelectedMonth) {
-          await createMonthGoal(getOddNumbers(MONTH_INDEXES));
+          await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
         } else {
-          await createDayGoal(getOddNumbers(DAY_NUMBERS));
+          await createDayGoal(
+            selectedMonthChooseFilter.value,
+            getOddNumbers(
+              getDaysInSelectedMonths(selectedMonthChooseFilter.value)
+            )
+          );
         }
 
         break;
@@ -131,8 +150,8 @@ const handleCreateGoals = async () => {
           await createMonthGoal(selectedMonthChooseFilter.value);
         } else {
           await createDayGoal(
-            selectedDayChooseFilter.value,
-            selectedMonthChooseFilter.value
+            selectedMonthChooseFilter.value,
+            selectedDayChooseFilter.value
           );
         }
         break;
@@ -173,6 +192,7 @@ const handleCreateGoals = async () => {
       <CommonGoalFields
         v-model:title="createGoalsForm.title"
         v-model:description="createGoalsForm.description"
+        v-model:category="createGoalsForm.category"
       />
 
       <Accordion>
@@ -217,6 +237,8 @@ const handleCreateGoals = async () => {
                   v-model:end-time="createGoalsForm.endTime"
                 />
               </template>
+
+              <CheckboxSettings v-model:show-one-times="showOneTimes" />
             </div>
           </AccordionContent>
         </AccordionPanel>

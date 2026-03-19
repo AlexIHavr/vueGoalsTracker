@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import Message from 'primevue/message';
+import ProgressSpinner from 'primevue/progressspinner';
 import { computed } from 'vue';
 
 import { getGoalStatus, GoalCard } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
-import { selectedStatusFilters, selectedYear } from 'shared/store';
+import {
+  selectedCategoryFilters,
+  selectedStatusFilters,
+  selectedYear,
+} from 'shared/store';
 
 import { getSortedGoals } from '../utils/getSortedGoals';
 
 const { data } = useGoals();
+
+const isLoadingData = data.pending;
 
 const goalsInYear = computed(() =>
   data.value.filter(
@@ -18,19 +26,37 @@ const goalsInYear = computed(() =>
 const sortedGoalsInYear = computed(() => getSortedGoals(goalsInYear.value));
 
 const filteredDataInYear = computed(() => {
-  if (!selectedStatusFilters?.value.length) {
-    return sortedGoalsInYear.value;
-  }
+  const selectedStatusFiltersLength = selectedStatusFilters.value.length;
+  const selectedCategoryFiltersLength = selectedCategoryFilters.value.length;
 
-  return sortedGoalsInYear.value.filter((goal) =>
-    selectedStatusFilters.value.includes(getGoalStatus(goal))
-  );
+  return sortedGoalsInYear.value.filter((goal) => {
+    const isIncludesStatus = !selectedStatusFiltersLength
+      ? true
+      : selectedStatusFilters.value.includes(getGoalStatus(goal));
+
+    const isIncludesCategory = !selectedCategoryFiltersLength
+      ? true
+      : selectedCategoryFilters.value.includes(goal.category);
+
+    return isIncludesStatus && isIncludesCategory;
+  });
 });
 </script>
 
 <template>
-  <div class="goal-board-wrapper">
+  <div v-if="!isLoadingData" class="goal-board-wrapper">
     <TransitionGroup name="goal-cards" tag="main" class="goals-board">
+      <Message
+        v-if="!filteredDataInYear.length && goalsInYear.length"
+        severity="success"
+      >
+        По данным фильтрам целей нет - поменяйте фильтры либо снимите их
+      </Message>
+
+      <Message v-if="!goalsInYear.length" severity="success">
+        Здесь будут ваши цели. Создайте первую цель
+      </Message>
+
       <GoalCard
         v-for="goal in filteredDataInYear"
         :key="goal.id"
@@ -38,6 +64,7 @@ const filteredDataInYear = computed(() => {
       />
     </TransitionGroup>
   </div>
+  <ProgressSpinner v-else />
 </template>
 
 <style lang="scss" scoped>

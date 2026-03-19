@@ -8,8 +8,9 @@ export interface CreateGoalsFormNumberFields {
 
 export interface CreateGoalsFormFields extends CreateGoalsFormNumberFields {
   title: string;
-  description?: string;
-  timesSuffix?: string;
+  description: string;
+  category: string;
+  timesSuffix: string;
   startDate: Date;
   endDate: Date;
   startTime: string;
