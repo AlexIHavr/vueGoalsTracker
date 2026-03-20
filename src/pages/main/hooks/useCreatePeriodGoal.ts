@@ -9,6 +9,12 @@ import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields'
 import type { PeriodTypeValue } from 'shared/types';
 import type { Ref } from 'vue';
 
+interface CreateDayGoalParams {
+  months?: number[];
+  days?: number[];
+  filterFunc?: (numbers: number[]) => number[];
+}
+
 export function useCreatePeriodGoal(
   createGoalsForm: CreateGoalsFormFields,
   showOneTimes: Ref<boolean>
@@ -72,43 +78,46 @@ export function useCreatePeriodGoal(
     );
   };
 
-  const createDayGoal = async (
-    months: number[] = MONTH_INDEXES,
-    days: number[] = []
-  ) => {
+  const createDayGoal = async ({
+    months = [],
+    days = [],
+    filterFunc,
+  }: CreateDayGoalParams = {}) => {
     const daysGoal: Promise<void>[] = [];
 
-    months.forEach((monthIndex) => {
-      (days.length ? days : DAYS_NUMBERS_IN_MONTHS[monthIndex]!).forEach(
-        (dayNumber) => {
-          const lastDay = getLastDayOfMonth(monthIndex);
-          const day = dayNumber > lastDay ? lastDay : dayNumber;
+    (months.length ? months : MONTH_INDEXES).forEach((monthIndex) => {
+      const daysInMonth = DAYS_NUMBERS_IN_MONTHS[monthIndex]!;
 
-          const [startHours, startMinutes] = parseTime(
-            createGoalsForm.startTime
-          );
+      const filteredDaysInMonth = filterFunc
+        ? filterFunc(daysInMonth)
+        : daysInMonth;
 
-          const [endHours, endMinutes] = parseTime(createGoalsForm.endTime);
+      (days.length ? days : filteredDaysInMonth).forEach((dayNumber) => {
+        const lastDay = getLastDayOfMonth(monthIndex);
+        const day = dayNumber > lastDay ? lastDay : dayNumber;
 
-          const startDate = new Date(
-            CURRENT_YEAR,
-            monthIndex,
-            day,
-            startHours,
-            startMinutes
-          );
-          const endDate = new Date(
-            CURRENT_YEAR,
-            monthIndex,
-            day,
-            endHours,
-            endMinutes,
-            MAX_SECONDS
-          );
+        const [startHours, startMinutes] = parseTime(createGoalsForm.startTime);
 
-          daysGoal.push(createYearGoal(startDate, endDate, 'day'));
-        }
-      );
+        const [endHours, endMinutes] = parseTime(createGoalsForm.endTime);
+
+        const startDate = new Date(
+          CURRENT_YEAR,
+          monthIndex,
+          day,
+          startHours,
+          startMinutes
+        );
+        const endDate = new Date(
+          CURRENT_YEAR,
+          monthIndex,
+          day,
+          endHours,
+          endMinutes,
+          MAX_SECONDS
+        );
+
+        daysGoal.push(createYearGoal(startDate, endDate, 'day'));
+      });
     });
 
     await Promise.all(daysGoal);
