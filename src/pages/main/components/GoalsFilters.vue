@@ -64,6 +64,11 @@ const onHidePopover = () => {
   isVisiblePopover.value = false;
 };
 
+const handleResetAllFilters = () => {
+  selectedStatusFilters.value = [];
+  selectedCategoryFilters.value = [];
+};
+
 watch(
   selectedStatusFilters,
   (value) => {
@@ -88,7 +93,6 @@ watch(
     :value="goalsFiltersCount"
   >
     <Button
-      type="button"
       icon="pi pi-filter"
       raised
       :class="filterButtonClasses"
@@ -97,7 +101,6 @@ watch(
   </OverlayBadge>
   <Button
     v-else
-    type="button"
     icon="pi pi-filter"
     raised
     :class="filterButtonClasses"
@@ -107,6 +110,16 @@ watch(
   <Popover ref="filtersPopoverRef" @show="onShowPopover" @hide="onHidePopover">
     <div class="status-filters-wrapper">
       <h4>Статусы целей</h4>
+
+      <Button
+        v-if="goalsFiltersCount"
+        icon="pi pi-filter-slash"
+        size="small"
+        severity="danger"
+        class="reset-all-filters-button"
+        raised
+        @click="handleResetAllFilters"
+      />
 
       <div
         v-for="{
@@ -159,9 +172,16 @@ watch(
 
 <style lang="scss" scoped>
 .status-filters-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.reset-all-filters-button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
 }
 
 .status-filters {
