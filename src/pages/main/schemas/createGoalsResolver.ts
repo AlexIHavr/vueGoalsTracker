@@ -13,7 +13,7 @@ import type {
 } from '../interfaces/createGoalsFormFields';
 
 const MAX_TITLE_LENGTH = 20;
-const MAX_DESCRIPTION_LENGTH = 100;
+const MAX_DESCRIPTION_LENGTH = 500;
 const MAX_CATEGORY_LENGTH = 20;
 
 const MAX_TIMES = 1_000_000;

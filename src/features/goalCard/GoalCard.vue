@@ -104,7 +104,9 @@ const handleUpdateTimes = () => {
         >
           {{ goalDates }}
         </Message>
-        <h4>{{ goal.description }}</h4>
+        <h4 class="goal-description">
+          {{ goal.description }}
+        </h4>
       </div>
     </template>
     <template #footer>
@@ -186,5 +188,15 @@ const handleUpdateTimes = () => {
 
 .goal-times-message {
   width: fit-content;
+}
+
+.goal-description {
+  max-height: 130px;
+  overflow: auto;
+  white-space: pre-line;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 </style>
