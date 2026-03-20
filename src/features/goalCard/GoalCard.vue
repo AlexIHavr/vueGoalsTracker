@@ -29,6 +29,8 @@ const goalDates = computed(() => getGoalDates(goalStatus, goal));
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);
 
+defineExpose({ goalId: goal.id, goalDates, goalTimes });
+
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,

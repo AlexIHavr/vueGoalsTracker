@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { getGoalStatus, GoalCard } from 'features/goalCard';
+import { GoalCard, type GoalCardExpose } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
-import {
-  selectedCategoryFilters,
-  selectedStatusFilters,
-  selectedYear,
-} from 'shared/store';
+import { selectedYear } from 'shared/store';
 
+import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
 import { getSortedGoals } from '../utils/getSortedGoals';
 
 const { data } = useGoals();
 
 const isLoadingData = data.pending;
+
+const goalsRef = ref<GoalCardExpose[] | null>(null);
+
+const allGoalsRef = ref<GoalCardExpose[] | null>(null);
 
 const goalsInYear = computed(() =>
   data.value.filter(
@@ -25,32 +26,27 @@ const goalsInYear = computed(() =>
 
 const sortedGoalsInYear = computed(() => getSortedGoals(goalsInYear.value));
 
-const filteredDataInYear = computed(() => {
-  const selectedStatusFiltersLength = selectedStatusFilters.value.length;
-  const selectedCategoryFiltersLength = selectedCategoryFilters.value.length;
+const filteredGoalsInYear = computed(() =>
+  getFilteredGoalsInYear(sortedGoalsInYear.value, allGoalsRef.value)
+);
 
-  return sortedGoalsInYear.value.filter((goal) => {
-    const isIncludesStatus = !selectedStatusFiltersLength
-      ? true
-      : selectedStatusFilters.value.includes(getGoalStatus(goal));
-
-    const isIncludesCategory = !selectedCategoryFiltersLength
-      ? true
-      : selectedCategoryFilters.value.includes(goal.category);
-
-    return isIncludesStatus && isIncludesCategory;
-  });
-});
+watch(
+  goalsRef,
+  (value) => {
+    allGoalsRef.value = JSON.parse(JSON.stringify(value));
+  },
+  { once: true }
+);
 </script>
 
 <template>
   <div v-if="!isLoadingData" class="goal-board-wrapper">
     <TransitionGroup name="goal-cards" tag="main" class="goals-board">
       <Message
-        v-if="!filteredDataInYear.length && goalsInYear.length"
+        v-if="!filteredGoalsInYear.length && goalsInYear.length"
         severity="success"
       >
-        По данным фильтрам целей нет - поменяйте фильтры либо снимите их
+        По данным фильтрам или поиску целей нет
       </Message>
 
       <Message v-if="!goalsInYear.length" severity="success">
@@ -58,7 +54,8 @@ const filteredDataInYear = computed(() => {
       </Message>
 
       <GoalCard
-        v-for="goal in filteredDataInYear"
+        v-for="goal in filteredGoalsInYear"
+        ref="goalsRef"
         :key="goal.id"
         :goal="goal"
       />
