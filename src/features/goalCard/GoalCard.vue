@@ -151,6 +151,7 @@ const handleUpdateTimes = () => {
   height: 300px;
   min-height: 300px;
   padding-top: 10px;
+  transition: var(--p-button-transition-duration);
 }
 
 .category-tag {
