@@ -6,7 +6,11 @@ import Popover from 'primevue/popover';
 import { computed, ref, watch } from 'vue';
 
 import { useGoals } from 'shared/hooks';
-import { selectedCategoryFilters, selectedStatusFilters } from 'shared/store';
+import {
+  selectedCategoryFilters,
+  selectedStatusFilters,
+  selectedYear,
+} from 'shared/store';
 import { appLocalStorage, getUniqueArr } from 'shared/utils';
 
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
@@ -68,6 +72,10 @@ const handleResetAllFilters = () => {
   selectedStatusFilters.value = [];
   selectedCategoryFilters.value = [];
 };
+
+watch(selectedYear, () => {
+  handleResetAllFilters();
+});
 
 watch(
   selectedStatusFilters,

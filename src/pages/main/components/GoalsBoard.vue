@@ -7,6 +7,7 @@ import { GoalCard, type GoalCardExpose } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 
+import { useVisibleGoals } from '../hooks/useVisibleGoals';
 import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
 import { getSortedGoals } from '../utils/getSortedGoals';
 
@@ -17,6 +18,8 @@ const isLoadingData = data.pending;
 const goalsRef = ref<GoalCardExpose[] | null>(null);
 
 const allGoalsRef = ref<GoalCardExpose[] | null>(null);
+
+const observerTriggerRef = ref<HTMLDivElement | null>(null);
 
 const goalsInYear = computed(() =>
   data.value.filter(
@@ -29,6 +32,8 @@ const sortedGoalsInYear = computed(() => getSortedGoals(goalsInYear.value));
 const filteredGoalsInYear = computed(() =>
   getFilteredGoalsInYear(sortedGoalsInYear.value, allGoalsRef.value)
 );
+
+const visibleGoals = useVisibleGoals(filteredGoalsInYear, observerTriggerRef);
 
 watch(
   goalsRef,
@@ -54,7 +59,7 @@ watch(
       </Message>
 
       <GoalCard
-        v-for="goal in filteredGoalsInYear"
+        v-for="goal in visibleGoals"
         ref="goalsRef"
         :key="goal.id"
         :goal="goal"
@@ -62,6 +67,7 @@ watch(
     </TransitionGroup>
   </div>
   <ProgressSpinner v-else />
+  <div ref="observerTriggerRef" />
 </template>
 
 <style lang="scss" scoped>
