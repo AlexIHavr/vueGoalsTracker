@@ -2,12 +2,8 @@ import { getLocaleNumberString } from 'shared/utils';
 
 import type { GoalDocument } from 'shared/interfaces';
 import type { GoalStatus } from 'shared/types';
-import type { ComputedRef } from 'vue';
 
-export const getGoalTimes = (
-  goalStatus: ComputedRef<GoalStatus>,
-  goal: GoalDocument
-) => {
+export const getGoalTimes = (goalStatus: GoalStatus, goal: GoalDocument) => {
   if (!goal.isShowOneTimes && goal.timesEnd === 1) {
     return '';
   }
@@ -15,7 +11,7 @@ export const getGoalTimes = (
   const timesCurrentString = `${getLocaleNumberString(goal.timesCurrent)}${goal.timesSuffix}`;
   const timesEndString = `${getLocaleNumberString(goal.timesEnd)}${goal.timesSuffix}`;
 
-  if (goalStatus.value == 'completed') {
+  if (goalStatus == 'completed') {
     return `${timesEndString} из ${timesEndString}`;
   }
 

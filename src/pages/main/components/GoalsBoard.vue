@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
-import { GoalCard, type GoalCardExpose } from 'features/goalCard';
+import { GoalCard } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 
@@ -15,10 +15,6 @@ const { data } = useGoals();
 
 const isLoadingData = data.pending;
 
-const goalsRef = ref<GoalCardExpose[] | null>(null);
-
-const allGoalsRef = ref<GoalCardExpose[] | null>(null);
-
 const observerTriggerRef = ref<HTMLDivElement | null>(null);
 
 const goalsInYear = computed(() =>
@@ -27,21 +23,15 @@ const goalsInYear = computed(() =>
   )
 );
 
-const sortedGoalsInYear = computed(() => getSortedGoals(goalsInYear.value));
-
 const filteredGoalsInYear = computed(() =>
-  getFilteredGoalsInYear(sortedGoalsInYear.value, allGoalsRef.value)
+  getFilteredGoalsInYear(goalsInYear.value)
 );
 
-const visibleGoals = useVisibleGoals(filteredGoalsInYear, observerTriggerRef);
-
-watch(
-  goalsRef,
-  (value) => {
-    allGoalsRef.value = JSON.parse(JSON.stringify(value));
-  },
-  { once: true }
+const sortedGoalsInYear = computed(() =>
+  getSortedGoals(filteredGoalsInYear.value)
 );
+
+const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 </script>
 
 <template>
@@ -58,12 +48,7 @@ watch(
         Здесь будут ваши цели. Создайте первую цель
       </Message>
 
-      <GoalCard
-        v-for="goal in visibleGoals"
-        ref="goalsRef"
-        :key="goal.id"
-        :goal="goal"
-      />
+      <GoalCard v-for="goal in visibleGoals" :key="goal.id" :goal="goal" />
     </main>
   </div>
   <ProgressSpinner v-else />

@@ -6,21 +6,6 @@ import {
 } from 'shared/consts';
 import { getLastDayOfMonth } from 'shared/utils';
 
-export const getDateLocalString = (date: Date) => {
-  return date.toLocaleString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-  });
-};
-
-export const getTimeLocalString = (date: Date, hour12: boolean = false) => {
-  return date.toLocaleTimeString('ru-RU', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12,
-  });
-};
-
 export const isFullYear = (startDate: Date, endDate: Date) => {
   const isStartYear = startDate.getMonth() === 0 && startDate.getDate() === 1;
 

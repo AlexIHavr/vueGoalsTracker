@@ -15,21 +15,20 @@ import { getGoalTimes } from './utils/getGoalTimes';
 
 import type { GoalDocument } from 'shared/interfaces';
 
-const { goal } = defineProps<{
+const { goal, isWithoutRender = false } = defineProps<{
   goal: GoalDocument;
+  isWithoutRender?: boolean;
 }>();
 
 const { data, updateGoal, removeGoal } = useGoals();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
-const goalTimes = computed(() => getGoalTimes(goalStatus, goal));
+const goalTimes = computed(() => getGoalTimes(goalStatus.value, goal));
 
-const goalDates = computed(() => getGoalDates(goalStatus, goal));
+const goalDates = computed(() => getGoalDates(goalStatus.value, goal));
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);
-
-defineExpose({ goalId: goal.id, goalDates, goalTimes });
 
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
@@ -76,7 +75,7 @@ const handleUpdateTimes = () => {
 </script>
 
 <template>
-  <Card :class="['goal-card', goalStatus]">
+  <Card v-if="!isWithoutRender" :class="['goal-card', goalStatus]">
     <template #title>
       <Tag
         v-show="goal.category"

@@ -120,12 +120,12 @@ watch(
       <h4>Статусы целей</h4>
 
       <Button
-        v-if="goalsFiltersCount"
         icon="pi pi-filter-slash"
         size="small"
         severity="danger"
         class="reset-all-filters-button"
         raised
+        :disabled="!goalsFiltersCount"
         @click="handleResetAllFilters"
       />
 
@@ -188,8 +188,8 @@ watch(
 
 .reset-all-filters-button {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -10px;
+  right: -10px;
 }
 
 .status-filters {

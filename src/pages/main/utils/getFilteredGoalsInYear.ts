@@ -1,17 +1,14 @@
-import { getGoalStatus, type GoalCardExpose } from 'features/goalCard';
+import { getGoalStatus, getGoalTimes } from 'features/goalCard';
 import {
   selectedStatusFilters,
   selectedCategoryFilters,
   searchValue,
 } from 'shared/store';
+import { getDateLocalString, getTimeLocalString } from 'shared/utils';
 
 import type { GoalDocument } from 'shared/interfaces';
 
-const isFoundInSearch = (
-  searchValue: string,
-  goal: GoalDocument,
-  allGoals: GoalCardExpose[] | null
-) => {
+const isFoundInSearch = (searchValue: string, goal: GoalDocument) => {
   const searchString = searchValue.toLowerCase();
 
   if (!searchString) {
@@ -38,27 +35,53 @@ const isFoundInSearch = (
     return true;
   }
 
-  const goalRef = allGoals?.find(({ goalId }) => goalId === goal.id);
+  const startDate = goal.startDate.toDate();
+  const isFoundStartDate = getDateLocalString(startDate).includes(searchString);
 
-  const isFoundDates = goalRef?.goalDates.toLowerCase().includes(searchString);
-
-  if (isFoundDates) {
+  if (isFoundStartDate) {
     return true;
   }
 
-  const isFoundTimes = goalRef?.goalTimes.toLowerCase().includes(searchString);
+  const endDate = goal.endDate.toDate();
+  const isFoundEndDate = getDateLocalString(endDate).includes(searchString);
+
+  if (isFoundEndDate) {
+    return true;
+  }
+
+  const isFoundStartTime = getTimeLocalString(startDate).includes(searchString);
+
+  if (isFoundStartTime) {
+    return true;
+  }
+
+  const isFoundEndTime = getTimeLocalString(endDate).includes(searchString);
+
+  if (isFoundEndTime) {
+    return true;
+  }
+
+  const isFoundTimes = getGoalTimes(getGoalStatus(goal), goal)
+    .toLowerCase()
+    .includes(searchString);
 
   return isFoundTimes;
 };
 
-export const getFilteredGoalsInYear = (
-  sortedGoalsInYear: GoalDocument[],
-  allGoals: GoalCardExpose[] | null
-) => {
+export const getFilteredGoalsInYear = (goalsInYear: GoalDocument[]) => {
   const selectedStatusFiltersLength = selectedStatusFilters.value.length;
   const selectedCategoryFiltersLength = selectedCategoryFilters.value.length;
+  const searchString = searchValue.value;
 
-  return sortedGoalsInYear.filter((goal) => {
+  if (
+    !selectedStatusFiltersLength &&
+    !selectedCategoryFiltersLength &&
+    !searchString
+  ) {
+    return goalsInYear;
+  }
+
+  return goalsInYear.filter((goal) => {
     const isIncludesStatus = !selectedStatusFiltersLength
       ? true
       : selectedStatusFilters.value.includes(getGoalStatus(goal));
@@ -70,7 +93,7 @@ export const getFilteredGoalsInYear = (
     return (
       isIncludesStatus &&
       isIncludesCategory &&
-      isFoundInSearch(searchValue.value, goal, allGoals)
+      isFoundInSearch(searchString, goal)
     );
   });
 };

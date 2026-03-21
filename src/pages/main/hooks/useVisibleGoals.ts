@@ -9,31 +9,36 @@ import {
 
 import type { GoalDocument } from 'shared/interfaces';
 
-const STEP = 15;
+const STEP = 10;
 
 export function useVisibleGoals(
-  filteredGoalsInYear: ComputedRef<GoalDocument[]>,
+  sortedGoalsInYear: ComputedRef<GoalDocument[]>,
   observerTriggerRef: Ref<HTMLDivElement | null>
 ) {
-  const visibleCount = ref(STEP);
+  const visibleCount = ref<number>(0);
 
   let observer: IntersectionObserver | null = null;
 
   const visibleGoals = computed(() => {
-    return filteredGoalsInYear.value.slice(0, visibleCount.value);
+    return sortedGoalsInYear.value.slice(0, visibleCount.value);
   });
 
   const hasMore = computed(() => {
-    return visibleCount.value < filteredGoalsInYear.value.length;
+    return visibleCount.value < sortedGoalsInYear.value.length;
   });
 
   const showMore = () => {
     const newCount = Math.min(
       visibleCount.value + STEP,
-      filteredGoalsInYear.value.length
+      sortedGoalsInYear.value.length
     );
 
     visibleCount.value = newCount;
+
+    if (observerTriggerRef.value) {
+      observer?.unobserve(observerTriggerRef.value);
+      observer?.observe(observerTriggerRef.value);
+    }
   };
 
   onMounted(() => {

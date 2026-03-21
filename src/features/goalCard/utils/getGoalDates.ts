@@ -1,23 +1,18 @@
 import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
+import { getDateLocalString, getTimeLocalString } from 'shared/utils';
 
 import {
   isFullYear,
   isFullMonth,
-  getDateLocalString,
   isFullDay,
-  isStartTime,
-  getTimeLocalString,
   isEndTime,
+  isStartTime,
 } from './parseDates';
 
 import type { GoalDocument } from 'shared/interfaces';
 import type { GoalStatus } from 'shared/types';
-import type { ComputedRef } from 'vue';
 
-export const getGoalDates = (
-  goalStatus: ComputedRef<GoalStatus>,
-  goal: GoalDocument
-) => {
+export const getGoalDates = (goalStatus: GoalStatus, goal: GoalDocument) => {
   const startDate = goal.startDate.toDate();
   const endDate = goal.endDate.toDate();
 
@@ -25,10 +20,10 @@ export const getGoalDates = (
   const endDateString = getDateLocalString(endDate);
 
   const isInProgressOrCompleted =
-    goalStatus.value === 'in-progress' || goalStatus.value === 'completed';
+    goalStatus === 'in-progress' || goalStatus === 'completed';
 
   const getToDoOrExpiredString = (startTime?: string, endTime?: string) => {
-    if (goalStatus.value === 'to-do') {
+    if (goalStatus === 'to-do') {
       if (startTime) {
         const startTimeString = isStartTime(startDate) ? '' : ` ${startTime}`;
 
@@ -38,7 +33,7 @@ export const getGoalDates = (
       return `От ${startDateString}`;
     }
 
-    if (goalStatus.value === 'expired') {
+    if (goalStatus === 'expired') {
       if (endTime) {
         const endTimeString = isEndTime(endDate) ? '' : ` ${endTime}`;
 
