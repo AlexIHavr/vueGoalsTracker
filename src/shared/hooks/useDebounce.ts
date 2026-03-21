@@ -1,6 +1,6 @@
 import { ref, type Ref, watch } from 'vue';
 
-export function useDebounce(value: Ref<string>, delay: number = 200) {
+export function useDebounce(value: Ref<string>, delay: number = 100) {
   const debouncedValue = ref('');
   let timeout: number;
 

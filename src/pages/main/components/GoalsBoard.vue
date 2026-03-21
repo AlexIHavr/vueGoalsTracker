@@ -46,7 +46,7 @@ watch(
 
 <template>
   <div v-if="!isLoadingData" class="goal-board-wrapper">
-    <TransitionGroup name="goal-cards" tag="main" class="goals-board">
+    <main class="goals-board">
       <Message
         v-if="!filteredGoalsInYear.length && goalsInYear.length"
         severity="success"
@@ -64,7 +64,7 @@ watch(
         :key="goal.id"
         :goal="goal"
       />
-    </TransitionGroup>
+    </main>
   </div>
   <ProgressSpinner v-else />
   <div ref="observerTriggerRef" />
