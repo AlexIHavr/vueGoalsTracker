@@ -1,5 +1,6 @@
 :root {
   --background-color-primary: #cfdace;
+  --p-card-completed: #c3ffb2;
 
   // p-card
   .to-do {
@@ -16,7 +17,7 @@
 
   .completed {
     &.p-card {
-      --p-card-background: #c3ffb2;
+      --p-card-background: var(--p-card-completed);
     }
   }
 
@@ -57,6 +58,7 @@
 
 .dark-theme {
   --background-color-primary: #4b4b4b;
+  --p-card-completed: #00461a;
 
   // p-card
   .to-do {
@@ -241,7 +243,7 @@ h6 {
   --p-multiselect-list-padding: 0;
 }
 
-// accordion
+// p-accordion
 .p-accordionheader {
   --p-accordion-header-padding: 0 0 20px 0;
 }
@@ -258,13 +260,13 @@ h6 {
   --p-divider-horizontal-margin: 0;
 }
 
-// inputmask
+// p-inputmask
 .p-inputmask {
   --p-inputtext-padding-x: var(--p-form-field-padding-x)
     calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
 }
 
-// card
+// p-card
 .p-card {
   .p-card-body {
     height: 100%;
@@ -276,14 +278,14 @@ h6 {
   }
 }
 
-// popover
+// p-popover
 .p-popover {
   max-width: 250px;
   max-height: 400px;
   overflow: auto;
 }
 
-// chip
+// p-chip
 .p-chip.p-component {
   cursor: pointer;
   background: var(--p-tag-primary-background);
@@ -298,7 +300,7 @@ h6 {
   }
 }
 
-// progress spinner
+// p-progressspinner
 .p-progressspinner[role='progressbar'] {
   width: 80px;
   height: 80px;
@@ -306,4 +308,10 @@ h6 {
 
 .p-progressspinner-circle {
   stroke: var(--p-button-primary-background) !important;
+}
+
+// p-message
+.p-message {
+  --p-success-message-in-statistics: var(--p-card-completed);
+  --p-times-message-in-statistics: var(--p-button-primary-background);
 }

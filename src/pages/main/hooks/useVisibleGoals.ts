@@ -3,6 +3,7 @@ import {
   onMounted,
   onUnmounted,
   ref,
+  watch,
   type ComputedRef,
   type Ref,
 } from 'vue';
@@ -34,12 +35,14 @@ export function useVisibleGoals(
     );
 
     visibleCount.value = newCount;
+  };
 
+  watch(visibleGoals, () => {
     if (observerTriggerRef.value) {
       observer?.unobserve(observerTriggerRef.value);
       observer?.observe(observerTriggerRef.value);
     }
-  };
+  });
 
   onMounted(() => {
     observer = new IntersectionObserver(
@@ -50,10 +53,6 @@ export function useVisibleGoals(
       },
       { rootMargin: '0px 0px 300px 0px' }
     );
-
-    if (observerTriggerRef.value) {
-      observer.observe(observerTriggerRef.value);
-    }
   });
 
   onUnmounted(() => {

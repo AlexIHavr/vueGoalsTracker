@@ -8,6 +8,7 @@ import { useGoals } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 
 import { useVisibleGoals } from '../hooks/useVisibleGoals';
+import GoalsStatistics from '../ui/GoalsStatistics.vue';
 import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
 import { getSortedGoals } from '../utils/getSortedGoals';
 
@@ -17,11 +18,11 @@ const isLoadingData = data.pending;
 
 const observerTriggerRef = ref<HTMLDivElement | null>(null);
 
-const goalsInYear = computed(() =>
-  data.value.filter(
+const goalsInYear = computed(() => {
+  return data.value.filter(
     ({ startDate }) => startDate.toDate().getFullYear() === selectedYear.value
-  )
-);
+  );
+});
 
 const filteredGoalsInYear = computed(() =>
   getFilteredGoalsInYear(goalsInYear.value)
@@ -36,6 +37,8 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 
 <template>
   <div v-if="!isLoadingData" class="goal-board-wrapper">
+    <GoalsStatistics :filtered-goals-in-year="filteredGoalsInYear" />
+
     <main class="goals-board">
       <Message
         v-if="!filteredGoalsInYear.length && goalsInYear.length"
@@ -58,6 +61,7 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 <style lang="scss" scoped>
 .goal-board-wrapper {
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 

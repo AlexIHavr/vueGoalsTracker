@@ -15,16 +15,15 @@ import { getGoalTimes } from './utils/getGoalTimes';
 
 import type { GoalDocument } from 'shared/interfaces';
 
-const { goal, isWithoutRender = false } = defineProps<{
+const { goal } = defineProps<{
   goal: GoalDocument;
-  isWithoutRender?: boolean;
 }>();
 
 const { data, updateGoal, removeGoal } = useGoals();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
-const goalTimes = computed(() => getGoalTimes(goalStatus.value, goal));
+const goalTimes = computed(() => getGoalTimes(goal));
 
 const goalDates = computed(() => getGoalDates(goalStatus.value, goal));
 
@@ -33,9 +32,7 @@ const goalAttrs = useGoalStatusAttrs(goalStatus);
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,
-    ...(goalStatus.value === 'in-progress' && {
-      timesCurrent: goal.timesStart,
-    }),
+    timesCurrent: goal.isCompleted ? goal.timesStart : goal.timesEnd,
   });
 };
 
@@ -61,21 +58,15 @@ const handleUpdateTimes = () => {
 
   const newTimes = goal.timesCurrent + goal.timesStep;
 
-  if (newTimes >= goal.timesEnd) {
-    updateGoal(goal.id, {
-      isCompleted: true,
-      timesCurrent: goal.timesStart,
-    });
-  } else {
-    updateGoal(goal.id, {
-      timesCurrent: newTimes,
-    });
-  }
+  updateGoal(goal.id, {
+    isCompleted: newTimes >= goal.timesEnd ? true : false,
+    timesCurrent: newTimes,
+  });
 };
 </script>
 
 <template>
-  <Card v-if="!isWithoutRender" :class="['goal-card', goalStatus]">
+  <Card :class="['goal-card', goalStatus]">
     <template #title>
       <Tag
         v-show="goal.category"

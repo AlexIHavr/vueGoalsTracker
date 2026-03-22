@@ -61,9 +61,7 @@ const isFoundInSearch = (searchValue: string, goal: GoalDocument) => {
     return true;
   }
 
-  const isFoundTimes = getGoalTimes(getGoalStatus(goal), goal)
-    .toLowerCase()
-    .includes(searchString);
+  const isFoundTimes = getGoalTimes(goal).toLowerCase().includes(searchString);
 
   return isFoundTimes;
 };
