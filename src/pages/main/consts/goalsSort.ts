@@ -13,4 +13,4 @@ export const SORT_TYPES_OPTIONS: SortTypesOptions = [
     label: 'По количеству',
     value: 'timesEnd',
   },
-];
+] as const;

@@ -9,7 +9,7 @@ const { name } = defineProps<{ name: T }>();
 <template>
   <FormField v-slot="$field" :name>
     <FloatLabel variant="on">
-      <slot></slot>
+      <slot />
     </FloatLabel>
 
     <Message

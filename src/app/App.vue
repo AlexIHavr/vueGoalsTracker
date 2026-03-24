@@ -16,5 +16,5 @@ onMounted(() => {
 
 <template>
   <Toast position="top-center" />
-  <router-view></router-view>
+  <router-view />
 </template>

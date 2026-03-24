@@ -6,7 +6,11 @@ import Popover from 'primevue/popover';
 import { computed, ref, watch } from 'vue';
 
 import { useGoals } from 'shared/hooks';
-import { selectedCategoryFilters, selectedStatusFilters } from 'shared/store';
+import {
+  selectedCategoryFilters,
+  selectedStatusFilters,
+  selectedYear,
+} from 'shared/store';
 import { appLocalStorage, getUniqueArr } from 'shared/utils';
 
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
@@ -26,6 +30,11 @@ const goalsFiltersCount = computed(
 
 const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
 const isVisiblePopover = ref<boolean>(false);
+
+const filterButtonClasses = computed(() => [
+  'toggle-popover-button',
+  { active: isVisiblePopover.value },
+]);
 
 const handleToggleFiltersPopover = (event: PointerEvent) => {
   filtersPopoverRef.value?.toggle(event);
@@ -59,6 +68,15 @@ const onHidePopover = () => {
   isVisiblePopover.value = false;
 };
 
+const handleResetAllFilters = () => {
+  selectedStatusFilters.value = [];
+  selectedCategoryFilters.value = [];
+};
+
+watch(selectedYear, () => {
+  handleResetAllFilters();
+});
+
 watch(
   selectedStatusFilters,
   (value) => {
@@ -83,25 +101,33 @@ watch(
     :value="goalsFiltersCount"
   >
     <Button
-      type="button"
       icon="pi pi-filter"
       raised
-      :class="['toggle-popover-button', { active: isVisiblePopover }]"
+      :class="filterButtonClasses"
       @click="handleToggleFiltersPopover"
     />
   </OverlayBadge>
   <Button
     v-else
-    type="button"
     icon="pi pi-filter"
     raised
-    :class="['toggle-popover-button', { active: isVisiblePopover }]"
+    :class="filterButtonClasses"
     @click="handleToggleFiltersPopover"
   />
 
   <Popover ref="filtersPopoverRef" @show="onShowPopover" @hide="onHidePopover">
     <div class="status-filters-wrapper">
       <h4>Статусы целей</h4>
+
+      <Button
+        icon="pi pi-filter-slash"
+        size="small"
+        severity="danger"
+        class="reset-all-filters-button"
+        raised
+        :disabled="!goalsFiltersCount"
+        @click="handleResetAllFilters"
+      />
 
       <div
         v-for="{
@@ -154,15 +180,26 @@ watch(
 
 <style lang="scss" scoped>
 .status-filters-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.reset-all-filters-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
 }
 
 .status-filters {
   display: flex;
   gap: 7px;
   align-items: center;
+}
+
+.toggle-popover-button {
+  height: 40px;
 }
 
 .p-button.status-filter-button {

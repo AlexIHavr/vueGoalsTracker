@@ -2,7 +2,7 @@ import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { date, number, object, ObjectSchema, ref, string } from 'yup';
 
 import { MAX_DAYS_IN_MONTH } from 'shared/consts';
-import { TIME_24_REGEX } from 'shared/consts/regex';
+import { TIME_24_REGEX } from 'shared/consts';
 import { getLocaleNumberString } from 'shared/utils';
 
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
@@ -13,7 +13,7 @@ import type {
 } from '../interfaces/createGoalsFormFields';
 
 const MAX_TITLE_LENGTH = 20;
-const MAX_DESCRIPTION_LENGTH = 100;
+const MAX_DESCRIPTION_LENGTH = 500;
 const MAX_CATEGORY_LENGTH = 20;
 
 const MAX_TIMES = 1_000_000;

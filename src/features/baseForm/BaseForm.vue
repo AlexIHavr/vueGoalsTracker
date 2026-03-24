@@ -43,7 +43,7 @@ const handleFormSubmit = async (event: FormSubmitEvent) => {
 
 <template>
   <Form v-slot="$form" ref="formRef" @submit="handleFormSubmit">
-    <slot></slot>
+    <slot />
 
     <Button
       type="submit"

@@ -23,18 +23,16 @@ const { data, updateGoal, removeGoal } = useGoals();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
-const goalTimes = computed(() => getGoalTimes(goalStatus, goal));
+const goalTimes = computed(() => getGoalTimes(goal));
 
-const goalDates = computed(() => getGoalDates(goalStatus, goal));
+const goalDates = computed(() => getGoalDates(goalStatus.value, goal));
 
 const goalAttrs = useGoalStatusAttrs(goalStatus);
 
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,
-    ...(goalStatus.value === 'in-progress' && {
-      timesCurrent: goal.timesStart,
-    }),
+    timesCurrent: goal.isCompleted ? goal.timesStart : goal.timesEnd,
   });
 };
 
@@ -60,16 +58,10 @@ const handleUpdateTimes = () => {
 
   const newTimes = goal.timesCurrent + goal.timesStep;
 
-  if (newTimes >= goal.timesEnd) {
-    updateGoal(goal.id, {
-      isCompleted: true,
-      timesCurrent: goal.timesStart,
-    });
-  } else {
-    updateGoal(goal.id, {
-      timesCurrent: newTimes,
-    });
-  }
+  updateGoal(goal.id, {
+    isCompleted: newTimes >= goal.timesEnd ? true : false,
+    timesCurrent: newTimes,
+  });
 };
 </script>
 
@@ -104,7 +96,9 @@ const handleUpdateTimes = () => {
         >
           {{ goalDates }}
         </Message>
-        <h4>{{ goal.description }}</h4>
+        <h4 class="goal-description">
+          {{ goal.description }}
+        </h4>
       </div>
     </template>
     <template #footer>
@@ -149,6 +143,7 @@ const handleUpdateTimes = () => {
   height: 300px;
   min-height: 300px;
   padding-top: 10px;
+  transition: var(--p-button-transition-duration);
 }
 
 .category-tag {
@@ -186,5 +181,15 @@ const handleUpdateTimes = () => {
 
 .goal-times-message {
   width: fit-content;
+}
+
+.goal-description {
+  max-height: 130px;
+  overflow: auto;
+  white-space: pre-line;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 </style>

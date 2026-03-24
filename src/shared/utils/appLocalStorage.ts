@@ -6,10 +6,13 @@ interface LocalStorageKeys {
   selectedSortType: SortTypes;
   selectedSortOrder: SortOrder;
   selectedCategoryFilters: string[];
+  isShowStatistics: boolean;
 }
 
 export const appLocalStorage = {
-  get: <T extends keyof LocalStorageKeys>(key: T): LocalStorageKeys[T] =>
+  get: <T extends keyof LocalStorageKeys>(
+    key: T
+  ): LocalStorageKeys[T] | undefined =>
     JSON.parse(localStorage.getItem(key) as string),
   set: <T extends keyof LocalStorageKeys>(key: T, value: LocalStorageKeys[T]) =>
     localStorage.setItem(key, JSON.stringify(value)),

@@ -4,5 +4,10 @@ export {
   getEvenNumbers,
   getOddNumbers,
 } from './numbers';
-export { getLastDayOfMonth, parseTime } from './dates';
+export {
+  getLastDayOfMonth,
+  parseTime,
+  getDateLocalString,
+  getTimeLocalString,
+} from './dates';
 export { getUniqueArr } from './arrays';

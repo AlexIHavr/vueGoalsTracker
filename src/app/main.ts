@@ -1,5 +1,5 @@
 import Aura from '@primeuix/themes/aura';
-import PrimeVue from 'primevue/config';
+import PrimeVue, { type PrimeVueConfiguration } from 'primevue/config';
 import KeyFilter from 'primevue/keyfilter';
 import ToastService from 'primevue/toastservice';
 import { createApp } from 'vue';
@@ -8,7 +8,7 @@ import { VueFire, VueFireAuth } from 'vuefire';
 import { firebaseApp } from 'shared/api';
 
 import App from './App.vue';
-import { ruLocale } from './locales/ru';
+import { RU_LOCALE } from './locales/ru';
 import { router } from './router';
 
 import 'primeicons/primeicons.css';
@@ -21,7 +21,7 @@ app.use(PrimeVue, {
     preset: Aura,
     options: { darkModeSelector: '.dark-theme' },
   },
-  locale: ruLocale,
+  locale: RU_LOCALE,
   pt: {
     inputNumber: {
       pcinputtext: {
@@ -29,7 +29,7 @@ app.use(PrimeVue, {
       },
     },
   },
-});
+} satisfies PrimeVueConfiguration);
 
 app.use(VueFire, {
   firebaseApp,

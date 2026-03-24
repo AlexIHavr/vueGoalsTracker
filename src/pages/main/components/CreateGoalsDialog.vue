@@ -25,7 +25,6 @@ import ExtraSettings from '../ui/ExtraSettings.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
 import TimesFields from '../ui/TimesFields.vue';
 import YearDateFields from '../ui/YearDateFields.vue';
-import { getDaysInSelectedMonths } from '../utils/getDaysInSelectedMonths';
 
 import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
 import type { PeriodFilterValue } from '../types/periodOptions';
@@ -109,7 +108,6 @@ const handleCreateGoals = async () => {
     await createYearGoal();
   } else {
     switch (selectedPeriodFilter.value) {
-      default:
       case 'all':
         if (isSelectedMonth) {
           await createMonthGoal();
@@ -122,12 +120,10 @@ const handleCreateGoals = async () => {
         if (isSelectedMonth) {
           await createMonthGoal(getOddNumbers(MONTH_INDEXES));
         } else {
-          await createDayGoal(
-            selectedMonthChooseFilter.value,
-            getEvenNumbers(
-              getDaysInSelectedMonths(selectedMonthChooseFilter.value)
-            )
-          );
+          await createDayGoal({
+            months: selectedMonthChooseFilter.value,
+            filterFunc: getEvenNumbers,
+          });
         }
         break;
 
@@ -135,12 +131,10 @@ const handleCreateGoals = async () => {
         if (isSelectedMonth) {
           await createMonthGoal(getEvenNumbers(MONTH_INDEXES));
         } else {
-          await createDayGoal(
-            selectedMonthChooseFilter.value,
-            getOddNumbers(
-              getDaysInSelectedMonths(selectedMonthChooseFilter.value)
-            )
-          );
+          await createDayGoal({
+            months: selectedMonthChooseFilter.value,
+            filterFunc: getOddNumbers,
+          });
         }
 
         break;
@@ -149,12 +143,17 @@ const handleCreateGoals = async () => {
         if (isSelectedMonth) {
           await createMonthGoal(selectedMonthChooseFilter.value);
         } else {
-          await createDayGoal(
-            selectedMonthChooseFilter.value,
-            selectedDayChooseFilter.value
-          );
+          await createDayGoal({
+            months: selectedMonthChooseFilter.value,
+            days: selectedDayChooseFilter.value,
+          });
         }
         break;
+
+      default: {
+        const _: never = selectedPeriodFilter.value;
+        return _;
+      }
     }
   }
 

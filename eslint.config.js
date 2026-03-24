@@ -42,6 +42,8 @@ export default [
     },
     rules: {
       'prettier/prettier': 'error',
+
+      //Import
       'import/order': [
         'error',
         {
@@ -57,6 +59,8 @@ export default [
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
+
+      //FSD
       'no-restricted-imports': [
         'error',
         {
@@ -75,6 +79,8 @@ export default [
           ],
         },
       ],
+
+      //VUE
       'vue/attributes-order': [
         'error',
         {
@@ -95,7 +101,22 @@ export default [
           ],
         },
       ],
+      'vue/html-self-closing': [
+        'error',
+        {
+          html: {
+            void: 'never',
+            normal: 'always',
+            component: 'always',
+          },
+          svg: 'always',
+          math: 'always',
+        },
+      ],
+
+      //OTHER
       'no-console': 'warn',
+      'default-case': ['error', { commentPattern: '^no default$' }],
     },
   },
 ];

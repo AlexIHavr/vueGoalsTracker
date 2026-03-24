@@ -1,6 +1,8 @@
 import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
 
-export const ruLocale = {
+import type { PrimeVueLocaleOptions } from 'primevue';
+
+export const RU_LOCALE = {
   monthNames: [
     'января',
     'февраля',
@@ -18,6 +20,18 @@ export const ruLocale = {
 
   monthNamesShort: MONTH_NAMES_LOWERCASE,
 
+  dayNames: [
+    'Воскресенье',
+    'Понедельник',
+    'Вторник',
+    'Среда',
+    'Четверг',
+    'Пятница',
+    'Суббота',
+  ],
   dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+  dayNamesShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
   firstDayOfWeek: 1,
-};
+
+  fileSizeTypes: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+} as const satisfies PrimeVueLocaleOptions;

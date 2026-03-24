@@ -4,3 +4,4 @@ export {
   selectedCategoryFilters,
 } from './selectedFilters';
 export { selectedSortOrder, selectedSortType } from './selectedSort';
+export { searchValue } from './searchValue';

@@ -41,12 +41,16 @@ export function useGoalStatusAttrs(status: ComputedRef<GoalStatus>) {
         break;
 
       case 'to-do':
-      default:
         goalAttrs.statusIcon = 'pi pi-bookmark';
         goalAttrs.completeButtonLabel = 'К выполнению';
         goalAttrs.buttonSeverity = 'info';
         goalAttrs.messageSeverity = 'info';
         break;
+
+      default: {
+        const _: never = status.value;
+        return _;
+      }
     }
   });
 

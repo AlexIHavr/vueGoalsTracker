@@ -1,75 +1,67 @@
 <script setup lang="ts">
 import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
-import { getGoalStatus, GoalCard } from 'features/goalCard';
+import { GoalCard } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
-import {
-  selectedCategoryFilters,
-  selectedStatusFilters,
-  selectedYear,
-} from 'shared/store';
+import { selectedYear } from 'shared/store';
 
+import { useVisibleGoals } from '../hooks/useVisibleGoals';
+import GoalsStatistics from '../ui/GoalsStatistics.vue';
+import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
 import { getSortedGoals } from '../utils/getSortedGoals';
 
 const { data } = useGoals();
 
 const isLoadingData = data.pending;
 
-const goalsInYear = computed(() =>
-  data.value.filter(
+const observerTriggerRef = ref<HTMLDivElement | null>(null);
+
+const goalsInYear = computed(() => {
+  return data.value.filter(
     ({ startDate }) => startDate.toDate().getFullYear() === selectedYear.value
-  )
+  );
+});
+
+const filteredGoalsInYear = computed(() =>
+  getFilteredGoalsInYear(goalsInYear.value)
 );
 
-const sortedGoalsInYear = computed(() => getSortedGoals(goalsInYear.value));
+const sortedGoalsInYear = computed(() =>
+  getSortedGoals(filteredGoalsInYear.value)
+);
 
-const filteredDataInYear = computed(() => {
-  const selectedStatusFiltersLength = selectedStatusFilters.value.length;
-  const selectedCategoryFiltersLength = selectedCategoryFilters.value.length;
-
-  return sortedGoalsInYear.value.filter((goal) => {
-    const isIncludesStatus = !selectedStatusFiltersLength
-      ? true
-      : selectedStatusFilters.value.includes(getGoalStatus(goal));
-
-    const isIncludesCategory = !selectedCategoryFiltersLength
-      ? true
-      : selectedCategoryFilters.value.includes(goal.category);
-
-    return isIncludesStatus && isIncludesCategory;
-  });
-});
+const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 </script>
 
 <template>
   <div v-if="!isLoadingData" class="goal-board-wrapper">
-    <TransitionGroup name="goal-cards" tag="main" class="goals-board">
+    <GoalsStatistics :filtered-goals-in-year="filteredGoalsInYear" />
+
+    <main class="goals-board">
       <Message
-        v-if="!filteredDataInYear.length && goalsInYear.length"
+        v-if="!filteredGoalsInYear.length && goalsInYear.length"
         severity="success"
       >
-        По данным фильтрам целей нет - поменяйте фильтры либо снимите их
+        По данным фильтрам или поиску целей нет
       </Message>
 
       <Message v-if="!goalsInYear.length" severity="success">
         Здесь будут ваши цели. Создайте первую цель
       </Message>
 
-      <GoalCard
-        v-for="goal in filteredDataInYear"
-        :key="goal.id"
-        :goal="goal"
-      />
-    </TransitionGroup>
+      <GoalCard v-for="goal in visibleGoals" :key="goal.id" :goal="goal" />
+    </main>
   </div>
   <ProgressSpinner v-else />
+  <div ref="observerTriggerRef" />
 </template>
 
 <style lang="scss" scoped>
 .goal-board-wrapper {
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
