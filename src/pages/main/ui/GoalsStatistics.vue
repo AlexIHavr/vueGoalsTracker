@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import Button from 'primevue/button';
 import Message from 'primevue/message';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { getGoalStatus } from 'features/goalCard';
+import { appLocalStorage } from 'shared/utils';
 
 import type { GoalDocument } from 'shared/interfaces';
 import type { GoalStatus } from 'shared/types';
@@ -10,6 +12,10 @@ import type { GoalStatus } from 'shared/types';
 const { filteredGoalsInYear } = defineProps<{
   filteredGoalsInYear: GoalDocument[];
 }>();
+
+const isShowStatistics = ref<boolean>(
+  appLocalStorage.get('isShowStatistics') ?? false
+);
 
 const counters = computed<{
   counters: Record<GoalStatus, number>;
@@ -44,10 +50,25 @@ const counters = computed<{
 const getCounterText = (status: GoalStatus) => {
   return `${counters.value.counters[status]} из ${filteredGoalsInYear.length}`;
 };
+
+const handleShowStatistics = () => {
+  isShowStatistics.value = !isShowStatistics.value;
+};
+
+watch(isShowStatistics, (value) => {
+  appLocalStorage.set('isShowStatistics', value);
+});
 </script>
 
 <template>
-  <div class="goals-statistics">
+  <Button
+    icon="pi pi-chart-bar"
+    raised
+    :class="['show-statistics-button', { active: isShowStatistics }]"
+    @click="handleShowStatistics"
+  />
+
+  <div v-if="isShowStatistics" class="goals-statistics">
     <Message class="completed-message" severity="success" icon="pi pi-check">
       Выполнено {{ getCounterText('completed') }}
     </Message>
@@ -71,6 +92,10 @@ const getCounterText = (status: GoalStatus) => {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.show-statistics-button {
+  height: 40px;
 }
 
 .completed-message {

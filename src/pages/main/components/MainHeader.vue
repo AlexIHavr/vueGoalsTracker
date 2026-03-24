@@ -12,7 +12,7 @@ import { useNotification } from 'shared/hooks';
 import { appLocalStorage } from 'shared/utils';
 
 const isLoading = ref<boolean>(false);
-const isDarkTheme = ref<boolean>(appLocalStorage.get('isDarkTheme'));
+const isDarkTheme = ref<boolean>(appLocalStorage.get('isDarkTheme') ?? false);
 
 const router = useRouter();
 const toast = useNotification();

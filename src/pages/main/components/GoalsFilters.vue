@@ -33,7 +33,7 @@ const isVisiblePopover = ref<boolean>(false);
 
 const filterButtonClasses = computed(() => [
   'toggle-popover-button',
-  { active: isVisiblePopover },
+  { active: isVisiblePopover.value },
 ]);
 
 const handleToggleFiltersPopover = (event: PointerEvent) => {
@@ -196,6 +196,10 @@ watch(
   display: flex;
   gap: 7px;
   align-items: center;
+}
+
+.toggle-popover-button {
+  height: 40px;
 }
 
 .p-button.status-filter-button {

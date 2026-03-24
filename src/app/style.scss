@@ -315,3 +315,9 @@ h6 {
   --p-success-message-in-statistics: var(--p-card-completed);
   --p-times-message-in-statistics: var(--p-button-primary-background);
 }
+
+// p-button
+.p-button.p-component.active:not(:disabled) {
+  background: var(--p-button-primary-active-background);
+  border: 1px solid var(--p-button-primary-active-border-color);
+}
