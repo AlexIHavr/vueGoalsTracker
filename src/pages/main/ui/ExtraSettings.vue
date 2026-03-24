@@ -104,7 +104,7 @@ const dayChooseFilterOptions = computed(() =>
 
 .period-settings {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
 }
 
 .p-select,

@@ -72,13 +72,13 @@ watch(isShowStatistics, (value) => {
     <Message class="completed-message" severity="success" icon="pi pi-check">
       Выполнено {{ getCounterText('completed') }}
     </Message>
-    <Message icon="pi pi-circle" severity="success">
+    <Message class="in-progress-message" icon="pi pi-circle" severity="success">
       В процессе {{ getCounterText('in-progress') }}
     </Message>
-    <Message severity="error" icon="pi pi-clock">
+    <Message class="expired-message" severity="error" icon="pi pi-clock">
       Просроченные {{ getCounterText('expired') }}
     </Message>
-    <Message severity="info" icon="pi pi-bookmark">
+    <Message class="to-do-message" severity="info" icon="pi pi-bookmark">
       К выполнению {{ getCounterText('to-do') }}
     </Message>
     <Message class="times-message" severity="contrast" icon="pi pi-database">
@@ -99,11 +99,27 @@ watch(isShowStatistics, (value) => {
 }
 
 .completed-message {
-  background: var(--p-success-message-in-statistics);
+  outline-color: transparent;
+  background: var(--p-card-completed);
+}
+
+.in-progress-message {
+  outline-color: transparent;
+  background: var(--p-card-in-progress);
+}
+
+.expired-message {
+  outline-color: transparent;
+  background: var(--p-card-expired);
+}
+
+.to-do-message {
+  outline-color: transparent;
+  background: var(--p-card-to-do);
 }
 
 .times-message {
   outline-color: transparent;
-  background: var(--p-times-message-in-statistics);
+  background: var(--p-button-primary-background);
 }
 </style>
