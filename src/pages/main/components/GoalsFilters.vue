@@ -145,7 +145,7 @@ watch(
           variant="outlined"
           :class="[
             'status-filter-button',
-            { active: selectedStatusFilters.includes(status) },
+            { 'active-filter': selectedStatusFilters.includes(status) },
           ]"
           :severity="severity"
           :icon="icon"
@@ -164,7 +164,7 @@ watch(
             :class="[
               'category-tag',
               {
-                active: selectedCategoryFilters.includes(category),
+                'active-tag': selectedCategoryFilters.includes(category),
                 'empty-category': !category,
               },
             ]"
@@ -206,7 +206,7 @@ watch(
   justify-content: space-between;
   width: 150px;
 
-  &.active:not(:disabled) {
+  &.active-filter:not(:disabled) {
     background: var(--p-button-outlined-primary-active-background);
 
     &.p-button-success {
@@ -233,7 +233,7 @@ watch(
 }
 
 .category-tag {
-  &.active {
+  &.active-tag {
     color: var(--p-button-success-color);
     background: var(--p-button-success-background);
 

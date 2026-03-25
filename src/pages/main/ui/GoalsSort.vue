@@ -51,6 +51,6 @@ watch(selectedSortType, () => {
 
 <style lang="scss" scoped>
 .p-inputgroup {
-  width: 215px;
+  width: 225px;
 }
 </style>

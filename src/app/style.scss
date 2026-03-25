@@ -7,6 +7,7 @@
   --p-card-expired: #fb979f;
   --p-datepicker-item: #b5ffb3;
   --p-datepicker-today: #83ee80;
+  --p-tag-background: #d1fae5;
 }
 
 .dark-theme {
@@ -18,6 +19,7 @@
   --p-card-expired: #420f13;
   --p-datepicker-item: #008c5b;
   --p-datepicker-today: #00a46b;
+  --p-tag-background: #314b3e;
 }
 
 html {
@@ -234,13 +236,18 @@ h6 {
 .p-popover {
   max-width: 250px;
   max-height: 400px;
-  overflow: auto;
+  overflow: hidden auto;
+  user-select: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 
 // p-chip
 .p-chip.p-component {
   cursor: pointer;
-  background: var(--p-tag-primary-background);
+  background: var(--p-tag-background);
   transition:
     background 0.2s,
     color 0.2s;
