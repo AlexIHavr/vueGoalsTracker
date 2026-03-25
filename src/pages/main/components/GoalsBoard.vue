@@ -4,17 +4,16 @@ import ProgressSpinner from 'primevue/progressspinner';
 import { computed, ref } from 'vue';
 
 import { GoalCard } from 'features/goalCard';
-import { useGoals } from 'shared/hooks';
+import { useGoals, useGoalsInYear } from 'shared/hooks';
 
-import { useGoalsInYear } from '../hooks/useGoalsInYear';
 import { useVisibleGoals } from '../hooks/useVisibleGoals';
 import GoalsStatistics from '../ui/GoalsStatistics.vue';
 import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
 import { getSortedGoals } from '../utils/getSortedGoals';
 
-const { data } = useGoals();
-
-const isLoadingData = data.pending;
+const {
+  data: { pending },
+} = useGoals();
 
 const observerTriggerRef = ref<HTMLDivElement | null>(null);
 
@@ -32,7 +31,7 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 </script>
 
 <template>
-  <div v-if="!isLoadingData" class="goal-board-wrapper">
+  <div v-if="!pending" class="goal-board-wrapper">
     <GoalsStatistics :filtered-goals-in-year="filteredGoalsInYear" />
 
     <main class="goals-board">

@@ -5,6 +5,7 @@ import OverlayBadge from 'primevue/overlaybadge';
 import Popover from 'primevue/popover';
 import { computed, ref, watch } from 'vue';
 
+import { useGoalsInYear } from 'shared/hooks';
 import {
   selectedCategoryFilters,
   selectedStatusFilters,
@@ -13,7 +14,6 @@ import {
 import { appLocalStorage, getUniqueArr } from 'shared/utils';
 
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
-import { useGoalsInYear } from '../hooks/useGoalsInYear';
 
 import type { GoalStatus } from 'shared/types';
 

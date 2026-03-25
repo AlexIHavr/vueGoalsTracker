@@ -5,12 +5,12 @@ import Message from 'primevue/message';
 import Tag from 'primevue/tag';
 import { computed } from 'vue';
 
-import { useGoals } from 'shared/hooks';
+import { useGoals, useGoalsInYear } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 
-import { useGoalStatusAttrs } from './hooks/useGoalStatusAttrs';
 import { getGoalDates } from './utils/getGoalDates';
 import { getGoalStatus } from './utils/getGoalStatus';
+import { getGoalStatusAttrs } from './utils/getGoalStatusAttrs';
 import { getGoalTimes } from './utils/getGoalTimes';
 
 import type { GoalDocument } from 'shared/interfaces';
@@ -19,7 +19,9 @@ const { goal } = defineProps<{
   goal: GoalDocument;
 }>();
 
-const { data, updateGoal, removeGoal } = useGoals();
+const { updateGoal, removeGoal } = useGoals();
+
+const goalsInYear = useGoalsInYear();
 
 const goalStatus = computed(() => getGoalStatus(goal));
 
@@ -27,7 +29,7 @@ const goalTimes = computed(() => getGoalTimes(goal));
 
 const goalDates = computed(() => getGoalDates(goalStatus.value, goal));
 
-const goalAttrs = useGoalStatusAttrs(goalStatus);
+const goalAttrs = computed(() => getGoalStatusAttrs(goalStatus.value));
 
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
@@ -38,8 +40,8 @@ const handleCompleteGoal = () => {
 
 const handleRemoveGoal = async () => {
   const isLastCategoryTag =
-    data.value.filter(({ category }) => category === goal.category).length ===
-    1;
+    goalsInYear.value.filter(({ category }) => category === goal.category)
+      .length === 1;
 
   await removeGoal(goal.id);
 
@@ -57,10 +59,11 @@ const handleUpdateTimes = () => {
   }
 
   const newTimes = goal.timesCurrent + goal.timesStep;
+  const newTimesCurrent = newTimes > goal.timesEnd ? goal.timesEnd : newTimes;
 
   updateGoal(goal.id, {
-    isCompleted: newTimes >= goal.timesEnd ? true : false,
-    timesCurrent: newTimes > goal.timesEnd ? goal.timesEnd : newTimes,
+    isCompleted: newTimes >= goal.timesEnd,
+    timesCurrent: newTimesCurrent,
   });
 };
 </script>
@@ -78,6 +81,7 @@ const handleUpdateTimes = () => {
 
       <div class="title-wrapper">
         <h4>{{ goal.title }}</h4>
+
         <Button
           size="small"
           rounded
@@ -87,6 +91,7 @@ const handleUpdateTimes = () => {
         />
       </div>
     </template>
+
     <template #content>
       <div class="content-wrapper">
         <Message
@@ -96,11 +101,13 @@ const handleUpdateTimes = () => {
         >
           {{ goalDates }}
         </Message>
+
         <h4 class="goal-description">
           {{ goal.description }}
         </h4>
       </div>
     </template>
+
     <template #footer>
       <div class="footer-wrapper">
         <Message
