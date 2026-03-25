@@ -5,7 +5,6 @@ import OverlayBadge from 'primevue/overlaybadge';
 import Popover from 'primevue/popover';
 import { computed, ref, watch } from 'vue';
 
-import { useGoals } from 'shared/hooks';
 import {
   selectedCategoryFilters,
   selectedStatusFilters,
@@ -14,13 +13,14 @@ import {
 import { appLocalStorage, getUniqueArr } from 'shared/utils';
 
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
+import { useGoalsInYear } from '../hooks/useGoalsInYear';
 
 import type { GoalStatus } from 'shared/types';
 
-const { data } = useGoals();
+const goalsInYear = useGoalsInYear();
 
 const uniqueGoalCategories = computed(() =>
-  getUniqueArr(data.value.map(({ category }) => category))
+  getUniqueArr(goalsInYear.value.map(({ category }) => category))
 );
 
 const goalsFiltersCount = computed(
