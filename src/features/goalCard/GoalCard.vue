@@ -60,7 +60,7 @@ const handleUpdateTimes = () => {
 
   updateGoal(goal.id, {
     isCompleted: newTimes >= goal.timesEnd ? true : false,
-    timesCurrent: newTimes,
+    timesCurrent: newTimes > goal.timesEnd ? goal.timesEnd : newTimes,
   });
 };
 </script>

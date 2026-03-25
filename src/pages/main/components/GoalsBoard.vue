@@ -5,8 +5,8 @@ import { computed, ref } from 'vue';
 
 import { GoalCard } from 'features/goalCard';
 import { useGoals } from 'shared/hooks';
-import { selectedYear } from 'shared/store';
 
+import { useGoalsInYear } from '../hooks/useGoalsInYear';
 import { useVisibleGoals } from '../hooks/useVisibleGoals';
 import GoalsStatistics from '../ui/GoalsStatistics.vue';
 import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
@@ -18,11 +18,7 @@ const isLoadingData = data.pending;
 
 const observerTriggerRef = ref<HTMLDivElement | null>(null);
 
-const goalsInYear = computed(() => {
-  return data.value.filter(
-    ({ startDate }) => startDate.toDate().getFullYear() === selectedYear.value
-  );
-});
+const goalsInYear = useGoalsInYear();
 
 const filteredGoalsInYear = computed(() =>
   getFilteredGoalsInYear(goalsInYear.value)
