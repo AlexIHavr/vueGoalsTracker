@@ -12,9 +12,9 @@ import type {
   CreateGoalsFormNumberFields,
 } from '../interfaces/createGoalsFormFields';
 
-const MAX_TITLE_LENGTH = 20;
+const MAX_TITLE_LENGTH = 50;
 const MAX_DESCRIPTION_LENGTH = 500;
-const MAX_CATEGORY_LENGTH = 20;
+const MAX_CATEGORY_LENGTH = 30;
 
 const MAX_TIMES = 1_000_000;
 const MAX_TIMES_SUFFIX_LENGTH = 5;

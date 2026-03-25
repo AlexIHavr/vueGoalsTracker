@@ -80,7 +80,7 @@ const handleUpdateTimes = () => {
       />
 
       <div class="title-wrapper">
-        <h4>{{ goal.title }}</h4>
+        <h4 class="goal-title">{{ goal.title }}</h4>
 
         <Button
           size="small"
@@ -143,12 +143,16 @@ const handleUpdateTimes = () => {
 </template>
 
 <style lang="scss" scoped>
+$goal-card-width: 320px;
+$goal-card-height: 350px;
+$goal-max-width: calc($goal-card-width - 2 * var(--p-card-body-padding));
+
 .goal-card {
   position: relative;
-  width: 320px;
-  min-width: 320px;
-  height: 300px;
-  min-height: 300px;
+  width: $goal-card-width;
+  min-width: $goal-card-width;
+  height: $goal-card-height;
+  min-height: $goal-card-height;
   padding-top: 10px;
   transition: var(--p-button-transition-duration);
 }
@@ -163,7 +167,6 @@ const handleUpdateTimes = () => {
 .title-wrapper {
   display: flex;
   gap: 10px;
-  align-items: center;
   justify-content: space-between;
 }
 
@@ -190,7 +193,12 @@ const handleUpdateTimes = () => {
   width: fit-content;
 }
 
+.goal-title {
+  max-width: calc($goal-max-width - var(--p-button-sm-icon-only-width) - 10px);
+}
+
 .goal-description {
+  max-width: $goal-max-width;
   max-height: 130px;
   overflow: auto;
   white-space: pre-line;

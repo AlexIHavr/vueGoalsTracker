@@ -282,9 +282,15 @@ h6 {
 }
 
 // p-button
-.p-button.p-component.active:not(:disabled) {
-  background: var(--p-button-primary-active-background);
-  border: 1px solid var(--p-button-primary-active-border-color);
+.p-button.p-component {
+  &.p-button-sm.p-button-icon-only {
+    min-width: var(--p-button-sm-icon-only-width);
+  }
+
+  &.active:not(:disabled) {
+    background: var(--p-button-primary-active-background);
+    border: 1px solid var(--p-button-primary-active-border-color);
+  }
 }
 
 // p-dialog
