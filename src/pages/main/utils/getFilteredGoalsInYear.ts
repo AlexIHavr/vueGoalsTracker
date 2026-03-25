@@ -1,8 +1,10 @@
 import { getGoalStatus, getGoalTimes } from 'features/goalCard';
+import { MAX_HOURS, MAX_MINUTES, MAX_SECONDS } from 'shared/consts';
 import {
   selectedStatusFilters,
   selectedCategoryFilters,
   searchValue,
+  selectedDatesRangeFilters,
 } from 'shared/store';
 import { getDateLocalString, getTimeLocalString } from 'shared/utils';
 
@@ -69,11 +71,14 @@ const isFoundInSearch = (searchValue: string, goal: GoalDocument) => {
 export const getFilteredGoalsInYear = (goalsInYear: GoalDocument[]) => {
   const selectedStatusFiltersLength = selectedStatusFilters.value.length;
   const selectedCategoryFiltersLength = selectedCategoryFilters.value.length;
+  const selectedDatesRangeFiltersLength =
+    selectedDatesRangeFilters.value.length;
   const searchString = searchValue.value;
 
   if (
     !selectedStatusFiltersLength &&
     !selectedCategoryFiltersLength &&
+    !selectedDatesRangeFiltersLength &&
     !searchString
   ) {
     return goalsInYear;
@@ -88,9 +93,36 @@ export const getFilteredGoalsInYear = (goalsInYear: GoalDocument[]) => {
       ? true
       : selectedCategoryFilters.value.includes(goal.category);
 
+    let isIncludesDatesRange = true;
+
+    if (selectedDatesRangeFiltersLength) {
+      const isIncludesStartDateFilter =
+        goal.startDate.toDate() >= selectedDatesRangeFilters.value[0];
+
+      const endDateFilter = selectedDatesRangeFilters.value[1];
+      let isIncludesEndDateFilter = true;
+
+      if (endDateFilter) {
+        const parsedEndDate = new Date(
+          endDateFilter.getFullYear(),
+          endDateFilter.getMonth(),
+          endDateFilter.getDate(),
+          MAX_HOURS,
+          MAX_MINUTES,
+          MAX_SECONDS
+        );
+
+        isIncludesEndDateFilter = goal.endDate.toDate() <= parsedEndDate;
+      }
+
+      isIncludesDatesRange =
+        isIncludesStartDateFilter && isIncludesEndDateFilter;
+    }
+
     return (
       isIncludesStatus &&
       isIncludesCategory &&
+      isIncludesDatesRange &&
       isFoundInSearch(searchString, goal)
     );
   });

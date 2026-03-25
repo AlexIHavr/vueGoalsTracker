@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Chip from 'primevue/chip';
+import DatePicker from 'primevue/datepicker';
 import OverlayBadge from 'primevue/overlaybadge';
 import Popover from 'primevue/popover';
 import { computed, ref, watch } from 'vue';
@@ -8,12 +9,15 @@ import { computed, ref, watch } from 'vue';
 import { useGoalsInYear } from 'shared/hooks';
 import {
   selectedCategoryFilters,
+  selectedDatesRangeFilters,
   selectedStatusFilters,
   selectedYear,
 } from 'shared/store';
 import { appLocalStorage, getUniqueArr } from 'shared/utils';
 
+import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
 import { STATUS_FILTERS_BUTTONS_PROPS } from '../consts/goalsFilters';
+import { MAX_START_DATE, MIN_START_DATE } from '../consts/goalsFormFields';
 
 import type { GoalStatus } from 'shared/types';
 
@@ -25,7 +29,9 @@ const uniqueGoalCategories = computed(() =>
 
 const goalsFiltersCount = computed(
   () =>
-    selectedStatusFilters.value.length + selectedCategoryFilters.value.length
+    selectedStatusFilters.value.length +
+    selectedCategoryFilters.value.length +
+    (selectedDatesRangeFilters.value.length ? 1 : 0)
 );
 
 const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
@@ -71,6 +77,7 @@ const onHidePopover = () => {
 const handleResetAllFilters = () => {
   selectedStatusFilters.value = [];
   selectedCategoryFilters.value = [];
+  selectedDatesRangeFilters.value = [];
 };
 
 watch(selectedYear, () => {
@@ -89,6 +96,14 @@ watch(
   selectedCategoryFilters,
   (value) => {
     appLocalStorage.set('selectedCategoryFilters', value);
+  },
+  { deep: true }
+);
+
+watch(
+  selectedDatesRangeFilters,
+  (value) => {
+    appLocalStorage.set('selectedDatesRangeFilters', value);
   },
   { deep: true }
 );
@@ -117,8 +132,6 @@ watch(
 
   <Popover ref="filtersPopoverRef" @show="onShowPopover" @hide="onHidePopover">
     <div class="status-filters-wrapper">
-      <h4>Статусы целей</h4>
-
       <Button
         icon="pi pi-filter-slash"
         size="small"
@@ -128,6 +141,8 @@ watch(
         :disabled="!goalsFiltersCount"
         @click="handleResetAllFilters"
       />
+
+      <h4>Статусы целей</h4>
 
       <div
         v-for="{
@@ -153,6 +168,32 @@ watch(
           @click="handleToggleStatusFilter(status)"
         />
       </div>
+
+      <h4>Диапазон дат</h4>
+
+      <DatePicker
+        v-model="selectedDatesRangeFilters"
+        selection-mode="range"
+        placeholder="Выберите диапазон"
+        size="small"
+        icon-display="input"
+        show-icon
+        show-clear
+        :manual-input="false"
+        :date-format="DATE_FIELD_FORMAT"
+        :min-date="MIN_START_DATE"
+        :max-date="MAX_START_DATE"
+      >
+        <template #clearicon="">
+          <div>
+            <i
+              v-if="selectedDatesRangeFilters.length"
+              class="pi pi-times p-icon p-datepicker-clear-icon"
+              @click="selectedDatesRangeFilters = []"
+            />
+          </div>
+        </template>
+      </DatePicker>
 
       <div v-if="uniqueGoalCategories.length">
         <h4>Категории</h4>
@@ -188,8 +229,8 @@ watch(
 
 .reset-all-filters-button {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: 0;
+  right: 0;
 }
 
 .status-filters {
@@ -243,5 +284,9 @@ watch(
   &.empty-category {
     order: -1;
   }
+}
+
+.dates-range-clear-icon {
+  cursor: pointer;
 }
 </style>

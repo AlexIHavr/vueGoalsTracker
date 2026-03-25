@@ -3,9 +3,10 @@ import type { GoalStatus, SortOrder, SortTypes } from 'shared/types';
 interface LocalStorageKeys {
   isDarkTheme: boolean;
   selectedStatusFilters: GoalStatus[];
+  selectedCategoryFilters: string[];
+  selectedDatesRangeFilters: [Date, Date | null] | [];
   selectedSortType: SortTypes;
   selectedSortOrder: SortOrder;
-  selectedCategoryFilters: string[];
   isShowStatistics: boolean;
 }
 

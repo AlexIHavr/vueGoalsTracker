@@ -71,6 +71,8 @@ h6 {
 // p-datepicker
 .p-datepicker-panel {
   --p-datepicker-panel-background: var(--p-card-in-progress);
+
+  user-select: none;
 }
 
 .p-datepicker-header {
@@ -90,6 +92,16 @@ h6 {
   &[aria-selected='true'] {
     background-color: var(--p-datepicker-date-hover-background);
     opacity: 1;
+  }
+
+  &.p-datepicker-day-selected,
+  &.p-datepicker-day-selected-range {
+    color: var(--p-datepicker-today-color);
+
+    .p-datepicker-today & {
+      color: var(--p-datepicker-today-color);
+      background: var(--p-datepicker-today-background);
+    }
   }
 }
 
@@ -234,7 +246,7 @@ h6 {
 
 // p-popover
 .p-popover {
-  max-width: 250px;
+  width: 250px;
   max-height: 400px;
   overflow: hidden auto;
   user-select: none;
