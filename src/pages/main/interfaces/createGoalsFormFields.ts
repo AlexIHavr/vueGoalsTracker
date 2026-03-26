@@ -17,7 +17,7 @@ export interface CreateGoalsFormFields extends CreateGoalsFormNumberFields {
   endTime: string;
 }
 
-export interface CheckboxSettingsFields {
+export interface SwitchSettingsFields {
   showOneTimes: boolean;
   overTimes: boolean;
 }

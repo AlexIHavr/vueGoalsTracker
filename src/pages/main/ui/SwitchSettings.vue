@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Checkbox from 'primevue/checkbox';
+import ToggleSwitch from 'primevue/toggleswitch';
 
 const showOneTimes = defineModel<boolean>('showOneTimes', {
   required: true,
@@ -11,34 +11,30 @@ const overTimes = defineModel<boolean>('overTimes', {
 </script>
 
 <template>
-  <div class="checkbox-field">
-    <Checkbox
-      v-model="showOneTimes"
-      input-id="show-one-times"
-      size="small"
-      binary
-    />
-    <label for="show-one-times" class="checkbox-field-label">
+  <div class="switch-field">
+    <ToggleSwitch v-model="showOneTimes" input-id="show-one-times" />
+    <label for="show-one-times" class="switch-field-label">
       Показывать одно количество
     </label>
   </div>
 
-  <div class="checkbox-field">
-    <Checkbox v-model="overTimes" input-id="over-times" size="small" binary />
-    <label for="over-times" class="checkbox-field-label">
+  <div class="switch-field">
+    <ToggleSwitch v-model="overTimes" input-id="over-times" />
+    <label for="over-times" class="switch-field-label">
       Добавлять сверх количество
     </label>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.checkbox-field {
+.switch-field {
   display: flex;
-  gap: 5px;
+  gap: 10px;
   align-items: center;
+  font-weight: 600;
 }
 
-.checkbox-field-label {
+.switch-field-label {
   cursor: pointer;
   user-select: none;
 }

@@ -14,23 +14,23 @@ import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
 import {
-  DEFAULT_CHECKBOX_SETTINGS_FIELDS,
+  DEFAULT_SWITCH_SETTINGS_FIELDS,
   DEFAULT_GOALS_FORM_FIELDS,
 } from '../consts/goalsFormFields';
 import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
 import { createGoalsResolver } from '../schemas/createGoalsResolver';
-import CheckboxSettings from '../ui/CheckboxSettings.vue';
 import CommonGoalFields from '../ui/CommonGoalsFields.vue';
 import DayDateFields from '../ui/DayDateFields.vue';
 import ExtraSettings from '../ui/ExtraSettings.vue';
 import MonthDateFields from '../ui/MonthDateFields.vue';
+import SwitchSettings from '../ui/SwitchSettings.vue';
 import TimesFields from '../ui/TimesFields.vue';
 import YearDateFields from '../ui/YearDateFields.vue';
 
 import type {
-  CheckboxSettingsFields,
+  SwitchSettingsFields,
   CreateGoalsFormFields,
 } from '../interfaces/createGoalsFormFields';
 import type { PeriodFilterValue } from '../types/periodOptions';
@@ -40,8 +40,8 @@ const createGoalsForm = reactive<CreateGoalsFormFields>({
   ...DEFAULT_GOALS_FORM_FIELDS,
 });
 
-const checkboxSettingsFields = reactive<CheckboxSettingsFields>({
-  ...DEFAULT_CHECKBOX_SETTINGS_FIELDS,
+const switchSettingsFields = reactive<SwitchSettingsFields>({
+  ...DEFAULT_SWITCH_SETTINGS_FIELDS,
 });
 
 const isDialogVisible = ref<boolean>(false);
@@ -55,15 +55,15 @@ const selectedDayChooseFilter = ref<number[]>([]);
 
 const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
   createGoalsForm,
-  checkboxSettingsFields
+  switchSettingsFields
 );
 
 useWatchFormRefs(createGoalsFormRef);
 
 const resetCreateGoalsForm = () => {
   Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
-  Object.assign(checkboxSettingsFields, {
-    ...DEFAULT_CHECKBOX_SETTINGS_FIELDS,
+  Object.assign(switchSettingsFields, {
+    ...DEFAULT_SWITCH_SETTINGS_FIELDS,
   });
 };
 
@@ -248,9 +248,9 @@ const handleCreateGoals = async () => {
                 />
               </template>
 
-              <CheckboxSettings
-                v-model:show-one-times="checkboxSettingsFields.showOneTimes"
-                v-model:over-times="checkboxSettingsFields.overTimes"
+              <SwitchSettings
+                v-model:show-one-times="switchSettingsFields.showOneTimes"
+                v-model:over-times="switchSettingsFields.overTimes"
               />
             </div>
           </AccordionContent>

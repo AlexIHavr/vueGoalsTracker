@@ -7,7 +7,7 @@ import {
 } from 'shared/consts';
 
 import type {
-  CheckboxSettingsFields,
+  SwitchSettingsFields,
   CreateGoalsFormFields,
 } from '../interfaces/createGoalsFormFields';
 
@@ -33,7 +33,7 @@ export const DEFAULT_GOALS_FORM_FIELDS = {
   endTime: MAX_TIME,
 } as const satisfies CreateGoalsFormFields;
 
-export const DEFAULT_CHECKBOX_SETTINGS_FIELDS = {
+export const DEFAULT_SWITCH_SETTINGS_FIELDS = {
   showOneTimes: false,
   overTimes: false,
-} as const satisfies CheckboxSettingsFields;
+} as const satisfies SwitchSettingsFields;

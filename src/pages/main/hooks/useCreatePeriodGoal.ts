@@ -6,7 +6,7 @@ import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 import { DAYS_NUMBERS_IN_MONTHS, MONTH_INDEXES } from '../consts/periodOptions';
 
 import type {
-  CheckboxSettingsFields,
+  SwitchSettingsFields,
   CreateGoalsFormFields,
 } from '../interfaces/createGoalsFormFields';
 import type { PeriodTypeValue } from 'shared/types';
@@ -19,7 +19,7 @@ interface CreateDayGoalParams {
 
 export function useCreatePeriodGoal(
   createGoalsForm: CreateGoalsFormFields,
-  checkboxSettingsFields: CheckboxSettingsFields
+  switchSettingsFields: SwitchSettingsFields
 ) {
   const { createGoal } = useGoals();
 
@@ -49,8 +49,8 @@ export function useCreatePeriodGoal(
       timesStep,
       timesCurrent: timesStart,
       isCompleted: false,
-      isShowOneTimes: checkboxSettingsFields.showOneTimes,
-      isOverTimes: checkboxSettingsFields.overTimes,
+      isShowOneTimes: switchSettingsFields.showOneTimes,
+      isOverTimes: switchSettingsFields.overTimes,
       periodType,
     });
   };
