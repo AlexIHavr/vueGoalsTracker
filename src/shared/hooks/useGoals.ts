@@ -70,7 +70,7 @@ export function useGoals() {
   };
 
   const getGoal = (id: string) => {
-    return useDocument(doc(db, COLLECTIONS_NAMES.GOALS, id), {
+    return useDocument<GoalDocument>(doc(db, COLLECTIONS_NAMES.GOALS, id), {
       ssrKey: `goal-${id}`,
     });
   };

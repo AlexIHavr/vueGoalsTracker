@@ -4,8 +4,9 @@ import Card from 'primevue/card';
 import Message from 'primevue/message';
 import Tag from 'primevue/tag';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
-import { MAX_TIMES } from 'shared/consts';
+import { MAX_TIMES, ROUTES_PATHS } from 'shared/consts';
 import { useGoals, useGoalsInYear } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 
@@ -18,6 +19,8 @@ import { getGoalStatusAttrs } from './utils/getGoalStatusAttrs';
 import { getGoalTimes } from './utils/getGoalTimes';
 
 import type { GoalDocument } from 'shared/interfaces';
+
+const router = useRouter();
 
 const { goal } = defineProps<{
   goal: GoalDocument;
@@ -74,6 +77,10 @@ const handleUpdateTimes = () => {
     isCompleted: newTimes >= goal.timesEnd,
     timesCurrent: newTimes > timesLimit ? goal.timesEnd : newTimes,
   });
+};
+
+const goToEditGoal = () => {
+  router.push(`${ROUTES_PATHS.EDIT_GOAL.path}/${goal.id}`);
 };
 </script>
 
@@ -137,6 +144,13 @@ const handleUpdateTimes = () => {
             :label="goalAttrs.completeButtonLabel"
             :severity="goalAttrs.buttonSeverity"
             @click="handleUpdateTimes()"
+          />
+
+          <Button
+            icon="pi pi-pencil"
+            severity="info"
+            raised
+            @click="goToEditGoal"
           />
 
           <Button
