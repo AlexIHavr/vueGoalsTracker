@@ -46,7 +46,7 @@ const handleToggleTheme = () => {
 </script>
 
 <template>
-  <header class="main-header">
+  <header class="app-header">
     <Button
       label="Выйти"
       icon="pi pi-sign-out"
@@ -71,9 +71,10 @@ const handleToggleTheme = () => {
 </template>
 
 <style lang="scss" scoped>
-.main-header {
+.app-header {
   display: flex;
   gap: 10px;
+  margin-bottom: 30px;
 }
 
 .welcome-message {

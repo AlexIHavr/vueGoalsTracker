@@ -23,6 +23,10 @@ export const router = createRouter({
       component: EditGoalPage,
       meta: { requiresAuth: true },
     },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: ROUTES_PATHS.MAIN,
+    },
   ],
 });
 

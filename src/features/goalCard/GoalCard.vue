@@ -4,7 +4,7 @@ import Card from 'primevue/card';
 import Message from 'primevue/message';
 import Tag from 'primevue/tag';
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { MAX_TIMES, ROUTES_PATHS } from 'shared/consts';
 import { useGoals, useGoalsInYear } from 'shared/hooks';
@@ -21,6 +21,7 @@ import { getGoalTimes } from './utils/getGoalTimes';
 import type { GoalDocument } from 'shared/interfaces';
 
 const router = useRouter();
+const route = useRoute();
 
 const { goal } = defineProps<{
   goal: GoalDocument;
@@ -95,6 +96,14 @@ const goToEditGoal = () => {
         :severity="goalAttrs.buttonSeverity"
       />
 
+      <Tag
+        v-if="!route.path.includes(ROUTES_PATHS.EDIT_GOAL.path)"
+        icon="pi pi-pencil"
+        class="edit-goal-button"
+        :severity="goalAttrs.buttonSeverity"
+        @click="goToEditGoal"
+      />
+
       <div class="title-wrapper">
         <h4 class="goal-title">{{ goal.title }}</h4>
 
@@ -147,13 +156,6 @@ const goToEditGoal = () => {
           />
 
           <Button
-            icon="pi pi-pencil"
-            severity="info"
-            raised
-            @click="goToEditGoal"
-          />
-
-          <Button
             icon="pi pi-trash"
             severity="danger"
             raised
@@ -166,16 +168,15 @@ const goToEditGoal = () => {
 </template>
 
 <style lang="scss" scoped>
-$goal-card-width: 320px;
-$goal-card-height: 350px;
-$goal-max-width: calc($goal-card-width - 2 * var(--p-card-body-padding));
+$goal-card-size: 320px;
+$goal-max-width: calc($goal-card-size - 2 * var(--p-card-body-padding));
 
 .goal-card {
   position: relative;
-  width: $goal-card-width;
-  min-width: $goal-card-width;
-  height: $goal-card-height;
-  min-height: $goal-card-height;
+  width: $goal-card-size;
+  min-width: $goal-card-size;
+  height: $goal-card-size;
+  min-height: $goal-card-size;
   padding-top: 10px;
   transition: var(--p-button-transition-duration);
 }
@@ -218,16 +219,31 @@ $goal-max-width: calc($goal-card-width - 2 * var(--p-card-body-padding));
 
 .goal-title {
   max-width: calc($goal-max-width - var(--p-button-sm-icon-only-width) - 10px);
+  max-height: 30px;
+  overflow: hidden auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 
 .goal-description {
   max-width: $goal-max-width;
-  max-height: 130px;
+  max-height: 100px;
   overflow: auto;
   white-space: pre-line;
 
   &::-webkit-scrollbar {
     width: 0;
   }
+}
+
+.edit-goal-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 25px;
+  cursor: pointer;
+  border-radius: 0 var(--p-card-border-radius);
 }
 </style>
