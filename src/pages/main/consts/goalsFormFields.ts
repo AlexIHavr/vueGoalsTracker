@@ -6,7 +6,10 @@ import {
   MONTHS_IN_YEAR,
 } from 'shared/consts';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type {
+  CheckboxSettingsFields,
+  CreateGoalsFormFields,
+} from '../interfaces/createGoalsFormFields';
 
 export const MIN_START_DATE = new Date(CURRENT_YEAR, 0);
 export const MAX_START_DATE = new Date(CURRENT_YEAR, MONTHS_IN_YEAR, 0);
@@ -29,3 +32,8 @@ export const DEFAULT_GOALS_FORM_FIELDS = {
   startTime: MIN_TIME,
   endTime: MAX_TIME,
 } as const satisfies CreateGoalsFormFields;
+
+export const DEFAULT_CHECKBOX_SETTINGS_FIELDS = {
+  showOneTimes: false,
+  overTimes: false,
+} as const satisfies CheckboxSettingsFields;

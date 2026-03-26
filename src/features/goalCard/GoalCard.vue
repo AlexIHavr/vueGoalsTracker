@@ -5,11 +5,15 @@ import Message from 'primevue/message';
 import Tag from 'primevue/tag';
 import { computed } from 'vue';
 
+import { MAX_TIMES } from 'shared/consts';
 import { useGoals, useGoalsInYear } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 
 import { getGoalDates } from './utils/getGoalDates';
-import { getGoalStatus } from './utils/getGoalStatus';
+import {
+  getGoalStatus,
+  getGoalStatusExceptCompleted,
+} from './utils/getGoalStatus';
 import { getGoalStatusAttrs } from './utils/getGoalStatusAttrs';
 import { getGoalTimes } from './utils/getGoalTimes';
 
@@ -53,17 +57,22 @@ const handleRemoveGoal = async () => {
 };
 
 const handleUpdateTimes = () => {
-  if (goalStatus.value !== 'in-progress') {
+  const isOverUpdateTimes =
+    goal.isOverTimes &&
+    getGoalStatusExceptCompleted(goal) === 'in-progress' &&
+    goal.timesCurrent < MAX_TIMES;
+
+  if (goalStatus.value !== 'in-progress' && !isOverUpdateTimes) {
     handleCompleteGoal();
     return;
   }
 
   const newTimes = goal.timesCurrent + goal.timesStep;
-  const newTimesCurrent = newTimes > goal.timesEnd ? goal.timesEnd : newTimes;
+  const timesLimit = goal.isOverTimes ? MAX_TIMES : goal.timesEnd;
 
   updateGoal(goal.id, {
     isCompleted: newTimes >= goal.timesEnd,
-    timesCurrent: newTimesCurrent,
+    timesCurrent: newTimes > timesLimit ? goal.timesEnd : newTimes,
   });
 };
 </script>

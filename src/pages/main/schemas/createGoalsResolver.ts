@@ -1,7 +1,7 @@
 import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { date, number, object, ObjectSchema, ref, string } from 'yup';
 
-import { MAX_DAYS_IN_MONTH } from 'shared/consts';
+import { MAX_DAYS_IN_MONTH, MAX_TIMES } from 'shared/consts';
 import { TIME_24_REGEX } from 'shared/consts';
 import { getLocaleNumberString } from 'shared/utils';
 
@@ -16,7 +16,6 @@ const MAX_TITLE_LENGTH = 50;
 const MAX_DESCRIPTION_LENGTH = 500;
 const MAX_CATEGORY_LENGTH = 30;
 
-const MAX_TIMES = 1_000_000;
 const MAX_TIMES_SUFFIX_LENGTH = 5;
 
 const MIN_DAY = 1;

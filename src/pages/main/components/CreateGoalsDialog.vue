@@ -13,7 +13,10 @@ import { CURRENT_YEAR } from 'shared/consts';
 import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
+import {
+  DEFAULT_CHECKBOX_SETTINGS_FIELDS,
+  DEFAULT_GOALS_FORM_FIELDS,
+} from '../consts/goalsFormFields';
 import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
@@ -26,12 +29,19 @@ import MonthDateFields from '../ui/MonthDateFields.vue';
 import TimesFields from '../ui/TimesFields.vue';
 import YearDateFields from '../ui/YearDateFields.vue';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type {
+  CheckboxSettingsFields,
+  CreateGoalsFormFields,
+} from '../interfaces/createGoalsFormFields';
 import type { PeriodFilterValue } from '../types/periodOptions';
 import type { PeriodTypeValue } from 'shared/types';
 
 const createGoalsForm = reactive<CreateGoalsFormFields>({
   ...DEFAULT_GOALS_FORM_FIELDS,
+});
+
+const checkboxSettingsFields = reactive<CheckboxSettingsFields>({
+  ...DEFAULT_CHECKBOX_SETTINGS_FIELDS,
 });
 
 const isDialogVisible = ref<boolean>(false);
@@ -43,17 +53,18 @@ const selectedPeriodFilter = ref<PeriodFilterValue>('all');
 const selectedMonthChooseFilter = ref<number[]>([]);
 const selectedDayChooseFilter = ref<number[]>([]);
 
-const showOneTimes = ref<boolean>(false);
-
 const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
   createGoalsForm,
-  showOneTimes
+  checkboxSettingsFields
 );
 
 useWatchFormRefs(createGoalsFormRef);
 
 const resetCreateGoalsForm = () => {
   Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
+  Object.assign(checkboxSettingsFields, {
+    ...DEFAULT_CHECKBOX_SETTINGS_FIELDS,
+  });
 };
 
 watch(selectedPeriod, () => {
@@ -95,8 +106,6 @@ const resetDialog = () => {
   selectedPeriodFilter.value = 'all';
   selectedMonthChooseFilter.value = [];
   selectedDayChooseFilter.value = [];
-
-  showOneTimes.value = false;
 
   isDialogVisible.value = false;
 };
@@ -239,7 +248,10 @@ const handleCreateGoals = async () => {
                 />
               </template>
 
-              <CheckboxSettings v-model:show-one-times="showOneTimes" />
+              <CheckboxSettings
+                v-model:show-one-times="checkboxSettingsFields.showOneTimes"
+                v-model:over-times="checkboxSettingsFields.overTimes"
+              />
             </div>
           </AccordionContent>
         </AccordionPanel>

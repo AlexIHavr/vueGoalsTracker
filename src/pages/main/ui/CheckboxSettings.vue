@@ -4,31 +4,41 @@ import Checkbox from 'primevue/checkbox';
 const showOneTimes = defineModel<boolean>('showOneTimes', {
   required: true,
 });
+
+const overTimes = defineModel<boolean>('overTimes', {
+  required: true,
+});
 </script>
 
 <template>
-  <div class="show-one-times-field">
+  <div class="checkbox-field">
     <Checkbox
       v-model="showOneTimes"
       input-id="show-one-times"
-      value="Cheese"
       size="small"
       binary
     />
-    <label for="show-one-times" class="show-one-times-label">
+    <label for="show-one-times" class="checkbox-field-label">
       Показывать одно количество
+    </label>
+  </div>
+
+  <div class="checkbox-field">
+    <Checkbox v-model="overTimes" input-id="over-times" size="small" binary />
+    <label for="over-times" class="checkbox-field-label">
+      Добавлять сверх количество
     </label>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.show-one-times-field {
+.checkbox-field {
   display: flex;
   gap: 5px;
   align-items: center;
 }
 
-.show-one-times-label {
+.checkbox-field-label {
   cursor: pointer;
   user-select: none;
 }
