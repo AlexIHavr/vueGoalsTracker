@@ -91,11 +91,23 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
   startDate: date()
     .typeError('Некорректный формат даты')
     .required('Начало действия обязательно')
-    .max(ref('endDate'), 'Начало действия должно быть меньше конца действия'),
+    .test(
+      'is-less-than-endDate',
+      'Начало действия должно быть меньше конца действия',
+      function (value) {
+        return value < this.parent.endDate;
+      }
+    ),
   endDate: date()
     .typeError('Некорректный формат даты')
     .required('Конец действия обязателен')
-    .min(ref('startDate'), 'Конец действия должен быть больше начала действия'),
+    .test(
+      'is-more-than-startDate',
+      'Конец действия должен быть больше начала действия',
+      function (value) {
+        return value > this.parent.startDate;
+      }
+    ),
   startDay: getNumberScheme({
     field: 'startDay',
     name: 'День начала',
