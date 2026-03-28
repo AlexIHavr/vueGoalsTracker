@@ -18,6 +18,6 @@ export interface GoalFormFields extends GoalFormNumberFields {
 }
 
 export interface SwitchSettingsFields {
-  showOneTimes: boolean;
-  overTimes: boolean;
+  isShowOneTimes: boolean;
+  isOverTimes: boolean;
 }

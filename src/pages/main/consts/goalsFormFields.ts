@@ -28,6 +28,6 @@ export const DEFAULT_GOALS_FORM_FIELDS = {
 } as const satisfies GoalFormFields;
 
 export const DEFAULT_SWITCH_SETTINGS_FIELDS = {
-  showOneTimes: false,
-  overTimes: false,
+  isShowOneTimes: false,
+  isOverTimes: false,
 } as const satisfies SwitchSettingsFields;

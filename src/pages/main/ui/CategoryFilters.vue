@@ -8,7 +8,7 @@ import { appLocalStorage, getUniqueArr } from 'shared/utils';
 
 const goalsInYear = useGoalsInYear();
 
-const uniqueGoalCategories = computed(() =>
+const uniqueGoalCategories = computed<string[]>(() =>
   getUniqueArr(goalsInYear.value.map(({ category }) => category))
 );
 

@@ -1,12 +1,25 @@
-import { watch, watchEffect, type Ref } from 'vue';
+import { computed, watch, watchEffect, type Ref } from 'vue';
 
 import type { GoalFormFields } from '../interfaces/goalFormFields';
+import type { FormFieldState } from '@primevue/forms/form';
 import type { BaseFormExpose } from 'features/baseForm';
 
 export function useWatchFormRefs(
   createGoalsFormRef: Ref<BaseFormExpose | null>,
   initialFields: GoalFormFields
 ) {
+  const formStates = computed<
+    Record<keyof GoalFormFields, FormFieldState> | undefined
+  >(() => createGoalsFormRef.value?.formRef?.states);
+
+  const validateFormState = (field: keyof GoalFormFields) => {
+    const formRefValue = createGoalsFormRef.value?.formRef;
+
+    if (formStates.value?.[field]?.invalid) {
+      formRefValue?.validate(field);
+    }
+  };
+
   watchEffect(() => {
     createGoalsFormRef.value?.formRef?.setValues({
       timesStart: initialFields.timesStart,
@@ -18,90 +31,58 @@ export function useWatchFormRefs(
   });
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.timesStart?.value,
+    () => formStates.value?.timesStart?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.timesEnd?.invalid) {
-        formRefValue?.validate('timesEnd');
-      }
+      validateFormState('timesEnd');
     }
   );
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.timesEnd?.value,
+    () => formStates.value?.timesEnd?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.timesStart?.invalid) {
-        formRefValue?.validate('timesStart');
-      }
+      validateFormState('timesStart');
     }
   );
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.startDate?.value,
+    () => formStates.value?.startDate?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.endDate?.invalid) {
-        formRefValue?.validate('endDate');
-      }
+      validateFormState('endDate');
     }
   );
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.endDate?.value,
+    () => formStates.value?.endDate?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.startDate?.invalid) {
-        formRefValue?.validate('startDate');
-      }
+      validateFormState('startDate');
     }
   );
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.startDay?.value,
+    () => formStates.value?.startDay?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.endDay?.invalid) {
-        formRefValue?.validate('endDay');
-      }
+      validateFormState('endDay');
     }
   );
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.endDay?.value,
+    () => formStates.value?.endDay?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.startDay?.invalid) {
-        formRefValue?.validate('startDay');
-      }
+      validateFormState('startDay');
     }
   );
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.startTime?.value,
+    () => formStates.value?.startTime?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.endTime?.invalid) {
-        formRefValue?.validate('endTime');
-      }
+      validateFormState('endTime');
     }
   );
 
   watch(
-    () => createGoalsFormRef.value?.formRef?.states.endTime?.value,
+    () => formStates.value?.endTime?.value,
     () => {
-      const formRefValue = createGoalsFormRef.value?.formRef;
-
-      if (formRefValue?.states.startTime?.invalid) {
-        formRefValue?.validate('startTime');
-      }
+      validateFormState('startTime');
     }
   );
 }

@@ -5,5 +5,5 @@ export interface GoalFormExpose {
   readonly goalFormRef: BaseFormExpose | null;
   goalFormFields: GoalFormFields;
   switchSettingsFields: SwitchSettingsFields;
-  readonly resetCreateGoalsForm: () => void;
+  readonly resetGoalForm: () => void;
 }

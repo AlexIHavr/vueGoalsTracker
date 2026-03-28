@@ -18,7 +18,9 @@ import {
 import { getGoalStatusAttrs } from './utils/getGoalStatusAttrs';
 import { getGoalTimes } from './utils/getGoalTimes';
 
+import type { GoalStatusAttr } from './interfaces/goalStatusAttr';
 import type { GoalDocument } from 'shared/interfaces';
+import type { GoalStatus } from 'shared/types';
 
 const router = useRouter();
 const route = useRoute();
@@ -31,13 +33,15 @@ const { updateGoal, removeGoal } = useGoals();
 
 const goalsInYear = useGoalsInYear();
 
-const goalStatus = computed(() => getGoalStatus(goal));
+const goalStatus = computed<GoalStatus>(() => getGoalStatus(goal));
 
-const goalTimes = computed(() => getGoalTimes(goal));
+const goalTimes = computed<string>(() => getGoalTimes(goal));
 
-const goalDates = computed(() => getGoalDates(goalStatus.value, goal));
+const goalDates = computed<string>(() => getGoalDates(goalStatus.value, goal));
 
-const goalAttrs = computed(() => getGoalStatusAttrs(goalStatus.value));
+const goalAttrs = computed<GoalStatusAttr>(() =>
+  getGoalStatusAttrs(goalStatus.value)
+);
 
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {

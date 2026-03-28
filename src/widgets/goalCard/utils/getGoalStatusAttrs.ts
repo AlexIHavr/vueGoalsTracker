@@ -1,13 +1,5 @@
-import type { ButtonProps } from 'primevue/button';
-import type { MessageProps } from 'primevue/message';
+import type { GoalStatusAttr } from '../interfaces/goalStatusAttr';
 import type { GoalStatus } from 'shared/types';
-
-interface GoalStatusAttr {
-  statusIcon: string;
-  completeButtonLabel: string;
-  buttonSeverity: ButtonProps['severity'];
-  messageSeverity: MessageProps['severity'];
-}
 
 export function getGoalStatusAttrs(status: GoalStatus) {
   const goalAttrs: GoalStatusAttr = {

@@ -10,6 +10,7 @@ import {
   GoalForm,
   type GoalFormExpose,
   type GoalFormFields,
+  type SwitchSettingsFields,
 } from 'widgets/goalForm';
 
 import {
@@ -21,6 +22,7 @@ import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import ExtraSettings from '../ui/ExtraSettings.vue';
 
 import type { PeriodFilterValue } from '../types/periodOptions';
+import type { BaseFormExpose } from 'features/baseForm';
 import type { PeriodTypeValue } from 'shared/types';
 
 const isDialogVisible = ref<boolean>(false);
@@ -32,13 +34,17 @@ const selectedPeriodFilter = ref<PeriodFilterValue>('all');
 const selectedMonthChooseFilter = ref<number[]>([]);
 const selectedDayChooseFilter = ref<number[]>([]);
 
-const goalFormFields = computed(() => createGoalsFormRef.value?.goalFormFields);
+const goalFormFields = computed<GoalFormFields | undefined>(
+  () => createGoalsFormRef.value?.goalFormFields
+);
 
-const switchSettingsFields = computed(
+const switchSettingsFields = computed<SwitchSettingsFields | undefined>(
   () => createGoalsFormRef.value?.switchSettingsFields
 );
 
-const goalFormRef = computed(() => createGoalsFormRef.value?.goalFormRef);
+const goalFormRef = computed<BaseFormExpose | null | undefined>(
+  () => createGoalsFormRef.value?.goalFormRef
+);
 
 const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
   goalFormFields,
@@ -54,17 +60,17 @@ watch(selectedPeriod, () => {
 
   goalFormRef?.value?.formRef?.reset();
 
-  createGoalsFormRef.value?.resetCreateGoalsForm();
+  createGoalsFormRef.value?.resetGoalForm();
 
-  if (goalFormFields.value?.title && title) {
+  if (title) {
     goalFormFields.value.title = title;
   }
 
-  if (goalFormFields.value?.description && description) {
+  if (description) {
     goalFormFields.value.description = description;
   }
 
-  if (goalFormFields.value?.category && category) {
+  if (category) {
     goalFormFields.value.category = category;
   }
 
@@ -88,7 +94,7 @@ const handleShowDialog = () => {
 };
 
 const resetDialog = () => {
-  createGoalsFormRef.value?.resetCreateGoalsForm();
+  createGoalsFormRef.value?.resetGoalForm();
 
   selectedPeriod.value = 'year';
   selectedPeriodFilter.value = 'all';
@@ -181,6 +187,8 @@ const handleCreateGoals = async () => {
 
     <GoalForm
       ref="createGoalsFormRef"
+      submit-button-icon="pi-plus"
+      submit-button-label="Создать"
       :selected-period="selectedPeriod"
       :initial-fields="DEFAULT_GOALS_FORM_FIELDS"
       :initial-switch-settings="DEFAULT_SWITCH_SETTINGS_FIELDS"

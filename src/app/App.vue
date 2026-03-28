@@ -22,7 +22,7 @@ if (isDarkTheme) {
 </script>
 
 <template>
-  <Toast position="top-center" />
+  <Toast position="top-right" />
 
   <AppHeader v-if="isAuthPage === false" />
 

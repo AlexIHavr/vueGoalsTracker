@@ -51,8 +51,8 @@ export function useCreatePeriodGoal(
       timesStep,
       timesCurrent: timesStart,
       isCompleted: false,
-      isShowOneTimes: switchSettingsFields.value.showOneTimes,
-      isOverTimes: switchSettingsFields.value.overTimes,
+      isShowOneTimes: switchSettingsFields.value.isShowOneTimes,
+      isOverTimes: switchSettingsFields.value.isOverTimes,
       periodType,
     });
   };

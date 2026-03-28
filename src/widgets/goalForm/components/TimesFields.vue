@@ -51,7 +51,7 @@ const timesStep = defineModel<GoalFormFields['timesStep'] | null>('timesStep', {
       fluid
       show-clear
       :suffix="timesSuffix"
-      :min="initialFields?.timesStart"
+      :min="0"
     />
     <label for="goals-timesStart">Начальное количество*</label>
   </BaseFormField>
@@ -64,7 +64,7 @@ const timesStep = defineModel<GoalFormFields['timesStep'] | null>('timesStep', {
       fluid
       show-clear
       :suffix="timesSuffix"
-      :min="initialFields?.timesEnd"
+      :min="0"
     />
     <label for="goals-timesEnd">Количество*</label>
   </BaseFormField>
@@ -77,7 +77,7 @@ const timesStep = defineModel<GoalFormFields['timesStep'] | null>('timesStep', {
       fluid
       show-clear
       :suffix="timesSuffix"
-      :min="initialFields?.timesStep"
+      :min="0"
     />
     <label for="goals-timesStep">Шаг*</label>
   </BaseFormField>

@@ -31,10 +31,18 @@ import type {
 } from './interfaces/goalFormFields';
 import type { PeriodTypeValue } from 'shared/types';
 
-const { initialFields, initialSwitchSettings } = defineProps<{
+const {
+  initialFields,
+  initialSwitchSettings,
+  selectedPeriod,
+  submitButtonLabel,
+  submitButtonIcon = '',
+} = defineProps<{
   selectedPeriod: PeriodTypeValue;
   initialFields: GoalFormFields;
   initialSwitchSettings: SwitchSettingsFields;
+  submitButtonLabel: string;
+  submitButtonIcon?: string;
   formSubmit: (event: BaseFormEvent) => Promise<void>;
 }>();
 
@@ -50,7 +58,7 @@ const goalFormRef = ref<BaseFormExpose | null>(null);
 
 useWatchFormRefs(goalFormRef, initialFields);
 
-const resetCreateGoalsForm = () => {
+const resetGoalForm = () => {
   Object.assign(goalFormFields, { ...initialFields });
   Object.assign(switchSettingsFields, { ...initialSwitchSettings });
 };
@@ -62,16 +70,16 @@ defineExpose({
   goalFormRef,
   goalFormFields,
   switchSettingsFields,
-  resetCreateGoalsForm,
+  resetGoalForm,
 });
 </script>
 
 <template>
   <BaseForm
     ref="goalFormRef"
-    submit-button-label="Создать"
-    submit-button-icon="pi-plus"
     class="goal-form"
+    :submit-button-label="submitButtonLabel"
+    :submit-button-icon="submitButtonIcon"
     :resolver="goalResolver"
     :form-submit="formSubmit"
   >
@@ -119,8 +127,8 @@ defineExpose({
             </template>
 
             <SwitchSettings
-              v-model:show-one-times="switchSettingsFields.showOneTimes"
-              v-model:over-times="switchSettingsFields.overTimes"
+              v-model:show-one-times="switchSettingsFields.isShowOneTimes"
+              v-model:over-times="switchSettingsFields.isOverTimes"
             />
           </div>
         </AccordionContent>

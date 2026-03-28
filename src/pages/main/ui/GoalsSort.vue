@@ -9,7 +9,7 @@ import { appLocalStorage } from 'shared/utils';
 
 import { SORT_TYPES_OPTIONS } from '../consts/goalsSort';
 
-const selectedSortOrderIcon = computed(() =>
+const selectedSortOrderIcon = computed<string>(() =>
   selectedSortOrder.value === 'asc'
     ? 'pi pi-sort-amount-down-alt'
     : 'pi pi-sort-amount-up-alt'

@@ -2,7 +2,7 @@
 import Button from 'primevue/button';
 import OverlayBadge from 'primevue/overlaybadge';
 import Popover from 'primevue/popover';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, type ClassValue } from 'vue';
 
 import {
   selectedCategoryFilters,
@@ -15,7 +15,7 @@ import CategoryFilters from '../ui/CategoryFilters.vue';
 import DatesRangeFilters from '../ui/DatesRangeFilters.vue';
 import StatusFilters from '../ui/StatusFilters.vue';
 
-const goalsFiltersCount = computed(
+const goalsFiltersCount = computed<number>(
   () =>
     selectedStatusFilters.value.length +
     selectedCategoryFilters.value.length +
@@ -25,7 +25,7 @@ const goalsFiltersCount = computed(
 const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
 const isVisiblePopover = ref<boolean>(false);
 
-const filterButtonClasses = computed(() => [
+const filterButtonClasses = computed<ClassValue>(() => [
   'toggle-popover-button',
   { active: isVisiblePopover.value },
 ]);

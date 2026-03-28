@@ -26,11 +26,11 @@ export function useVisibleGoals(
     { rootMargin: '0px 0px 300px 0px' }
   );
 
-  const visibleGoals = computed(() => {
+  const visibleGoals = computed<GoalDocument[]>(() => {
     return sortedGoalsInYear.value.slice(0, visibleCount.value);
   });
 
-  const hasMore = computed(() => {
+  const hasMore = computed<boolean>(() => {
     return visibleCount.value < sortedGoalsInYear.value.length;
   });
 

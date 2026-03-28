@@ -11,6 +11,8 @@ import GoalsStatistics from '../ui/GoalsStatistics.vue';
 import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
 import { getSortedGoals } from '../utils/getSortedGoals';
 
+import type { GoalDocument } from 'shared/interfaces';
+
 const {
   data: { pending },
 } = useGoals();
@@ -19,11 +21,11 @@ const observerTriggerRef = ref<HTMLDivElement | null>(null);
 
 const goalsInYear = useGoalsInYear();
 
-const filteredGoalsInYear = computed(() =>
+const filteredGoalsInYear = computed<GoalDocument[]>(() =>
   getFilteredGoalsInYear(goalsInYear.value)
 );
 
-const sortedGoalsInYear = computed(() =>
+const sortedGoalsInYear = computed<GoalDocument[]>(() =>
   getSortedGoals(filteredGoalsInYear.value)
 );
 

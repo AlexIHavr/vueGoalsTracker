@@ -20,7 +20,7 @@ const overTimes = defineModel<boolean>('overTimes', {
     <ToggleSwitch
       v-model="showOneTimes"
       input-id="show-one-times"
-      :default-value="initialSwitchSettings?.showOneTimes"
+      :default-value="initialSwitchSettings?.isShowOneTimes"
     />
     <label for="show-one-times" class="switch-field-label">
       Показывать одно количество
@@ -31,7 +31,7 @@ const overTimes = defineModel<boolean>('overTimes', {
     <ToggleSwitch
       v-model="overTimes"
       input-id="over-times"
-      :default-value="initialSwitchSettings?.overTimes"
+      :default-value="initialSwitchSettings?.isOverTimes"
     />
     <label for="over-times" class="switch-field-label">
       Добавлять сверх количество

@@ -30,7 +30,7 @@ const category = defineModel<GoalFormFields['category']>('category', {
 
 const { data } = useGoals();
 
-const uniqueGoalCategories = computed(() =>
+const uniqueGoalCategories = computed<string[]>(() =>
   getUniqueArr(data.value.map(({ category }) => category)).filter(Boolean)
 );
 
