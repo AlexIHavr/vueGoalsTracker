@@ -1,32 +1,32 @@
 <script setup lang="ts">
 import DatePicker from 'primevue/datepicker';
+import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
-
-import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
 import {
-  DEFAULT_GOALS_FORM_FIELDS,
+  DATE_FIELD_FORMAT,
   MAX_START_DATE,
   MIN_START_DATE,
-} from '../consts/goalsFormFields';
+} from 'shared/consts';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 
-const startDate = defineModel<CreateGoalsFormFields['startDate']>('startDate', {
+import type { GoalFormFields } from '../interfaces/goalFormFields';
+
+const initialFields = inject(INITIAL_FIELDS_INJECT_KEY);
+
+const startDate = defineModel<GoalFormFields['startDate']>('startDate', {
   required: true,
 });
 
-const endDate = defineModel<CreateGoalsFormFields['endDate']>('endDate', {
+const endDate = defineModel<GoalFormFields['endDate']>('endDate', {
   required: true,
 });
 </script>
 
 <template>
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField
-    name="startDate"
-    :initial-value="DEFAULT_GOALS_FORM_FIELDS.startDate"
-  >
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="startDate" :initial-value="initialFields?.startDate">
     <DatePicker
       v-model="startDate"
       input-id="goals-startDate"
@@ -42,11 +42,8 @@ const endDate = defineModel<CreateGoalsFormFields['endDate']>('endDate', {
     <label for="goals-startDate">Начало действия*</label>
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField
-    name="endDate"
-    :initial-value="DEFAULT_GOALS_FORM_FIELDS.endDate"
-  >
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="endDate" :initial-value="initialFields?.endDate">
     <DatePicker
       v-model="endDate"
       input-id="goals-endDate"

@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import Accordion from 'primevue/accordion';
-import AccordionContent from 'primevue/accordioncontent';
-import AccordionHeader from 'primevue/accordionheader';
-import AccordionPanel from 'primevue/accordionpanel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import Divider from 'primevue/divider';
-import { reactive, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { BaseForm, type BaseFormExpose } from 'features/baseForm';
 import { CURRENT_YEAR } from 'shared/consts';
 import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
+import {
+  GoalForm,
+  type GoalFormExpose,
+  type GoalFormFields,
+} from 'widgets/goalForm';
 
 import {
   DEFAULT_SWITCH_SETTINGS_FIELDS,
@@ -19,72 +18,61 @@ import {
 } from '../consts/goalsFormFields';
 import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
-import { useWatchFormRefs } from '../hooks/useWatchFormRefs';
-import { createGoalsResolver } from '../schemas/createGoalsResolver';
-import CommonGoalFields from '../ui/CommonGoalsFields.vue';
-import DayDateFields from '../ui/DayDateFields.vue';
 import ExtraSettings from '../ui/ExtraSettings.vue';
-import MonthDateFields from '../ui/MonthDateFields.vue';
-import SwitchSettings from '../ui/SwitchSettings.vue';
-import TimesFields from '../ui/TimesFields.vue';
-import YearDateFields from '../ui/YearDateFields.vue';
 
-import type {
-  SwitchSettingsFields,
-  CreateGoalsFormFields,
-} from '../interfaces/createGoalsFormFields';
 import type { PeriodFilterValue } from '../types/periodOptions';
 import type { PeriodTypeValue } from 'shared/types';
 
-const createGoalsForm = reactive<CreateGoalsFormFields>({
-  ...DEFAULT_GOALS_FORM_FIELDS,
-});
-
-const switchSettingsFields = reactive<SwitchSettingsFields>({
-  ...DEFAULT_SWITCH_SETTINGS_FIELDS,
-});
-
 const isDialogVisible = ref<boolean>(false);
 
-const createGoalsFormRef = ref<BaseFormExpose>();
+const createGoalsFormRef = ref<GoalFormExpose | null>(null);
 
 const selectedPeriod = ref<PeriodTypeValue>('year');
 const selectedPeriodFilter = ref<PeriodFilterValue>('all');
 const selectedMonthChooseFilter = ref<number[]>([]);
 const selectedDayChooseFilter = ref<number[]>([]);
 
-const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
-  createGoalsForm,
-  switchSettingsFields
+const goalFormFields = computed(() => createGoalsFormRef.value?.goalFormFields);
+
+const switchSettingsFields = computed(
+  () => createGoalsFormRef.value?.switchSettingsFields
 );
 
-useWatchFormRefs(createGoalsFormRef);
+const goalFormRef = computed(() => createGoalsFormRef.value?.goalFormRef);
 
-const resetCreateGoalsForm = () => {
-  Object.assign(createGoalsForm, { ...DEFAULT_GOALS_FORM_FIELDS });
-  Object.assign(switchSettingsFields, {
-    ...DEFAULT_SWITCH_SETTINGS_FIELDS,
-  });
-};
+const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
+  goalFormFields,
+  switchSettingsFields
+);
 
 watch(selectedPeriod, () => {
   selectedPeriodFilter.value = 'all';
 
-  const { title, description, category } = createGoalsForm;
+  const title = goalFormFields.value?.title;
+  const description = goalFormFields.value?.description;
+  const category = goalFormFields.value?.category;
 
-  createGoalsFormRef.value?.formRef?.reset();
+  goalFormRef?.value?.formRef?.reset();
 
-  resetCreateGoalsForm();
+  createGoalsFormRef.value?.resetCreateGoalsForm();
 
-  createGoalsForm.title = title;
-  createGoalsForm.description = description;
-  createGoalsForm.category = category;
+  if (goalFormFields.value?.title && title) {
+    goalFormFields.value.title = title;
+  }
 
-  createGoalsFormRef.value?.formRef?.setValues({
+  if (goalFormFields.value?.description && description) {
+    goalFormFields.value.description = description;
+  }
+
+  if (goalFormFields.value?.category && category) {
+    goalFormFields.value.category = category;
+  }
+
+  goalFormRef?.value?.formRef?.setValues({
     title,
     description,
     category,
-  } as CreateGoalsFormFields);
+  } as GoalFormFields);
 });
 
 watch(selectedPeriodFilter, () => {
@@ -100,7 +88,7 @@ const handleShowDialog = () => {
 };
 
 const resetDialog = () => {
-  resetCreateGoalsForm();
+  createGoalsFormRef.value?.resetCreateGoalsForm();
 
   selectedPeriod.value = 'year';
   selectedPeriodFilter.value = 'all';
@@ -182,96 +170,29 @@ const handleCreateGoals = async () => {
   <Dialog
     v-model:visible="isDialogVisible"
     modal
-    :dismissable-mask="!createGoalsFormRef?.isLoading"
-    :close-on-escape="!createGoalsFormRef?.isLoading"
-    :closable="!createGoalsFormRef?.isLoading"
+    :dismissable-mask="!goalFormRef?.isLoading"
+    :close-on-escape="!goalFormRef?.isLoading"
+    :closable="!goalFormRef?.isLoading"
     @after-hide="resetDialog"
   >
     <template #header>
       <h2>Создать цели</h2>
     </template>
 
-    <BaseForm
+    <GoalForm
       ref="createGoalsFormRef"
-      submit-button-label="Создать"
-      submit-button-icon="pi-plus"
-      class="create-goals-form"
-      :resolver="createGoalsResolver"
+      :selected-period="selectedPeriod"
+      :initial-fields="DEFAULT_GOALS_FORM_FIELDS"
+      :initial-switch-settings="DEFAULT_SWITCH_SETTINGS_FIELDS"
       :form-submit="handleCreateGoals"
     >
-      <CommonGoalFields
-        v-model:title="createGoalsForm.title"
-        v-model:description="createGoalsForm.description"
-        v-model:category="createGoalsForm.category"
+      <ExtraSettings
+        v-model:selected-period="selectedPeriod"
+        v-model:selected-period-filter="selectedPeriodFilter"
+        v-model:selected-month-choose-filter="selectedMonthChooseFilter"
+        v-model:selected-day-choose-filter="selectedDayChooseFilter"
+        :is-loading="!!goalFormRef?.isLoading"
       />
-
-      <Accordion>
-        <AccordionPanel value="extraSettings">
-          <AccordionHeader>Дополнительные параметры</AccordionHeader>
-          <AccordionContent>
-            <div class="extra-settings-wrapper">
-              <ExtraSettings
-                v-model:selected-period="selectedPeriod"
-                v-model:selected-period-filter="selectedPeriodFilter"
-                v-model:selected-month-choose-filter="selectedMonthChooseFilter"
-                v-model:selected-day-choose-filter="selectedDayChooseFilter"
-                :is-loading="!!createGoalsFormRef?.isLoading"
-              />
-
-              <Divider />
-
-              <TimesFields
-                v-model:times-suffix="createGoalsForm.timesSuffix"
-                v-model:times-start="createGoalsForm.timesStart"
-                v-model:times-end="createGoalsForm.timesEnd"
-                v-model:times-step="createGoalsForm.timesStep"
-              />
-
-              <template v-if="selectedPeriod === 'year'">
-                <YearDateFields
-                  v-model:start-date="createGoalsForm.startDate"
-                  v-model:end-date="createGoalsForm.endDate"
-                />
-              </template>
-
-              <template v-if="selectedPeriod === 'month'">
-                <MonthDateFields
-                  v-model:start-day="createGoalsForm.startDay"
-                  v-model:end-day="createGoalsForm.endDay"
-                />
-              </template>
-
-              <template v-if="selectedPeriod === 'day'">
-                <DayDateFields
-                  v-model:start-time="createGoalsForm.startTime"
-                  v-model:end-time="createGoalsForm.endTime"
-                />
-              </template>
-
-              <SwitchSettings
-                v-model:show-one-times="switchSettingsFields.showOneTimes"
-                v-model:over-times="switchSettingsFields.overTimes"
-              />
-            </div>
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
-    </BaseForm>
+    </GoalForm>
   </Dialog>
 </template>
-
-<style lang="scss" scoped>
-.create-goals-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 500px;
-  padding-top: 5px;
-}
-
-.extra-settings-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-</style>

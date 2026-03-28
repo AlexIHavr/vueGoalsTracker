@@ -3,8 +3,8 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { computed, ref, watch } from 'vue';
 
-import { getGoalStatus } from 'features/goalCard';
 import { appLocalStorage } from 'shared/utils';
+import { getGoalStatus } from 'widgets/goalCard';
 
 import type { GoalDocument } from 'shared/interfaces';
 import type { GoalStatus } from 'shared/types';

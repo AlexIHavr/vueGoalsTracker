@@ -2,11 +2,13 @@
 import DatePicker from 'primevue/datepicker';
 import { watch } from 'vue';
 
+import {
+  DATE_FIELD_FORMAT,
+  MAX_START_DATE,
+  MIN_START_DATE,
+} from 'shared/consts';
 import { selectedDatesRangeFilters } from 'shared/store';
 import { appLocalStorage } from 'shared/utils';
-
-import { DATE_FIELD_FORMAT } from '../consts/dateFormats';
-import { MAX_START_DATE, MIN_START_DATE } from '../consts/goalsFormFields';
 
 watch(
   selectedDatesRangeFilters,

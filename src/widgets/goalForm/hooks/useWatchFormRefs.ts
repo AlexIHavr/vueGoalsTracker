@@ -1,21 +1,20 @@
 import { watch, watchEffect, type Ref } from 'vue';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
-
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type { GoalFormFields } from '../interfaces/goalFormFields';
 import type { BaseFormExpose } from 'features/baseForm';
 
 export function useWatchFormRefs(
-  createGoalsFormRef: Ref<BaseFormExpose | undefined>
+  createGoalsFormRef: Ref<BaseFormExpose | null>,
+  initialFields: GoalFormFields
 ) {
   watchEffect(() => {
     createGoalsFormRef.value?.formRef?.setValues({
-      timesStart: DEFAULT_GOALS_FORM_FIELDS.timesStart,
-      timesEnd: DEFAULT_GOALS_FORM_FIELDS.timesEnd,
-      timesStep: DEFAULT_GOALS_FORM_FIELDS.timesStep,
-      startDay: DEFAULT_GOALS_FORM_FIELDS.startDay,
-      endDay: DEFAULT_GOALS_FORM_FIELDS.endDay,
-    } as CreateGoalsFormFields);
+      timesStart: initialFields.timesStart,
+      timesEnd: initialFields.timesEnd,
+      timesStep: initialFields.timesStep,
+      startDay: initialFields.startDay,
+      endDay: initialFields.endDay,
+    } as GoalFormFields);
   });
 
   watch(

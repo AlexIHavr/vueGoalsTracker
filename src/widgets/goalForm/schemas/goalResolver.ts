@@ -5,12 +5,7 @@ import { MAX_DAYS_IN_MONTH, MAX_TIMES } from 'shared/consts';
 import { TIME_24_REGEX } from 'shared/consts';
 import { getLocaleNumberString } from 'shared/utils';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
-
-import type {
-  CreateGoalsFormFields,
-  CreateGoalsFormNumberFields,
-} from '../interfaces/createGoalsFormFields';
+import type { GoalFormFields } from '../interfaces/goalFormFields';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_DESCRIPTION_LENGTH = 500;
@@ -18,22 +13,21 @@ const MAX_CATEGORY_LENGTH = 30;
 
 const MAX_TIMES_SUFFIX_LENGTH = 5;
 
+const MIN_TIMES_START = 0;
 const MIN_DAY = 1;
 
 const getNumberScheme = ({
-  field,
   name,
   errorVerb = 'должно',
-  minValue,
+  minValue = MIN_DAY,
   maxValue = MAX_TIMES,
 }: {
-  field: keyof CreateGoalsFormNumberFields;
   name: string;
   errorVerb?: string;
   minValue?: number;
   maxValue?: number;
 }) => {
-  const min = minValue ?? DEFAULT_GOALS_FORM_FIELDS[field];
+  const min = minValue;
 
   return number()
     .required(`${name} обязательно`)
@@ -44,7 +38,7 @@ const getNumberScheme = ({
     );
 };
 
-const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
+const createGoalsSchema: ObjectSchema<GoalFormFields> = object({
   title: string()
     .trim()
     .required('Название обязательно')
@@ -67,18 +61,17 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
     )
     .defined(),
   timesStart: getNumberScheme({
-    field: 'timesStart',
+    minValue: MIN_TIMES_START,
     name: 'Начальное количество',
   }).lessThan(
     ref('timesEnd'),
     'Начальное количество должно быть меньше количества'
   ),
-  timesEnd: getNumberScheme({ field: 'timesEnd', name: 'Количество' }).moreThan(
+  timesEnd: getNumberScheme({ name: 'Количество' }).moreThan(
     ref('timesStart'),
     'Количество должно быть больше начального количества'
   ),
   timesStep: getNumberScheme({
-    field: 'timesStep',
     name: 'Шаг',
     errorVerb: 'должен',
   }),
@@ -109,16 +102,13 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
       }
     ),
   startDay: getNumberScheme({
-    field: 'startDay',
     name: 'День начала',
     errorVerb: 'должен',
     maxValue: MAX_DAYS_IN_MONTH,
   }).lessThan(ref('endDay'), 'День начала должно быть меньше дня окончания'),
   endDay: getNumberScheme({
-    field: 'endDay',
     name: 'День окончания',
     errorVerb: 'должен',
-    minValue: MIN_DAY,
     maxValue: MAX_DAYS_IN_MONTH,
   }).moreThan(ref('startDay'), 'День окончания должен быть больше дня начала'),
   startTime: string()
@@ -143,4 +133,4 @@ const createGoalsSchema: ObjectSchema<CreateGoalsFormFields> = object({
     ),
 });
 
-export const createGoalsResolver = yupResolver(createGoalsSchema);
+export const goalResolver = yupResolver(createGoalsSchema);

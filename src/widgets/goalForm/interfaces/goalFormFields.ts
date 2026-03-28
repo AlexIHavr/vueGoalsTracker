@@ -1,4 +1,4 @@
-export interface CreateGoalsFormNumberFields {
+export interface GoalFormNumberFields {
   timesStart: number;
   timesEnd: number;
   timesStep: number;
@@ -6,7 +6,7 @@ export interface CreateGoalsFormNumberFields {
   endDay: number;
 }
 
-export interface CreateGoalsFormFields extends CreateGoalsFormNumberFields {
+export interface GoalFormFields extends GoalFormNumberFields {
   title: string;
   description: string;
   category: string;

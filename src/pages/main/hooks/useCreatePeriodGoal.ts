@@ -5,11 +5,9 @@ import { getLastDayOfMonth, parseTime } from 'shared/utils';
 import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
 import { DAYS_NUMBERS_IN_MONTHS, MONTH_INDEXES } from '../consts/periodOptions';
 
-import type {
-  SwitchSettingsFields,
-  CreateGoalsFormFields,
-} from '../interfaces/createGoalsFormFields';
 import type { PeriodTypeValue } from 'shared/types';
+import type { ComputedRef } from 'vue';
+import type { GoalFormFields, SwitchSettingsFields } from 'widgets/goalForm';
 
 interface CreateDayGoalParams {
   months?: number[];
@@ -18,47 +16,56 @@ interface CreateDayGoalParams {
 }
 
 export function useCreatePeriodGoal(
-  createGoalsForm: CreateGoalsFormFields,
-  switchSettingsFields: SwitchSettingsFields
+  createGoalsForm: ComputedRef<GoalFormFields | undefined>,
+  switchSettingsFields: ComputedRef<SwitchSettingsFields | undefined>
 ) {
   const { createGoal } = useGoals();
 
   const createYearGoal = async (
-    startDate: Date = createGoalsForm.startDate,
-    endDate: Date = createGoalsForm.endDate,
+    startDate?: Date,
+    endDate?: Date,
     periodType: PeriodTypeValue = 'year'
   ) => {
+    if (!createGoalsForm.value || !switchSettingsFields.value) {
+      return;
+    }
+
     const timesStart =
-      createGoalsForm.timesStart ?? DEFAULT_GOALS_FORM_FIELDS.timesStart;
+      createGoalsForm.value.timesStart ?? DEFAULT_GOALS_FORM_FIELDS.timesStart;
 
     const timesEnd =
-      createGoalsForm.timesEnd ?? DEFAULT_GOALS_FORM_FIELDS.timesEnd;
+      createGoalsForm.value.timesEnd ?? DEFAULT_GOALS_FORM_FIELDS.timesEnd;
 
     const timesStep =
-      createGoalsForm.timesStep ?? DEFAULT_GOALS_FORM_FIELDS.timesStep;
+      createGoalsForm.value.timesStep ?? DEFAULT_GOALS_FORM_FIELDS.timesStep;
 
     await createGoal({
-      title: createGoalsForm.title,
-      description: createGoalsForm.description,
-      category: createGoalsForm.category,
-      timesSuffix: createGoalsForm.timesSuffix,
-      startDate,
-      endDate,
+      title: createGoalsForm.value.title,
+      description: createGoalsForm.value.description,
+      category: createGoalsForm.value.category,
+      timesSuffix: createGoalsForm.value.timesSuffix,
+      startDate: startDate ?? createGoalsForm.value.startDate,
+      endDate: endDate ?? createGoalsForm.value.endDate,
       timesStart,
       timesEnd,
       timesStep,
       timesCurrent: timesStart,
       isCompleted: false,
-      isShowOneTimes: switchSettingsFields.showOneTimes,
-      isOverTimes: switchSettingsFields.overTimes,
+      isShowOneTimes: switchSettingsFields.value.showOneTimes,
+      isOverTimes: switchSettingsFields.value.overTimes,
       periodType,
     });
   };
 
   const createMonthGoal = async (months: number[] = []) => {
+    if (!createGoalsForm.value) {
+      return;
+    }
+
     const startDay =
-      createGoalsForm.startDay ?? DEFAULT_GOALS_FORM_FIELDS.startDay;
-    const endDay = createGoalsForm.endDay ?? DEFAULT_GOALS_FORM_FIELDS.endDay;
+      createGoalsForm.value.startDay ?? DEFAULT_GOALS_FORM_FIELDS.startDay;
+    const endDay =
+      createGoalsForm.value.endDay ?? DEFAULT_GOALS_FORM_FIELDS.endDay;
 
     await Promise.all(
       (months.length ? months : MONTH_INDEXES).map((monthIndex) => {
@@ -86,6 +93,10 @@ export function useCreatePeriodGoal(
     days = [],
     filterFunc,
   }: CreateDayGoalParams = {}) => {
+    if (!createGoalsForm.value) {
+      return;
+    }
+
     const daysGoal: Promise<void>[] = [];
 
     (months.length ? months : MONTH_INDEXES).forEach((monthIndex) => {
@@ -96,12 +107,18 @@ export function useCreatePeriodGoal(
         : daysInMonth;
 
       (days.length ? days : filteredDaysInMonth).forEach((dayNumber) => {
+        if (!createGoalsForm.value) {
+          return;
+        }
+
         const lastDay = getLastDayOfMonth(monthIndex);
         const day = dayNumber > lastDay ? lastDay : dayNumber;
 
-        const [startHours, startMinutes] = parseTime(createGoalsForm.startTime);
+        const [startHours, startMinutes] = parseTime(
+          createGoalsForm.value.startTime
+        );
 
-        const [endHours, endMinutes] = parseTime(createGoalsForm.endTime);
+        const [endHours, endMinutes] = parseTime(createGoalsForm.value.endTime);
 
         const startDate = new Date(
           CURRENT_YEAR,

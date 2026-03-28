@@ -1,45 +1,38 @@
 <script setup lang="ts">
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
+import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
 import { ALL_EXCEPT_NUMBERS_REGEX } from 'shared/consts';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
+import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type { GoalFormFields } from '../interfaces/goalFormFields';
 
-const timesSuffix = defineModel<CreateGoalsFormFields['timesSuffix']>(
-  'timesSuffix',
-  { required: true }
-);
+const initialFields = inject(INITIAL_FIELDS_INJECT_KEY);
 
-const timesStart = defineModel<CreateGoalsFormFields['timesStart'] | null>(
+const timesSuffix = defineModel<GoalFormFields['timesSuffix']>('timesSuffix', {
+  required: true,
+});
+
+const timesStart = defineModel<GoalFormFields['timesStart'] | null>(
   'timesStart',
   { required: true }
 );
 
-const timesEnd = defineModel<CreateGoalsFormFields['timesEnd'] | null>(
-  'timesEnd',
-  {
-    required: true,
-  }
-);
+const timesEnd = defineModel<GoalFormFields['timesEnd'] | null>('timesEnd', {
+  required: true,
+});
 
-const timesStep = defineModel<CreateGoalsFormFields['timesStep'] | null>(
-  'timesStep',
-  {
-    required: true,
-  }
-);
+const timesStep = defineModel<GoalFormFields['timesStep'] | null>('timesStep', {
+  required: true,
+});
 </script>
 
 <template>
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField
-    name="timesSuffix"
-    :initial-value="DEFAULT_GOALS_FORM_FIELDS.timesSuffix"
-  >
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="timesSuffix" :initial-value="initialFields?.timesSuffix">
     <InputText
       id="goals-timesSuffix"
       v-model="timesSuffix"
@@ -50,7 +43,7 @@ const timesStep = defineModel<CreateGoalsFormFields['timesStep'] | null>(
     <label for="goals-timesSuffix">Наименование количества</label>
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+  <!-- @vue-generic {keyof GoalFormFields} -->
   <BaseFormField name="timesStart">
     <InputNumber
       v-model="timesStart"
@@ -58,12 +51,12 @@ const timesStep = defineModel<CreateGoalsFormFields['timesStep'] | null>(
       fluid
       show-clear
       :suffix="timesSuffix"
-      :min="DEFAULT_GOALS_FORM_FIELDS.timesStart"
+      :min="initialFields?.timesStart"
     />
     <label for="goals-timesStart">Начальное количество*</label>
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+  <!-- @vue-generic {keyof GoalFormFields} -->
   <BaseFormField name="timesEnd">
     <InputNumber
       v-model="timesEnd"
@@ -71,12 +64,12 @@ const timesStep = defineModel<CreateGoalsFormFields['timesStep'] | null>(
       fluid
       show-clear
       :suffix="timesSuffix"
-      :min="DEFAULT_GOALS_FORM_FIELDS.timesEnd"
+      :min="initialFields?.timesEnd"
     />
     <label for="goals-timesEnd">Количество*</label>
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+  <!-- @vue-generic {keyof GoalFormFields} -->
   <BaseFormField name="timesStep">
     <InputNumber
       v-model="timesStep"
@@ -84,7 +77,7 @@ const timesStep = defineModel<CreateGoalsFormFields['timesStep'] | null>(
       fluid
       show-clear
       :suffix="timesSuffix"
-      :min="DEFAULT_GOALS_FORM_FIELDS.timesStep"
+      :min="initialFields?.timesStep"
     />
     <label for="goals-timesStep">Шаг*</label>
   </BaseFormField>

@@ -3,9 +3,9 @@ import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
 import { useRoute } from 'vue-router';
 
-import { GoalCard } from 'features/goalCard';
 import { ROUTES_PATHS } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
+import { GoalCard } from 'widgets/goalCard';
 
 const route = useRoute();
 

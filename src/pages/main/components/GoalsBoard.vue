@@ -3,8 +3,8 @@ import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
 import { computed, ref } from 'vue';
 
-import { GoalCard } from 'features/goalCard';
 import { useGoals, useGoalsInYear } from 'shared/hooks';
+import { GoalCard } from 'widgets/goalCard';
 
 import { useVisibleGoals } from '../hooks/useVisibleGoals';
 import GoalsStatistics from '../ui/GoalsStatistics.vue';

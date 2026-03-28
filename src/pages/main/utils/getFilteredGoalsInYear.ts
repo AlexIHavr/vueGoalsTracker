@@ -1,4 +1,3 @@
-import { getGoalStatus, getGoalTimes } from 'features/goalCard';
 import { MAX_HOURS, MAX_MINUTES, MAX_SECONDS } from 'shared/consts';
 import {
   selectedStatusFilters,
@@ -7,6 +6,7 @@ import {
   selectedDatesRangeFilters,
 } from 'shared/store';
 import { getDateLocalString, getTimeLocalString } from 'shared/utils';
+import { getGoalStatus, getGoalTimes } from 'widgets/goalCard';
 
 import type { GoalDocument } from 'shared/interfaces';
 
