@@ -62,6 +62,8 @@
   "lint-staged": {
     "*.{ts,vue}": "eslint --fix",
     "*.{css,scss,vue}": "stylelint --fix",
-    "*.{js,ts,vue,css,scss,json,md}": "prettier --write"
+    "*.{js,ts,vue,css,scss,json,md}": "prettier --write",
+    "*.{ts}": "type-check",
+    "*.{vue}": "type-check"
   }
 }
