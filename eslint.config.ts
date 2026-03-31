@@ -7,10 +7,13 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
 
+import fsdConfig from './fsd.config';
+
 export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...vue.configs['flat/recommended'],
+  ...fsdConfig,
   prettier,
   {
     files: ['**/*.{ts,js,vue}'],
@@ -57,26 +60,6 @@ export default [
           ],
           'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
-        },
-      ],
-
-      //FSD
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            'app/**',
-            'pages/*/**',
-            'widgets/*/**',
-            'features/*/**',
-            'entities/*/**',
-            'shared/*/*/**',
-            '../**/app',
-            '../**/pages',
-            '../**/features',
-            '../**/entities',
-            '../**/shared',
-          ],
         },
       ],
 
