@@ -3,7 +3,7 @@ import { signOut } from 'firebase/auth';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useCurrentUser } from 'vuefire';
 
 import { auth } from 'shared/api';
@@ -15,6 +15,7 @@ const isLoading = ref<boolean>(false);
 const isDarkTheme = ref<boolean>(appLocalStorage.get('isDarkTheme') ?? false);
 
 const router = useRouter();
+const route = useRoute();
 const toast = useNotification();
 const user = useCurrentUser();
 
@@ -23,7 +24,6 @@ const handleLogout = async () => {
 
   try {
     await signOut(auth);
-
     router.push(ROUTES_PATHS.AUTH);
   } catch (error) {
     toast.add({
@@ -43,10 +43,14 @@ const handleToggleTheme = () => {
 
   appLocalStorage.set('isDarkTheme', isDarkTheme.value);
 };
+
+const goToMain = () => {
+  router.push(ROUTES_PATHS.MAIN);
+};
 </script>
 
 <template>
-  <header class="main-header">
+  <header class="app-header">
     <Button
       label="Выйти"
       icon="pi pi-sign-out"
@@ -64,6 +68,14 @@ const handleToggleTheme = () => {
       @click="handleToggleTheme"
     />
 
+    <Button
+      label="Все цели"
+      icon="pi pi-home"
+      raised
+      :class="{ active: route.path === ROUTES_PATHS.MAIN }"
+      @click="goToMain"
+    />
+
     <Message class="welcome-message" severity="secondary">
       <h4>Добро пожаловать {{ user?.email }}</h4>
     </Message>
@@ -71,9 +83,10 @@ const handleToggleTheme = () => {
 </template>
 
 <style lang="scss" scoped>
-.main-header {
+.app-header {
   display: flex;
   gap: 10px;
+  margin-bottom: 30px;
 }
 
 .welcome-message {

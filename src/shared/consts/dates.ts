@@ -26,3 +26,8 @@ export const MAX_DAYS_IN_MONTH = 31;
 export const MAX_HOURS = 23;
 export const MAX_MINUTES = 59;
 export const MAX_SECONDS = 59;
+
+export const MIN_START_DATE = new Date(CURRENT_YEAR, 0);
+export const MAX_START_DATE = new Date(CURRENT_YEAR, MONTHS_IN_YEAR, 0);
+
+export const DATE_FIELD_FORMAT = 'd MM';

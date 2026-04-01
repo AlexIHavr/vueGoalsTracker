@@ -4,32 +4,33 @@ import AutoComplete, {
 } from 'primevue/autocomplete';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
 import { useGoals } from 'shared/hooks';
 import { getUniqueArr } from 'shared/utils';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
+import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type { GoalFormFields } from '../interfaces/goalFormFields';
 
-const title = defineModel<CreateGoalsFormFields['title']>('title', {
+const initialFields = inject(INITIAL_FIELDS_INJECT_KEY);
+
+const title = defineModel<GoalFormFields['title']>('title', {
   required: true,
 });
 
-const description = defineModel<CreateGoalsFormFields['description']>(
-  'description',
-  { required: true }
-);
+const description = defineModel<GoalFormFields['description']>('description', {
+  required: true,
+});
 
-const category = defineModel<CreateGoalsFormFields['category']>('category', {
+const category = defineModel<GoalFormFields['category']>('category', {
   required: true,
 });
 
 const { data } = useGoals();
 
-const uniqueGoalCategories = computed(() =>
+const uniqueGoalCategories = computed<string[]>(() =>
   getUniqueArr(data.value.map(({ category }) => category)).filter(Boolean)
 );
 
@@ -47,17 +48,14 @@ const handleComplete = (event: AutoCompleteCompleteEvent) => {
 </script>
 
 <template>
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField name="title" :initial-value="DEFAULT_GOALS_FORM_FIELDS.title">
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="title" :initial-value="initialFields?.title">
     <InputText id="goals-title" v-model.trim="title" size="large" fluid />
     <label for="goals-title">Название*</label>
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField
-    name="description"
-    :initial-value="DEFAULT_GOALS_FORM_FIELDS.description"
-  >
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="description" :initial-value="initialFields?.description">
     <Textarea
       id="goals-description"
       v-model.trim="description"
@@ -68,11 +66,8 @@ const handleComplete = (event: AutoCompleteCompleteEvent) => {
     <label for="goals-description">Описание</label>
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField
-    name="category"
-    :initial-value="DEFAULT_GOALS_FORM_FIELDS.category"
-  >
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="category" :initial-value="initialFields?.category">
     <AutoComplete
       v-model.trim="category"
       input-id="goals-category"

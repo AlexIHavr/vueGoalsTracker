@@ -1,28 +1,28 @@
 <script setup lang="ts">
 import InputIcon from 'primevue/inputicon';
 import InputMask from 'primevue/inputmask';
+import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
+import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type { GoalFormFields } from '../interfaces/goalFormFields';
 
-const startTime = defineModel<CreateGoalsFormFields['startTime']>('startTime', {
+const initialFields = inject(INITIAL_FIELDS_INJECT_KEY);
+
+const startTime = defineModel<GoalFormFields['startTime']>('startTime', {
   required: true,
 });
 
-const endTime = defineModel<CreateGoalsFormFields['endTime']>('endTime', {
+const endTime = defineModel<GoalFormFields['endTime']>('endTime', {
   required: true,
 });
 </script>
 
 <template>
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField
-    name="startTime"
-    :initial-value="DEFAULT_GOALS_FORM_FIELDS.startTime"
-  >
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="startTime" :initial-value="initialFields?.startTime">
     <InputMask
       id="goals-startTime"
       v-model="startTime"
@@ -34,11 +34,8 @@ const endTime = defineModel<CreateGoalsFormFields['endTime']>('endTime', {
     <InputIcon class="pi pi-clock time-icon" />
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
-  <BaseFormField
-    name="endTime"
-    :initial-value="DEFAULT_GOALS_FORM_FIELDS.endTime"
-  >
+  <!-- @vue-generic {keyof GoalFormFields} -->
+  <BaseFormField name="endTime" :initial-value="initialFields?.endTime">
     <InputMask
       id="goals-endTime"
       v-model="endTime"

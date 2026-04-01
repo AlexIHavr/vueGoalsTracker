@@ -1,45 +1,45 @@
 <script setup lang="ts">
 import InputNumber from 'primevue/inputnumber';
+import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
 
-import { DEFAULT_GOALS_FORM_FIELDS } from '../consts/goalsFormFields';
+import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
+import type { GoalFormFields } from '../interfaces/goalFormFields';
 
-const startDay = defineModel<CreateGoalsFormFields['startDay'] | null>(
-  'startDay',
-  {
-    required: true,
-  }
-);
+const initialFields = inject(INITIAL_FIELDS_INJECT_KEY);
 
-const endDay = defineModel<CreateGoalsFormFields['endDay'] | null>('endDay', {
+const startDay = defineModel<GoalFormFields['startDay'] | null>('startDay', {
+  required: true,
+});
+
+const endDay = defineModel<GoalFormFields['endDay'] | null>('endDay', {
   required: true,
 });
 </script>
 
 <template>
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+  <!-- @vue-generic {keyof GoalFormFields} -->
   <BaseFormField name="startDay">
     <InputNumber
       v-model="startDay"
       input-id="goals-startDay"
       fluid
       show-clear
-      :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
+      :min="initialFields?.startDay"
     />
     <label for="goals-startDay">День начала*</label>
   </BaseFormField>
 
-  <!-- @vue-generic {keyof CreateGoalsFormFields} -->
+  <!-- @vue-generic {keyof GoalFormFields} -->
   <BaseFormField name="endDay">
     <InputNumber
       v-model="endDay"
       input-id="goals-endDay"
       fluid
       show-clear
-      :min="DEFAULT_GOALS_FORM_FIELDS.startDay"
+      :min="initialFields?.startDay"
     />
     <label for="goals-endDay">День окончания*</label>
   </BaseFormField>

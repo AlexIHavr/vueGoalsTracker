@@ -40,7 +40,7 @@ const selectedDayChooseFilter = defineModel<number[]>(
   }
 );
 
-const dayChooseFilterOptions = computed(() =>
+const dayChooseFilterOptions = computed<number[]>(() =>
   getDaysInSelectedMonths(selectedMonthChooseFilter.value)
 );
 </script>

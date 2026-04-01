@@ -1,6 +1,5 @@
 import {
   computed,
-  onMounted,
   onUnmounted,
   ref,
   watch,
@@ -18,13 +17,20 @@ export function useVisibleGoals(
 ) {
   const visibleCount = ref<number>(0);
 
-  let observer: IntersectionObserver | null = null;
+  const observer: IntersectionObserver = new IntersectionObserver(
+    (entries) => {
+      if (entries[0]?.isIntersecting && hasMore.value) {
+        showMore();
+      }
+    },
+    { rootMargin: '0px 0px 300px 0px' }
+  );
 
-  const visibleGoals = computed(() => {
+  const visibleGoals = computed<GoalDocument[]>(() => {
     return sortedGoalsInYear.value.slice(0, visibleCount.value);
   });
 
-  const hasMore = computed(() => {
+  const hasMore = computed<boolean>(() => {
     return visibleCount.value < sortedGoalsInYear.value.length;
   });
 
@@ -39,20 +45,9 @@ export function useVisibleGoals(
 
   watch(visibleGoals, () => {
     if (observerTriggerRef.value) {
-      observer?.unobserve(observerTriggerRef.value);
-      observer?.observe(observerTriggerRef.value);
+      observer.unobserve(observerTriggerRef.value);
+      observer.observe(observerTriggerRef.value);
     }
-  });
-
-  onMounted(() => {
-    observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting && hasMore.value) {
-          showMore();
-        }
-      },
-      { rootMargin: '0px 0px 300px 0px' }
-    );
   });
 
   onUnmounted(() => {

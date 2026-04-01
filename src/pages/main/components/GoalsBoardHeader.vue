@@ -14,7 +14,7 @@ import GoalsSort from '../ui/GoalsSort.vue';
 
 const { data } = useGoals();
 
-const yearSelectOptions = computed(() =>
+const yearSelectOptions = computed<number[]>(() =>
   getUniqueArr(
     data.value
       .map(({ startDate }) => startDate.toDate().getFullYear())

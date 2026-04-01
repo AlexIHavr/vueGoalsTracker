@@ -1,6 +1,6 @@
 import { MONTH_NAMES_LOWERCASE } from 'shared/consts';
 
-import type { PrimeVueLocaleOptions } from 'primevue';
+import type { PrimeVueLocaleOptions } from 'primevue/config';
 
 export const RU_LOCALE = {
   monthNames: [

@@ -71,6 +71,8 @@ h6 {
 // p-datepicker
 .p-datepicker-panel {
   --p-datepicker-panel-background: var(--p-card-in-progress);
+
+  user-select: none;
 }
 
 .p-datepicker-header {
@@ -90,6 +92,16 @@ h6 {
   &[aria-selected='true'] {
     background-color: var(--p-datepicker-date-hover-background);
     opacity: 1;
+  }
+
+  &.p-datepicker-day-selected,
+  &.p-datepicker-day-selected-range {
+    color: var(--p-datepicker-today-color);
+
+    .p-datepicker-today & {
+      color: var(--p-datepicker-today-color);
+      background: var(--p-datepicker-today-background);
+    }
   }
 }
 
@@ -233,14 +245,13 @@ h6 {
 }
 
 // p-popover
-.p-popover {
-  max-width: 250px;
-  max-height: 400px;
-  overflow: hidden auto;
-  user-select: none;
+.p-popover .p-chip-remove-icon {
+  transition: background-color 0.2s;
 
-  &::-webkit-scrollbar {
-    width: 0;
+  @media (hover: hover) {
+    &:hover {
+      background-color: red;
+    }
   }
 }
 
@@ -270,9 +281,15 @@ h6 {
 }
 
 // p-button
-.p-button.p-component.active:not(:disabled) {
-  background: var(--p-button-primary-active-background);
-  border: 1px solid var(--p-button-primary-active-border-color);
+.p-button.p-component {
+  &.p-button-sm.p-button-icon-only {
+    min-width: var(--p-button-sm-icon-only-width);
+  }
+
+  &.active:not(:disabled) {
+    background: var(--p-button-primary-active-background);
+    border: 1px solid var(--p-button-primary-active-border-color);
+  }
 }
 
 // p-dialog

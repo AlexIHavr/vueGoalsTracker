@@ -97,12 +97,13 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
             <!-- @vue-generic {keyof AuthFormFields} -->
             <BaseFormField name="password">
               <Password
-                id="password"
                 v-model="authForm.password"
+                input-id="password"
                 size="large"
                 toggle-mask
                 fluid
                 :feedback="false"
+                :pt:pcinputtext:root="{ autocomplete: 'current-password' }"
               />
               <label for="password">Пароль</label>
             </BaseFormField>

@@ -1,15 +1,12 @@
 import {
-  CURRENT_YEAR,
   MAX_DAYS_IN_MONTH,
   MAX_HOURS,
   MAX_MINUTES,
-  MONTHS_IN_YEAR,
+  MAX_START_DATE,
+  MIN_START_DATE,
 } from 'shared/consts';
 
-import type { CreateGoalsFormFields } from '../interfaces/createGoalsFormFields';
-
-export const MIN_START_DATE = new Date(CURRENT_YEAR, 0);
-export const MAX_START_DATE = new Date(CURRENT_YEAR, MONTHS_IN_YEAR, 0);
+import type { GoalFormFields, SwitchSettingsFields } from 'widgets/goalForm';
 
 const MIN_TIME = '00:00';
 const MAX_TIME = `${MAX_HOURS}:${MAX_MINUTES}`;
@@ -28,4 +25,9 @@ export const DEFAULT_GOALS_FORM_FIELDS = {
   endDay: MAX_DAYS_IN_MONTH,
   startTime: MIN_TIME,
   endTime: MAX_TIME,
-} as const satisfies CreateGoalsFormFields;
+} as const satisfies GoalFormFields;
+
+export const DEFAULT_SWITCH_SETTINGS_FIELDS = {
+  isShowOneTimes: false,
+  isOverTimes: false,
+} as const satisfies SwitchSettingsFields;

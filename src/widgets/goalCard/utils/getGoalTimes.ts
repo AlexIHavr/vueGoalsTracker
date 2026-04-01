@@ -3,7 +3,7 @@ import { getLocaleNumberString } from 'shared/utils';
 import type { GoalDocument } from 'shared/interfaces';
 
 export const getGoalTimes = (goal: GoalDocument) => {
-  if (!goal.isShowOneTimes && goal.timesEnd === 1) {
+  if (!goal.isShowOneTimes && goal.timesEnd === 1 && goal.timesCurrent <= 1) {
     return '';
   }
 

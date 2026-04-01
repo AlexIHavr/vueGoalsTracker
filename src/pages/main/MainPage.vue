@@ -3,7 +3,6 @@ import { useGoals } from 'shared/hooks';
 
 import GoalsBoard from './components/GoalsBoard.vue';
 import GoalsBoardHeader from './components/GoalsBoardHeader.vue';
-import MainHeader from './components/MainHeader.vue';
 
 const {
   data: { pending },
@@ -12,7 +11,6 @@ const {
 
 <template>
   <div v-if="!pending" class="main-page">
-    <MainHeader />
     <GoalsBoardHeader />
     <GoalsBoard />
   </div>
