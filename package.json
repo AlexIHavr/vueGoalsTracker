@@ -15,7 +15,10 @@
     "stylelint:fix": "stylelint \"src/**/*.{scss,vue}\" --fix",
     "type-check:app": "vue-tsc -p tsconfig.app.json --noEmit",
     "type-check:node": "vue-tsc -p tsconfig.node.json --noEmit",
-    "type-check": "npm run type-check:app && npm run type-check:node"
+    "type-check": "npm run type-check:app && npm run type-check:node",
+    "type-check-staged:app": "tsc-files -p tsconfig.app.json --noEmit",
+    "type-check-staged:node": "tsc-files -p tsconfig.node.json --noEmit",
+    "type-check-staged": "npm run type-check-staged:app && npm run type-check-staged:node"
   },
   "dependencies": {
     "@primeuix/themes": "^2.0.3",
@@ -47,6 +50,7 @@
     "stylelint-prettier": "^5.0.3",
     "stylelint-scss": "^7.0.0",
     "stylelint-use-nesting": "^6.0.2",
+    "tsc-files": "^1.1.4",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
@@ -56,8 +60,6 @@
   "lint-staged": {
     "*.{ts,vue}": "eslint --fix",
     "*.{css,scss,vue}": "stylelint --fix",
-    "*.{js,ts,vue,css,scss,json,md}": "prettier --write",
-    "*.{ts}": "type-check",
-    "*.{vue}": "type-check"
+    "*.{js,ts,vue,css,scss,json,md}": "prettier --write"
   }
 }
