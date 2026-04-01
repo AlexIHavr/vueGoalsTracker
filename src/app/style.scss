@@ -245,14 +245,13 @@ h6 {
 }
 
 // p-popover
-.p-popover {
-  width: 250px;
-  max-height: 400px;
-  overflow: hidden auto;
-  user-select: none;
+.p-popover .p-chip-remove-icon {
+  transition: background-color 0.2s;
 
-  &::-webkit-scrollbar {
-    width: 0;
+  @media (hover: hover) {
+    &:hover {
+      background-color: red;
+    }
   }
 }
 

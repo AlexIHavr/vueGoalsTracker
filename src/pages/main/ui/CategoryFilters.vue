@@ -2,9 +2,11 @@
 import Chip from 'primevue/chip';
 import { computed, watch } from 'vue';
 
-import { useGoalsInYear } from 'shared/hooks';
+import { useGoals, useGoalsInYear } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 import { appLocalStorage, getUniqueArr } from 'shared/utils';
+
+const { removeGoal } = useGoals();
 
 const goalsInYear = useGoalsInYear();
 
@@ -20,6 +22,14 @@ const handleToggleCategoryFilter = (category: string) => {
   } else {
     selectedCategoryFilters.value.push(category);
   }
+};
+
+const removeCategory = (category: string) => {
+  goalsInYear.value.forEach((goal) => {
+    if (goal.category === category) {
+      removeGoal(goal.id);
+    }
+  });
 };
 
 watch(
@@ -39,6 +49,7 @@ watch(
       <Chip
         v-for="category in uniqueGoalCategories"
         :key="category"
+        removable
         :class="[
           'category-tag',
           {
@@ -49,6 +60,7 @@ watch(
         :icon="category ? 'pi pi-tag' : ''"
         :label="category ? category : 'Без категории'"
         @click="handleToggleCategoryFilter(category)"
+        @remove.stop="removeCategory(category)"
       />
     </div>
   </div>

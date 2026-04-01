@@ -176,7 +176,6 @@ const handleCreateGoals = async () => {
   <Dialog
     v-model:visible="isDialogVisible"
     modal
-    :dismissable-mask="!goalFormRef?.isLoading"
     :close-on-escape="!goalFormRef?.isLoading"
     :closable="!goalFormRef?.isLoading"
     @after-hide="resetDialog"

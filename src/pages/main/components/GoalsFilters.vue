@@ -101,6 +101,14 @@ watch(selectedYear, () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 265px;
+  max-height: 385px;
+  overflow: hidden auto;
+  user-select: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 
 .reset-all-filters-button {
