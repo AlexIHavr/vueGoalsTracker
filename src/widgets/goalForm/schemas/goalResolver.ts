@@ -18,11 +18,13 @@ const MIN_DAY = 1;
 
 const getNumberScheme = ({
   name,
+  defaultValue,
   errorVerb = 'должно',
   minValue = MIN_DAY,
   maxValue = MAX_TIMES,
 }: {
   name: string;
+  defaultValue: number;
   errorVerb?: string;
   minValue?: number;
   maxValue?: number;
@@ -30,6 +32,7 @@ const getNumberScheme = ({
   const min = minValue;
 
   return number()
+    .transform((value) => (value === null ? defaultValue : value))
     .required(`${name} обязательно`)
     .min(min, `${name} не ${errorVerb} быть меньше ${min}`)
     .max(
@@ -38,99 +41,113 @@ const getNumberScheme = ({
     );
 };
 
-const createGoalsSchema: ObjectSchema<GoalFormFields> = object({
-  title: string()
-    .trim()
-    .required('Название обязательно')
-    .max(
-      MAX_TITLE_LENGTH,
-      `Название не должно превышать ${MAX_TITLE_LENGTH} символов`
+const createGoalSchema = (
+  initialFields: GoalFormFields
+): ObjectSchema<GoalFormFields> =>
+  object({
+    title: string()
+      .trim()
+      .required('Название обязательно')
+      .max(
+        MAX_TITLE_LENGTH,
+        `Название не должно превышать ${MAX_TITLE_LENGTH} символов`
+      ),
+    description: string()
+      .trim()
+      .max(
+        MAX_DESCRIPTION_LENGTH,
+        `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`
+      )
+      .defined(),
+    category: string()
+      .trim()
+      .max(
+        MAX_CATEGORY_LENGTH,
+        `Категория не должна превышать ${MAX_CATEGORY_LENGTH} символов`
+      )
+      .defined(),
+    timesStart: getNumberScheme({
+      name: 'Начальное количество',
+      defaultValue: initialFields.timesStart,
+      minValue: MIN_TIMES_START,
+    }).lessThan(
+      ref('timesEnd'),
+      'Начальное количество должно быть меньше количества'
     ),
-  description: string()
-    .trim()
-    .max(
-      MAX_DESCRIPTION_LENGTH,
-      `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`
-    )
-    .defined(),
-  category: string()
-    .trim()
-    .max(
-      MAX_CATEGORY_LENGTH,
-      `Категория не должна превышать ${MAX_CATEGORY_LENGTH} символов`
-    )
-    .defined(),
-  timesStart: getNumberScheme({
-    minValue: MIN_TIMES_START,
-    name: 'Начальное количество',
-  }).lessThan(
-    ref('timesEnd'),
-    'Начальное количество должно быть меньше количества'
-  ),
-  timesEnd: getNumberScheme({ name: 'Количество' }).moreThan(
-    ref('timesStart'),
-    'Количество должно быть больше начального количества'
-  ),
-  timesStep: getNumberScheme({
-    name: 'Шаг',
-    errorVerb: 'должен',
-  }),
-  timesSuffix: string()
-    .max(
-      MAX_TIMES_SUFFIX_LENGTH,
-      `Наименование количества не должно превышать ${MAX_TIMES_SUFFIX_LENGTH} символов`
-    )
-    .defined(),
-  startDate: date()
-    .typeError('Некорректный формат даты')
-    .required('Начало действия обязательно')
-    .test(
-      'is-less-than-endDate',
-      'Начало действия должно быть меньше конца действия',
-      function (value) {
-        return value < this.parent.endDate;
-      }
+    timesEnd: getNumberScheme({
+      name: 'Количество',
+      defaultValue: initialFields.timesEnd,
+    }).moreThan(
+      ref('timesStart'),
+      'Количество должно быть больше начального количества'
     ),
-  endDate: date()
-    .typeError('Некорректный формат даты')
-    .required('Конец действия обязателен')
-    .test(
-      'is-more-than-startDate',
-      'Конец действия должен быть больше начала действия',
-      function (value) {
-        return value > this.parent.startDate;
-      }
+    timesStep: getNumberScheme({
+      name: 'Шаг',
+      defaultValue: initialFields.timesStep,
+      errorVerb: 'должен',
+    }),
+    timesSuffix: string()
+      .max(
+        MAX_TIMES_SUFFIX_LENGTH,
+        `Наименование количества не должно превышать ${MAX_TIMES_SUFFIX_LENGTH} символов`
+      )
+      .defined(),
+    startDate: date()
+      .typeError('Некорректный формат даты')
+      .required('Начало действия обязательно')
+      .test(
+        'is-less-than-endDate',
+        'Начало действия должно быть меньше конца действия',
+        function (value) {
+          return value < this.parent.endDate;
+        }
+      ),
+    endDate: date()
+      .typeError('Некорректный формат даты')
+      .required('Конец действия обязателен')
+      .test(
+        'is-more-than-startDate',
+        'Конец действия должен быть больше начала действия',
+        function (value) {
+          return value > this.parent.startDate;
+        }
+      ),
+    startDay: getNumberScheme({
+      name: 'День начала',
+      defaultValue: initialFields.startDay,
+      errorVerb: 'должен',
+      maxValue: MAX_DAYS_IN_MONTH,
+    }).lessThan(ref('endDay'), 'День начала должно быть меньше дня окончания'),
+    endDay: getNumberScheme({
+      name: 'День окончания',
+      defaultValue: initialFields.endDay,
+      errorVerb: 'должен',
+      maxValue: MAX_DAYS_IN_MONTH,
+    }).moreThan(
+      ref('startDay'),
+      'День окончания должен быть больше дня начала'
     ),
-  startDay: getNumberScheme({
-    name: 'День начала',
-    errorVerb: 'должен',
-    maxValue: MAX_DAYS_IN_MONTH,
-  }).lessThan(ref('endDay'), 'День начала должно быть меньше дня окончания'),
-  endDay: getNumberScheme({
-    name: 'День окончания',
-    errorVerb: 'должен',
-    maxValue: MAX_DAYS_IN_MONTH,
-  }).moreThan(ref('startDay'), 'День окончания должен быть больше дня начала'),
-  startTime: string()
-    .required('Время начала обязательно')
-    .matches(TIME_24_REGEX, 'Некорректный формат времени')
-    .test(
-      'is-less-than-endTime',
-      'Время начала должно быть меньше времени окончания',
-      function (startTime) {
-        return startTime < this.parent.endTime;
-      }
-    ),
-  endTime: string()
-    .required('Время окончания обязательно')
-    .matches(TIME_24_REGEX, 'Некорректный формат времени')
-    .test(
-      'is-greater-than-startTime',
-      'Время окончания должно быть больше времени начала',
-      function (endTime) {
-        return endTime > this.parent.startTime;
-      }
-    ),
-});
+    startTime: string()
+      .required('Время начала обязательно')
+      .matches(TIME_24_REGEX, 'Некорректный формат времени')
+      .test(
+        'is-less-than-endTime',
+        'Время начала должно быть меньше времени окончания',
+        function (startTime) {
+          return startTime < this.parent.endTime;
+        }
+      ),
+    endTime: string()
+      .required('Время окончания обязательно')
+      .matches(TIME_24_REGEX, 'Некорректный формат времени')
+      .test(
+        'is-greater-than-startTime',
+        'Время окончания должно быть больше времени начала',
+        function (endTime) {
+          return endTime > this.parent.startTime;
+        }
+      ),
+  });
 
-export const goalResolver = yupResolver(createGoalsSchema);
+export const getGoalResolver = (initialFields: GoalFormFields) =>
+  yupResolver(createGoalSchema(initialFields));

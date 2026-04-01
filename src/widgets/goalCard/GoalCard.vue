@@ -43,6 +43,10 @@ const goalAttrs = computed<GoalStatusAttr>(() =>
   getGoalStatusAttrs(goalStatus.value)
 );
 
+const isEditGoalPage = computed(() =>
+  route.path.includes(ROUTES_PATHS.EDIT_GOAL.path)
+);
+
 const handleCompleteGoal = () => {
   updateGoal(goal.id, {
     isCompleted: !goal.isCompleted,
@@ -56,6 +60,10 @@ const handleRemoveGoal = async () => {
       .length === 1;
 
   await removeGoal(goal.id);
+
+  if (isEditGoalPage.value) {
+    router.replace(ROUTES_PATHS.MAIN);
+  }
 
   if (isLastCategoryTag) {
     selectedCategoryFilters.value = selectedCategoryFilters.value.filter(
@@ -101,7 +109,7 @@ const goToEditGoal = () => {
       />
 
       <Tag
-        v-if="!route.path.includes(ROUTES_PATHS.EDIT_GOAL.path)"
+        v-if="!isEditGoalPage"
         icon="pi pi-pencil"
         class="edit-goal-button"
         :severity="goalAttrs.buttonSeverity"

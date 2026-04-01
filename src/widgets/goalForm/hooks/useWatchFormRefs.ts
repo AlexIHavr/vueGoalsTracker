@@ -1,12 +1,11 @@
-import { computed, watch, watchEffect, type Ref } from 'vue';
+import { computed, watch, type Ref } from 'vue';
 
 import type { GoalFormFields } from '../interfaces/goalFormFields';
 import type { FormFieldState } from '@primevue/forms/form';
 import type { BaseFormExpose } from 'features/baseForm';
 
 export function useWatchFormRefs(
-  createGoalsFormRef: Ref<BaseFormExpose | null>,
-  initialFields: GoalFormFields
+  createGoalsFormRef: Ref<BaseFormExpose | null>
 ) {
   const formStates = computed<
     Record<keyof GoalFormFields, FormFieldState> | undefined
@@ -19,16 +18,6 @@ export function useWatchFormRefs(
       formRefValue?.validate(field);
     }
   };
-
-  watchEffect(() => {
-    createGoalsFormRef.value?.formRef?.setValues({
-      timesStart: initialFields.timesStart,
-      timesEnd: initialFields.timesEnd,
-      timesStep: initialFields.timesStep,
-      startDay: initialFields.startDay,
-      endDay: initialFields.endDay,
-    } as GoalFormFields);
-  });
 
   watch(
     () => formStates.value?.timesStart?.value,

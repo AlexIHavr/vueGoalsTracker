@@ -23,7 +23,7 @@ import {
   INITIAL_SWITCH_SETTINGS_INJECT_KEY,
 } from './consts/injectKeys';
 import { useWatchFormRefs } from './hooks/useWatchFormRefs';
-import { goalResolver } from './schemas/goalResolver';
+import { getGoalResolver } from './schemas/goalResolver';
 
 import type {
   GoalFormFields,
@@ -56,7 +56,7 @@ const switchSettingsFields = reactive<SwitchSettingsFields>({
 
 const goalFormRef = ref<BaseFormExpose | null>(null);
 
-useWatchFormRefs(goalFormRef, initialFields);
+useWatchFormRefs(goalFormRef);
 
 const resetGoalForm = () => {
   Object.assign(goalFormFields, { ...initialFields });
@@ -80,7 +80,7 @@ defineExpose({
     class="goal-form"
     :submit-button-label="submitButtonLabel"
     :submit-button-icon="submitButtonIcon"
-    :resolver="goalResolver"
+    :resolver="getGoalResolver(initialFields)"
     :form-submit="formSubmit"
   >
     <CommonGoalFields
