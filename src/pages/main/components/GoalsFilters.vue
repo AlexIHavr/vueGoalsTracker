@@ -101,6 +101,7 @@ watch(selectedYear, () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 250px;
   max-width: 265px;
   max-height: 385px;
   overflow: hidden auto;
