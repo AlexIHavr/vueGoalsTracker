@@ -5,9 +5,9 @@ import ProgressSpinner from 'primevue/progressspinner';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { ROUTES_PATHS } from 'shared/consts';
+import { CURRENT_YEAR, ROUTES_PATHS } from 'shared/consts';
 import { useGoals, useNotification } from 'shared/hooks';
-import { getTimeLocalString } from 'shared/utils';
+import { getTimeLocalString, parseTime } from 'shared/utils';
 import { GoalCard } from 'widgets/goalCard';
 import {
   GoalForm,
@@ -54,18 +54,42 @@ const getInitialSwitchSettings = (goal: GoalDocument): SwitchSettingsFields => {
   return { isOverTimes: goal.isOverTimes, isShowOneTimes: goal.isShowOneTimes };
 };
 
-const handleSubmitEditForm = async () => {
-  if (goal.value) {
-    await updateGoal(goal.value.id, {
-      ...editGoalForm.value?.goalFormFields,
-      ...editGoalForm.value?.switchSettingsFields,
-    });
+const handleSubmitEditForm = (goal: GoalDocument) => async () => {
+  const [startHours, startMinutes] = parseTime(
+    editGoalForm.value?.goalFormFields.startTime ?? ''
+  );
 
-    toast.add({
-      severity: 'success',
-      summary: 'Цель успешно изменена',
-    });
-  }
+  const [endHours, endMinutes] = parseTime(
+    editGoalForm.value?.goalFormFields.endTime ?? ''
+  );
+
+  const startDate = new Date(
+    CURRENT_YEAR,
+    editGoalForm.value?.goalFormFields.startDate?.getMonth() ?? 0,
+    editGoalForm.value?.goalFormFields.startDay,
+    startHours,
+    startMinutes
+  );
+
+  const endDate = new Date(
+    CURRENT_YEAR,
+    editGoalForm.value?.goalFormFields.endDate?.getMonth() ?? 0,
+    editGoalForm.value?.goalFormFields.endDay,
+    endHours,
+    endMinutes
+  );
+
+  await updateGoal(goal.id, {
+    ...editGoalForm.value?.goalFormFields,
+    ...editGoalForm.value?.switchSettingsFields,
+    startDate,
+    endDate,
+  });
+
+  toast.add({
+    severity: 'success',
+    summary: 'Цель успешно изменена',
+  });
 };
 </script>
 
@@ -94,7 +118,7 @@ const handleSubmitEditForm = async () => {
               :selected-period="goal.periodType"
               :initial-fields="getInitialFields(goal)"
               :initial-switch-settings="getInitialSwitchSettings(goal)"
-              :form-submit="handleSubmitEditForm"
+              :form-submit="handleSubmitEditForm(goal)"
             />
           </template>
         </Card>

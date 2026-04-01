@@ -92,6 +92,10 @@ watch(isShowStatistics, (value) => {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+
+  & > * {
+    width: 225px;
+  }
 }
 
 .show-statistics-button {
