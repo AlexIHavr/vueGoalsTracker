@@ -24,12 +24,12 @@ const handleToggleCategoryFilter = (category: string) => {
   }
 };
 
-const removeCategory = (category: string) => {
-  goalsInYear.value.forEach((goal) => {
-    if (goal.category === category) {
-      removeGoal(goal.id);
-    }
-  });
+const removeCategory = async (category: string) => {
+  await Promise.all(
+    goalsInYear.value
+      .filter((goal) => goal.category === category)
+      .map((goal) => removeGoal(goal.id))
+  );
 };
 
 watch(
