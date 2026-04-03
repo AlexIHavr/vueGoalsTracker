@@ -4,6 +4,7 @@ import OverlayBadge from 'primevue/overlaybadge';
 import Popover from 'primevue/popover';
 import { computed, ref, watch, type ClassValue } from 'vue';
 
+import { TOOLTIP_SHOW_DELAY } from 'shared/consts';
 import {
   selectedCategoryFilters,
   selectedDatesRangeFilters,
@@ -60,14 +61,20 @@ watch(selectedYear, () => {
     :value="goalsFiltersCount"
   >
     <Button
+      v-tooltip.bottom="{ value: 'Фильтры', showDelay: TOOLTIP_SHOW_DELAY }"
       icon="pi pi-filter"
       raised
       :class="filterButtonClasses"
       @click="handleToggleFiltersPopover"
     />
   </OverlayBadge>
+
   <Button
     v-else
+    v-tooltip.bottom="{
+      value: 'Фильтры',
+      showDelay: TOOLTIP_SHOW_DELAY,
+    }"
     icon="pi pi-filter"
     raised
     :class="filterButtonClasses"
@@ -77,6 +84,10 @@ watch(selectedYear, () => {
   <Popover ref="filtersPopoverRef" @show="onShowPopover" @hide="onHidePopover">
     <div class="filters-wrapper">
       <Button
+        v-tooltip.bottom="{
+          value: goalsFiltersCount ? 'Убрать фильтры' : '',
+          showDelay: TOOLTIP_SHOW_DELAY,
+        }"
         icon="pi pi-filter-slash"
         size="small"
         severity="danger"

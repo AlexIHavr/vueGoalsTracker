@@ -305,3 +305,12 @@ h6 {
 .p-password-toggle-mask-icon {
   cursor: pointer;
 }
+
+// p-tooltip
+.p-tooltip {
+  --p-tooltip-background: var(--p-button-primary-hover-background);
+  --p-tooltip-color: var(--p-button-primary-color);
+  --p-tooltip-max-width: 300px;
+
+  font-size: 0.8rem;
+}

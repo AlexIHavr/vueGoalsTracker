@@ -2,6 +2,7 @@ import Aura from '@primeuix/themes/aura';
 import PrimeVue, { type PrimeVueConfiguration } from 'primevue/config';
 import KeyFilter from 'primevue/keyfilter';
 import ToastService from 'primevue/toastservice';
+import Tooltip from 'primevue/tooltip';
 import { createApp } from 'vue';
 import { VueFire, VueFireAuth } from 'vuefire';
 
@@ -41,5 +42,6 @@ app.use(router);
 app.use(ToastService);
 
 app.directive('keyfilter', KeyFilter);
+app.directive('tooltip', Tooltip);
 
 app.mount('#app');

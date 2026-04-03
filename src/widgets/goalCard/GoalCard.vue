@@ -6,7 +6,7 @@ import Tag from 'primevue/tag';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { MAX_TIMES, ROUTES_PATHS } from 'shared/consts';
+import { MAX_TIMES, ROUTES_PATHS, TOOLTIP_SHOW_DELAY } from 'shared/consts';
 import { useGoals, useGoalsInYear } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 
@@ -110,6 +110,10 @@ const goToEditGoal = () => {
 
       <Tag
         v-if="!isEditGoalPage"
+        v-tooltip.bottom="{
+          value: 'Редактировать цель',
+          showDelay: TOOLTIP_SHOW_DELAY,
+        }"
         icon="pi pi-pencil"
         class="edit-goal-button"
         :severity="goalAttrs.buttonSeverity"
@@ -120,6 +124,10 @@ const goToEditGoal = () => {
         <h4 class="goal-title">{{ goal.title }}</h4>
 
         <Button
+          v-tooltip.bottom="{
+            value: goal.isCompleted ? 'Отменить цель' : 'Выполнить цель',
+            showDelay: TOOLTIP_SHOW_DELAY,
+          }"
           size="small"
           rounded
           :icon="goalAttrs.statusIcon"
@@ -168,6 +176,10 @@ const goToEditGoal = () => {
           />
 
           <Button
+            v-tooltip.bottom="{
+              value: 'Удалить цель',
+              showDelay: TOOLTIP_SHOW_DELAY,
+            }"
             icon="pi pi-trash"
             severity="danger"
             raised
