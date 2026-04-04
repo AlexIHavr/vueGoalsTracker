@@ -3,11 +3,12 @@ import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Message from 'primevue/message';
 import Tag from 'primevue/tag';
+import { useConfirm } from 'primevue/useconfirm';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { MAX_TIMES, ROUTES_PATHS, TOOLTIP_SHOW_DELAY } from 'shared/consts';
-import { useGoals, useGoalsInYear } from 'shared/hooks';
+import { useGoals, useGoalsInYear, useNotification } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 
 import { getGoalDates } from './utils/getGoalDates';
@@ -30,6 +31,10 @@ const { goal } = defineProps<{
 }>();
 
 const { updateGoal, removeGoal } = useGoals();
+
+const confirm = useConfirm();
+
+const { add } = useNotification();
 
 const goalsInYear = useGoalsInYear();
 
@@ -70,6 +75,18 @@ const handleRemoveGoal = async () => {
       (category) => category !== goal.category
     );
   }
+};
+
+const handleConfirmRemoveGoal = (event: PointerEvent) => {
+  confirm.require({
+    target: event.currentTarget as HTMLButtonElement,
+    message: 'Вы уверены, что хотите удалить цель?',
+    accept: async () => {
+      await handleRemoveGoal();
+
+      add({ severity: 'success', summary: 'Цель удалена' });
+    },
+  });
 };
 
 const handleUpdateTimes = () => {
@@ -183,7 +200,7 @@ const goToEditGoal = () => {
             icon="pi pi-trash"
             severity="danger"
             raised
-            @click="handleRemoveGoal"
+            @click="handleConfirmRemoveGoal"
           />
         </div>
       </div>

@@ -244,17 +244,6 @@ h6 {
     calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
 }
 
-// p-popover
-.p-popover .p-chip-remove-icon {
-  transition: background-color 0.2s;
-
-  @media (hover: hover) {
-    &:hover {
-      background-color: red;
-    }
-  }
-}
-
 // p-chip
 .p-chip.p-component {
   cursor: pointer;
