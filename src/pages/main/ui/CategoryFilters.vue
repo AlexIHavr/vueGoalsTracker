@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import Chip from 'primevue/chip';
 import { useConfirm } from 'primevue/useconfirm';
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
+import { LoadingModal } from 'features/loadingModal';
 import { useGoals, useGoalsInYear, useNotification } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 import { appLocalStorage, getUniqueArr } from 'shared/utils';
+
+const isLoadingModalVisible = ref<boolean>(false);
 
 const { removeGoal } = useGoals();
 
@@ -34,13 +37,17 @@ const handleToggleCategoryFilter = (category: string) => {
 };
 
 const removeCategory = async (category: string) => {
-  handleRemoveCategoryFilter(category);
+  isLoadingModalVisible.value = true;
 
   await Promise.all(
     goalsInYear.value
       .filter((goal) => goal.category === category)
       .map((goal) => removeGoal(goal.id))
   );
+
+  handleRemoveCategoryFilter(category);
+
+  isLoadingModalVisible.value = false;
 };
 
 const handleConfirmRemoveCategory = (category: string, event: PointerEvent) => {
@@ -65,10 +72,12 @@ watch(
 </script>
 
 <template>
-  <div v-if="uniqueGoalCategories.length">
+  <div>
     <h4>Категории</h4>
 
-    <div class="categories-tags">
+    <LoadingModal v-if="isLoadingModalVisible" />
+
+    <div v-if="uniqueGoalCategories.length" class="categories-tags">
       <div
         v-for="category in uniqueGoalCategories"
         :key="category"

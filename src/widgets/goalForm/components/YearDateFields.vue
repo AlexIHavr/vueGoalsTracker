@@ -3,7 +3,7 @@ import DatePicker from 'primevue/datepicker';
 import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
-import { GoalTip } from 'shared/components';
+import { GoalTip } from 'features/goalTip';
 import {
   DATE_FIELD_FORMAT,
   MAX_START_DATE,

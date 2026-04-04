@@ -4,7 +4,7 @@ import InputText from 'primevue/inputtext';
 import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
-import { GoalTip } from 'shared/components';
+import { GoalTip } from 'features/goalTip';
 import { ALL_EXCEPT_NUMBERS_REGEX } from 'shared/consts';
 
 import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';

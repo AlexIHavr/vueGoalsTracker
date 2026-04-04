@@ -18,7 +18,7 @@ import ConfirmPopup from 'primevue/confirmpopup';
             size="small"
             severity="danger"
             icon="pi pi-trash"
-            @click="acceptCallback"
+            @click.stop="acceptCallback"
           />
 
           <Button
@@ -26,7 +26,7 @@ import ConfirmPopup from 'primevue/confirmpopup';
             severity="secondary"
             size="small"
             icon="pi pi-times"
-            @click="rejectCallback"
+            @click.stop="rejectCallback"
           />
         </div>
       </div>

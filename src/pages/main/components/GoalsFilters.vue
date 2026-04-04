@@ -81,7 +81,12 @@ watch(selectedYear, () => {
     @click="handleToggleFiltersPopover"
   />
 
-  <Popover ref="filtersPopoverRef" @show="onShowPopover" @hide="onHidePopover">
+  <Popover
+    ref="filtersPopoverRef"
+    :close-on-escape="false"
+    @show="onShowPopover"
+    @hide="onHidePopover"
+  >
     <div class="filters-wrapper">
       <Button
         v-tooltip.bottom="{

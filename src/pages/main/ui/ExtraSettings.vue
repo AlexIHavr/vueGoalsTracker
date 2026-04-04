@@ -3,7 +3,7 @@ import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
 import { computed } from 'vue';
 
-import { GoalTip } from 'shared/components';
+import { GoalTip } from 'features/goalTip';
 
 import {
   MONTH_CHOOSE_FILTERS_OPTIONS,
@@ -14,8 +14,6 @@ import { getDaysInSelectedMonths } from '../utils/getDaysInSelectedMonths';
 
 import type { PeriodFilterValue } from '../types/periodOptions';
 import type { PeriodTypeValue } from 'shared/types';
-
-const { isLoading } = defineProps<{ isLoading: boolean }>();
 
 const selectedPeriod = defineModel<PeriodTypeValue>('selectedPeriod', {
   required: true,
@@ -68,7 +66,6 @@ const selectPeriodTipText = computed(() => {
         option-label="label"
         option-value="value"
         :options="PERIOD_TYPES_OPTIONS"
-        :disabled="isLoading"
       />
 
       <GoalTip :text="selectPeriodTipText" />
@@ -81,7 +78,7 @@ const selectPeriodTipText = computed(() => {
           option-label="label"
           option-value="value"
           :options="PERIOD_FILTERS_OPTIONS"
-          :disabled="selectedPeriod === 'year' || isLoading"
+          :disabled="selectedPeriod === 'year'"
         />
 
         <MultiSelect
@@ -94,8 +91,7 @@ const selectPeriodTipText = computed(() => {
           :disabled="
             selectedPeriod === 'year' ||
             (selectedPeriod === 'month' && selectedPeriodFilter !== 'choose') ||
-            (selectedPeriod === 'day' && selectedPeriodFilter === 'all') ||
-            isLoading
+            (selectedPeriod === 'day' && selectedPeriodFilter === 'all')
           "
         />
 
@@ -105,9 +101,7 @@ const selectPeriodTipText = computed(() => {
           placeholder="Все дни"
           :options="dayChooseFilterOptions"
           :disabled="
-            selectedPeriod !== 'day' ||
-            selectedPeriodFilter !== 'choose' ||
-            isLoading
+            selectedPeriod !== 'day' || selectedPeriodFilter !== 'choose'
           "
         />
       </div>

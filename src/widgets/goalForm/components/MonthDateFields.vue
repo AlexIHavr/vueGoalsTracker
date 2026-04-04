@@ -3,7 +3,7 @@ import InputNumber from 'primevue/inputnumber';
 import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
-import { GoalTip } from 'shared/components';
+import { GoalTip } from 'features/goalTip';
 
 import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 

@@ -3,7 +3,7 @@ import Message from 'primevue/message';
 import ToggleSwitch from 'primevue/toggleswitch';
 import { inject } from 'vue';
 
-import { GoalTip } from 'shared/components';
+import { GoalTip } from 'features/goalTip';
 
 import { INITIAL_SWITCH_SETTINGS_INJECT_KEY } from '../consts/injectKeys';
 

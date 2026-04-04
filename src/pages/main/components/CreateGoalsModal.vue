@@ -3,6 +3,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import { computed, ref, watch } from 'vue';
 
+import { LoadingModal } from 'features/loadingModal';
 import { CURRENT_YEAR } from 'shared/consts';
 import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
@@ -173,11 +174,12 @@ const handleCreateGoals = async () => {
     @click="handleShowDialog"
   />
 
+  <LoadingModal v-if="goalFormRef?.isLoading" />
+
   <Dialog
     v-model:visible="isDialogVisible"
     modal
     :close-on-escape="!goalFormRef?.isLoading"
-    :closable="!goalFormRef?.isLoading"
     @after-hide="resetDialog"
   >
     <template #header>
@@ -198,7 +200,6 @@ const handleCreateGoals = async () => {
         v-model:selected-period-filter="selectedPeriodFilter"
         v-model:selected-month-choose-filter="selectedMonthChooseFilter"
         v-model:selected-day-choose-filter="selectedDayChooseFilter"
-        :is-loading="!!goalFormRef?.isLoading"
       />
     </GoalForm>
   </Dialog>
