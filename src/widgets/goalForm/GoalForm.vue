@@ -152,3 +152,10 @@ defineExpose({
   gap: 20px;
 }
 </style>
+
+<style lang="scss">
+.goal-field-wrapper {
+  display: flex;
+  gap: 5px;
+}
+</style>

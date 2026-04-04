@@ -4,6 +4,7 @@ import InputMask from 'primevue/inputmask';
 import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
+import { GoalTip } from 'shared/components';
 
 import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 
@@ -21,31 +22,39 @@ const endTime = defineModel<GoalFormFields['endTime']>('endTime', {
 </script>
 
 <template>
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="startTime" :initial-value="initialFields?.startTime">
-    <InputMask
-      id="goals-startTime"
-      v-model="startTime"
-      mask="99:99"
-      placeholder="чч:мм"
-      fluid
-    />
-    <label for="goals-startTime">Время начала*</label>
-    <InputIcon class="pi pi-clock time-icon" />
-  </BaseFormField>
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField name="startTime" :initial-value="initialFields?.startTime">
+      <InputMask
+        id="goals-startTime"
+        v-model="startTime"
+        mask="99:99"
+        placeholder="чч:мм"
+        fluid
+      />
+      <label for="goals-startTime">Время начала*</label>
+      <InputIcon class="pi pi-clock time-icon" />
+    </BaseFormField>
 
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="endTime" :initial-value="initialFields?.endTime">
-    <InputMask
-      id="goals-endTime"
-      v-model="endTime"
-      mask="99:99"
-      placeholder="чч:мм"
-      fluid
-    />
-    <label for="goals-endTime">Время окончания*</label>
-    <InputIcon class="pi pi-clock time-icon" />
-  </BaseFormField>
+    <GoalTip text="Укажите время начала действия вашей цели" />
+  </div>
+
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField name="endTime" :initial-value="initialFields?.endTime">
+      <InputMask
+        id="goals-endTime"
+        v-model="endTime"
+        mask="99:99"
+        placeholder="чч:мм"
+        fluid
+      />
+      <label for="goals-endTime">Время окончания*</label>
+      <InputIcon class="pi pi-clock time-icon" />
+    </BaseFormField>
+
+    <GoalTip text="Укажите время окончания действия вашей цели" />
+  </div>
 </template>
 
 <style lang="scss" scoped>

@@ -3,6 +3,7 @@ import InputNumber from 'primevue/inputnumber';
 import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
+import { GoalTip } from 'shared/components';
 
 import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
 
@@ -20,27 +21,39 @@ const endDay = defineModel<GoalFormFields['endDay'] | null>('endDay', {
 </script>
 
 <template>
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="startDay">
-    <InputNumber
-      v-model="startDay"
-      input-id="goals-startDay"
-      fluid
-      show-clear
-      :min="initialFields?.startDay"
-    />
-    <label for="goals-startDay">День начала*</label>
-  </BaseFormField>
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField name="startDay">
+      <InputNumber
+        v-model="startDay"
+        input-id="goals-startDay"
+        fluid
+        show-clear
+        :min="initialFields?.startDay"
+      />
+      <label for="goals-startDay">День начала</label>
+    </BaseFormField>
 
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="endDay">
-    <InputNumber
-      v-model="endDay"
-      input-id="goals-endDay"
-      fluid
-      show-clear
-      :min="initialFields?.startDay"
+    <GoalTip
+      text="Укажите с какого числа начнет действовать ваша цель в рамкам месяца (если день начала превышает количество дней в месяце, то будет выбран последний день данного месяца)"
     />
-    <label for="goals-endDay">День окончания*</label>
-  </BaseFormField>
+  </div>
+
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField name="endDay">
+      <InputNumber
+        v-model="endDay"
+        input-id="goals-endDay"
+        fluid
+        show-clear
+        :min="initialFields?.startDay"
+      />
+      <label for="goals-endDay">День окончания</label>
+    </BaseFormField>
+
+    <GoalTip
+      text="Укажите до какого числа будет действовать ваша цель в рамкам месяца (если день окончания превышает количество дней в месяце, то будет выбран последний день данного месяца)"
+    />
+  </div>
 </template>
