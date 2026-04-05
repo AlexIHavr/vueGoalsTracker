@@ -88,5 +88,9 @@ export const getConfirmModalText = ({
     return 'целей';
   };
 
-  return { text, allGoalsCountText: `${allGoalsCount} ${getCountText()}` };
+  return {
+    text,
+    allGoalsCountText: `${allGoalsCount} ${getCountText()}`,
+    allGoalsCount,
+  };
 };

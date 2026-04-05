@@ -60,3 +60,5 @@ export const DAYS_NUMBERS_IN_MONTHS = Array.from(
       (_, index) => index + 1
     )
 );
+
+export const MAX_GOALS_COUNT = 1000;

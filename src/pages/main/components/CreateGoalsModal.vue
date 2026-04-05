@@ -6,7 +6,7 @@ import { computed, ref, watch } from 'vue';
 
 import { LoadingModal } from 'features/loadingModal';
 import { CURRENT_YEAR } from 'shared/consts';
-import { useNotification } from 'shared/hooks';
+import { useGoalsInYear, useNotification } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 import {
@@ -20,7 +20,7 @@ import {
   DEFAULT_SWITCH_SETTINGS_FIELDS,
   DEFAULT_GOALS_FORM_FIELDS,
 } from '../consts/goalsFormFields';
-import { MONTH_INDEXES } from '../consts/periodOptions';
+import { MAX_GOALS_COUNT, MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import ExtraSettings from '../ui/ExtraSettings.vue';
 import { getConfirmModalText } from '../utils/getConfirmModalText';
@@ -28,6 +28,8 @@ import { getConfirmModalText } from '../utils/getConfirmModalText';
 import type { PeriodFilterValue } from '../types/periodOptions';
 import type { BaseFormExpose } from 'features/baseForm';
 import type { PeriodTypeValue } from 'shared/types';
+
+const goalsInYear = useGoalsInYear();
 
 const toast = useNotification();
 
@@ -54,9 +56,14 @@ const goalFormRef = computed<BaseFormExpose | null | undefined>(
   () => createGoalsFormRef.value?.goalFormRef
 );
 
+const maxCreateGoalsCount = computed(
+  () => MAX_GOALS_COUNT - goalsInYear.value.length
+);
+
 const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
   goalFormFields,
-  switchSettingsFields
+  switchSettingsFields,
+  maxCreateGoalsCount.value
 );
 
 watch(selectedPeriod, () => {
@@ -119,6 +126,15 @@ const handleShowConfirmModal = async () => {
 const handleCloseConfirmModal = () => {
   isConfirmModalVisible.value = false;
 };
+
+const confirmModalText = computed(() =>
+  getConfirmModalText({
+    selectedPeriod: selectedPeriod.value,
+    selectedPeriodFilter: selectedPeriodFilter.value,
+    selectedMonthChooseFilter: selectedMonthChooseFilter.value,
+    selectedDayChooseFilter: selectedDayChooseFilter.value,
+  })
+);
 
 const handleCreateGoals = async () => {
   handleCloseConfirmModal();
@@ -186,15 +202,6 @@ const handleCreateGoals = async () => {
 
   toast.add({ severity: 'success', summary: 'Цели успешно добавлены' });
 };
-
-const confirmModalText = computed(() =>
-  getConfirmModalText({
-    selectedPeriod: selectedPeriod.value,
-    selectedPeriodFilter: selectedPeriodFilter.value,
-    selectedMonthChooseFilter: selectedMonthChooseFilter.value,
-    selectedDayChooseFilter: selectedDayChooseFilter.value,
-  })
-);
 </script>
 
 <template>
@@ -218,12 +225,25 @@ const confirmModalText = computed(() =>
       <Message severity="success" variant="simple">
         <div class="confirm-modal-header">
           <i class="pi pi-info-circle confirm-modal-header-icon" />
-          <div>{{ confirmModalText.text }}</div>
+          <h4>{{ confirmModalText.text }}</h4>
         </div>
       </Message>
 
-      <Message severity="success">
-        <h3>{{ confirmModalText.allGoalsCountText }}</h3>
+      <Message
+        v-if="confirmModalText.allGoalsCount > maxCreateGoalsCount"
+        severity="error"
+      >
+        <h4>
+          Превышен лимит в {{ MAX_GOALS_COUNT }} целей,
+          {{
+            !maxCreateGoalsCount
+              ? ' цели не могут быть созданы'
+              : ` будут создано только ${maxCreateGoalsCount}`
+          }}
+        </h4>
+      </Message>
+      <Message v-else severity="success">
+        <h4>{{ confirmModalText.allGoalsCountText }}</h4>
       </Message>
 
       <h4>Желаете продолжить?</h4>
@@ -233,6 +253,7 @@ const confirmModalText = computed(() =>
           label="Создать"
           icon="pi pi-plus "
           raised
+          :disabled="!maxCreateGoalsCount"
           @click="handleCreateGoals"
         />
         <Button
