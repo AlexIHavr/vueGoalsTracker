@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import Message from 'primevue/message';
 import { computed, ref, watch } from 'vue';
 
 import { LoadingModal } from 'features/loadingModal';
 import { CURRENT_YEAR } from 'shared/consts';
+import { useNotification } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
 import {
@@ -21,12 +23,17 @@ import {
 import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import ExtraSettings from '../ui/ExtraSettings.vue';
+import { getConfirmModalText } from '../utils/getConfirmModalText';
 
 import type { PeriodFilterValue } from '../types/periodOptions';
 import type { BaseFormExpose } from 'features/baseForm';
 import type { PeriodTypeValue } from 'shared/types';
 
-const isDialogVisible = ref<boolean>(false);
+const toast = useNotification();
+
+const isCreateGoalsModalVisible = ref<boolean>(false);
+const isConfirmModalVisible = ref<boolean>(false);
+const isLoadingCreateGoals = ref<boolean>(false);
 
 const createGoalsFormRef = ref<GoalFormExpose | null>(null);
 
@@ -90,8 +97,8 @@ watch(selectedMonthChooseFilter, () => {
   selectedDayChooseFilter.value = [];
 });
 
-const handleShowDialog = () => {
-  isDialogVisible.value = true;
+const handleShowCreateGoalsDialog = () => {
+  isCreateGoalsModalVisible.value = true;
 };
 
 const resetDialog = () => {
@@ -102,10 +109,22 @@ const resetDialog = () => {
   selectedMonthChooseFilter.value = [];
   selectedDayChooseFilter.value = [];
 
-  isDialogVisible.value = false;
+  isCreateGoalsModalVisible.value = false;
+};
+
+const handleShowConfirmModal = async () => {
+  isConfirmModalVisible.value = true;
+};
+
+const handleCloseConfirmModal = () => {
+  isConfirmModalVisible.value = false;
 };
 
 const handleCreateGoals = async () => {
+  handleCloseConfirmModal();
+
+  isLoadingCreateGoals.value = true;
+
   const isSelectedMonth = selectedPeriod.value === 'month';
 
   if (selectedPeriod.value === 'year') {
@@ -162,7 +181,20 @@ const handleCreateGoals = async () => {
   }
 
   resetDialog();
+
+  isLoadingCreateGoals.value = false;
+
+  toast.add({ severity: 'success', summary: 'Цели успешно добавлены' });
 };
+
+const confirmModalText = computed(() =>
+  getConfirmModalText({
+    selectedPeriod: selectedPeriod.value,
+    selectedPeriodFilter: selectedPeriodFilter.value,
+    selectedMonthChooseFilter: selectedMonthChooseFilter.value,
+    selectedDayChooseFilter: selectedDayChooseFilter.value,
+  })
+);
 </script>
 
 <template>
@@ -171,21 +203,56 @@ const handleCreateGoals = async () => {
     icon="pi pi-plus"
     raised
     :disabled="selectedYear !== CURRENT_YEAR"
-    @click="handleShowDialog"
+    @click="handleShowCreateGoalsDialog"
   />
 
-  <LoadingModal v-if="goalFormRef?.isLoading" />
+  <LoadingModal v-if="isLoadingCreateGoals" />
 
   <Dialog
-    v-model:visible="isDialogVisible"
+    v-model:visible="isConfirmModalVisible"
+    header="Создать цели"
     modal
-    :close-on-escape="!goalFormRef?.isLoading"
+    dismissable-mask
+  >
+    <div class="confirm-modal-content">
+      <Message severity="success" variant="simple">
+        <div class="confirm-modal-header">
+          <i class="pi pi-info-circle confirm-modal-header-icon" />
+          <div>{{ confirmModalText.text }}</div>
+        </div>
+      </Message>
+
+      <Message severity="success">
+        <h3>{{ confirmModalText.allGoalsCountText }}</h3>
+      </Message>
+
+      <h4>Желаете продолжить?</h4>
+
+      <div class="confirm-modal-button-group">
+        <Button
+          label="Создать"
+          icon="pi pi-plus "
+          raised
+          @click="handleCreateGoals"
+        />
+        <Button
+          label="Отменить"
+          severity="contrast"
+          icon="pi pi-times"
+          raised
+          @click="handleCloseConfirmModal"
+        />
+      </div>
+    </div>
+  </Dialog>
+
+  <Dialog
+    v-model:visible="isCreateGoalsModalVisible"
+    header="Создать цели"
+    modal
+    :close-on-escape="!isLoadingCreateGoals"
     @after-hide="resetDialog"
   >
-    <template #header>
-      <h2>Создать цели</h2>
-    </template>
-
     <GoalForm
       ref="createGoalsFormRef"
       submit-button-icon="pi-plus"
@@ -193,7 +260,7 @@ const handleCreateGoals = async () => {
       :selected-period="selectedPeriod"
       :initial-fields="DEFAULT_GOALS_FORM_FIELDS"
       :initial-switch-settings="DEFAULT_SWITCH_SETTINGS_FIELDS"
-      :form-submit="handleCreateGoals"
+      :form-submit="handleShowConfirmModal"
     >
       <ExtraSettings
         v-model:selected-period="selectedPeriod"
@@ -204,3 +271,27 @@ const handleCreateGoals = async () => {
     </GoalForm>
   </Dialog>
 </template>
+
+<style lang="scss" scoped>
+.confirm-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.confirm-modal-header {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.confirm-modal-header-icon {
+  font-size: var(--p-confirmpopup-icon-size);
+}
+
+.confirm-modal-button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+</style>

@@ -34,7 +34,7 @@ const { updateGoal, removeGoal } = useGoals();
 
 const confirm = useConfirm();
 
-const { add } = useNotification();
+const toast = useNotification();
 
 const goalsInYear = useGoalsInYear();
 
@@ -84,7 +84,7 @@ const handleConfirmRemoveGoal = (event: PointerEvent) => {
     accept: async () => {
       await handleRemoveGoal();
 
-      add({ severity: 'success', summary: 'Цель удалена' });
+      toast.add({ severity: 'success', summary: 'Цель удалена' });
     },
   });
 };

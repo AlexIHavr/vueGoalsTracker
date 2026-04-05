@@ -4,6 +4,7 @@ import OverlayBadge from 'primevue/overlaybadge';
 import Popover from 'primevue/popover';
 import { computed, ref, watch, type ClassValue } from 'vue';
 
+import { LoadingModal } from 'features/loadingModal';
 import { TOOLTIP_SHOW_DELAY } from 'shared/consts';
 import {
   selectedCategoryFilters,
@@ -25,6 +26,7 @@ const goalsFiltersCount = computed<number>(
 
 const filtersPopoverRef = ref<InstanceType<typeof Popover> | null>(null);
 const isVisiblePopover = ref<boolean>(false);
+const isLoadingModalVisible = ref<boolean>(false);
 
 const filterButtonClasses = computed<ClassValue>(() => [
   'toggle-popover-button',
@@ -81,9 +83,12 @@ watch(selectedYear, () => {
     @click="handleToggleFiltersPopover"
   />
 
+  <LoadingModal v-if="isLoadingModalVisible" />
+
   <Popover
     ref="filtersPopoverRef"
     :close-on-escape="false"
+    :dismissable="!isLoadingModalVisible"
     @show="onShowPopover"
     @hide="onHidePopover"
   >
@@ -106,7 +111,9 @@ watch(selectedYear, () => {
 
       <DatesRangeFilters />
 
-      <CategoryFilters />
+      <CategoryFilters
+        v-model:is-loading-modal-visible="isLoadingModalVisible"
+      />
     </div>
   </Popover>
 </template>
