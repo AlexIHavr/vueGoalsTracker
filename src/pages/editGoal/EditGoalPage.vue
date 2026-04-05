@@ -63,31 +63,51 @@ const handleSubmitEditForm = (goal: GoalDocument) => async () => {
     editGoalForm.value?.goalFormFields.endTime ?? ''
   );
 
+  const goalStartDate = editGoalForm.value?.goalFormFields.startDate;
+  const goalEndDate = editGoalForm.value?.goalFormFields.endDate;
+
+  const goalStartDay =
+    editGoalForm.value?.goalFormFields.startDay ?? goalStartDate?.getDate();
+  const goalEndDay =
+    editGoalForm.value?.goalFormFields.endDay ?? goalEndDate?.getDate();
+
   const startDate = new Date(
-    CURRENT_YEAR,
-    editGoalForm.value?.goalFormFields.startDate?.getMonth() ?? 0,
-    goal.periodType === 'month'
-      ? editGoalForm.value?.goalFormFields.startDay
-      : editGoalForm.value?.goalFormFields.startDate?.getDate(),
+    goalStartDate?.getFullYear() ?? CURRENT_YEAR,
+    goalStartDate?.getMonth() ?? 0,
+    goal.periodType === 'month' ? goalStartDay : goalStartDate?.getDate(),
     startHours,
     startMinutes
   );
 
   const endDate = new Date(
-    CURRENT_YEAR,
-    editGoalForm.value?.goalFormFields.endDate?.getMonth() ?? 0,
-    goal.periodType === 'month'
-      ? editGoalForm.value?.goalFormFields.endDay
-      : editGoalForm.value?.goalFormFields.endDate?.getDate(),
+    goalEndDate?.getFullYear() ?? CURRENT_YEAR,
+    goalEndDate?.getMonth() ?? 0,
+    goal.periodType === 'month' ? goalEndDay : goalEndDate?.getDate(),
     endHours,
     endMinutes
   );
 
+  const timesStart =
+    editGoalForm.value?.goalFormFields.timesStart ?? goal.timesStart;
+
+  const timesEnd = editGoalForm.value?.goalFormFields.timesEnd ?? goal.timesEnd;
+
+  const timesStep =
+    editGoalForm.value?.goalFormFields.timesStep ?? goal.timesStep;
+
   await updateGoal(goal.id, {
-    ...editGoalForm.value?.goalFormFields,
-    ...editGoalForm.value?.switchSettingsFields,
+    title: editGoalForm.value?.goalFormFields.title,
+    description: editGoalForm.value?.goalFormFields.description,
+    category: editGoalForm.value?.goalFormFields.category,
+    timesSuffix: editGoalForm.value?.goalFormFields.timesSuffix,
     startDate,
     endDate,
+    timesStart,
+    timesEnd,
+    timesStep,
+    timesCurrent: goal.isCompleted ? timesEnd : timesStart,
+    isShowOneTimes: editGoalForm.value?.switchSettingsFields.isShowOneTimes,
+    isOverTimes: editGoalForm.value?.switchSettingsFields.isOverTimes,
   });
 
   toast.add({

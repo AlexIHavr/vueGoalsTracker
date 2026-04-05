@@ -209,7 +209,7 @@ const goToEditGoal = () => {
 </template>
 
 <style lang="scss" scoped>
-$goal-card-size: 320px;
+$goal-card-size: 330px;
 $goal-max-width: calc($goal-card-size - 2 * var(--p-card-body-padding));
 
 .goal-card {
