@@ -66,7 +66,9 @@ const handleSubmitEditForm = (goal: GoalDocument) => async () => {
   const startDate = new Date(
     CURRENT_YEAR,
     editGoalForm.value?.goalFormFields.startDate?.getMonth() ?? 0,
-    editGoalForm.value?.goalFormFields.startDay,
+    goal.periodType === 'month'
+      ? editGoalForm.value?.goalFormFields.startDay
+      : editGoalForm.value?.goalFormFields.startDate?.getDate(),
     startHours,
     startMinutes
   );
@@ -74,7 +76,9 @@ const handleSubmitEditForm = (goal: GoalDocument) => async () => {
   const endDate = new Date(
     CURRENT_YEAR,
     editGoalForm.value?.goalFormFields.endDate?.getMonth() ?? 0,
-    editGoalForm.value?.goalFormFields.endDay,
+    goal.periodType === 'month'
+      ? editGoalForm.value?.goalFormFields.endDay
+      : editGoalForm.value?.goalFormFields.endDate?.getDate(),
     endHours,
     endMinutes
   );
