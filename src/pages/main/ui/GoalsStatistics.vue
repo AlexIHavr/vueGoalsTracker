@@ -95,12 +95,9 @@ watch(isShowStatistics, (value) => {
 <style lang="scss" scoped>
 .goals-statistics {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
-
-  & > * {
-    width: 225px;
-  }
+  align-self: flex-start;
 }
 
 .show-statistics-button {

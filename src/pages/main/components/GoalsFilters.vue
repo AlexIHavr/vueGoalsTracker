@@ -94,10 +94,6 @@ watch(selectedYear, () => {
   >
     <div class="filters-wrapper">
       <Button
-        v-tooltip.bottom="{
-          value: goalsFiltersCount ? 'Убрать фильтры' : '',
-          showDelay: TOOLTIP_SHOW_DELAY,
-        }"
         icon="pi pi-filter-slash"
         size="small"
         severity="danger"

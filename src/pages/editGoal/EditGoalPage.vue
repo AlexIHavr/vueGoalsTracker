@@ -5,9 +5,9 @@ import ProgressSpinner from 'primevue/progressspinner';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { CURRENT_YEAR, ROUTES_PATHS } from 'shared/consts';
+import { ROUTES_PATHS } from 'shared/consts';
 import { useGoals, useNotification } from 'shared/hooks';
-import { getTimeLocalString, parseTime } from 'shared/utils';
+import { getTimeLocalString } from 'shared/utils';
 import { GoalCard } from 'widgets/goalCard';
 import {
   GoalForm,
@@ -16,18 +16,22 @@ import {
   type SwitchSettingsFields,
 } from 'widgets/goalForm';
 
+import { useEditGoal } from './hooks/useEditGoal';
+
 import type { GoalDocument } from 'shared/interfaces';
 
 const route = useRoute();
 const toast = useNotification();
 
-const { updateGoal, getGoal } = useGoals();
+const { getGoal } = useGoals();
 
 const goal = getGoal(route.params[ROUTES_PATHS.EDIT_GOAL.params] as string);
 
 const isLoading = goal.pending;
 
 const editGoalForm = ref<GoalFormExpose | null>(null);
+
+const editGoal = useEditGoal(editGoalForm);
 
 const getInitialFields = (goal: GoalDocument): GoalFormFields => {
   const startDate = goal.startDate.toDate();
@@ -55,60 +59,7 @@ const getInitialSwitchSettings = (goal: GoalDocument): SwitchSettingsFields => {
 };
 
 const handleSubmitEditForm = (goal: GoalDocument) => async () => {
-  const [startHours, startMinutes] = parseTime(
-    editGoalForm.value?.goalFormFields.startTime ?? ''
-  );
-
-  const [endHours, endMinutes] = parseTime(
-    editGoalForm.value?.goalFormFields.endTime ?? ''
-  );
-
-  const goalStartDate = editGoalForm.value?.goalFormFields.startDate;
-  const goalEndDate = editGoalForm.value?.goalFormFields.endDate;
-
-  const goalStartDay =
-    editGoalForm.value?.goalFormFields.startDay ?? goalStartDate?.getDate();
-  const goalEndDay =
-    editGoalForm.value?.goalFormFields.endDay ?? goalEndDate?.getDate();
-
-  const startDate = new Date(
-    goalStartDate?.getFullYear() ?? CURRENT_YEAR,
-    goalStartDate?.getMonth() ?? 0,
-    goal.periodType === 'month' ? goalStartDay : goalStartDate?.getDate(),
-    startHours,
-    startMinutes
-  );
-
-  const endDate = new Date(
-    goalEndDate?.getFullYear() ?? CURRENT_YEAR,
-    goalEndDate?.getMonth() ?? 0,
-    goal.periodType === 'month' ? goalEndDay : goalEndDate?.getDate(),
-    endHours,
-    endMinutes
-  );
-
-  const timesStart =
-    editGoalForm.value?.goalFormFields.timesStart ?? goal.timesStart;
-
-  const timesEnd = editGoalForm.value?.goalFormFields.timesEnd ?? goal.timesEnd;
-
-  const timesStep =
-    editGoalForm.value?.goalFormFields.timesStep ?? goal.timesStep;
-
-  await updateGoal(goal.id, {
-    title: editGoalForm.value?.goalFormFields.title,
-    description: editGoalForm.value?.goalFormFields.description,
-    category: editGoalForm.value?.goalFormFields.category,
-    timesSuffix: editGoalForm.value?.goalFormFields.timesSuffix,
-    startDate,
-    endDate,
-    timesStart,
-    timesEnd,
-    timesStep,
-    timesCurrent: goal.isCompleted ? timesEnd : timesStart,
-    isShowOneTimes: editGoalForm.value?.switchSettingsFields.isShowOneTimes,
-    isOverTimes: editGoalForm.value?.switchSettingsFields.isOverTimes,
-  });
+  await editGoal?.(goal);
 
   toast.add({
     severity: 'success',
