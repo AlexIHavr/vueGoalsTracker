@@ -7,6 +7,7 @@ import { DARK_THEME_CLASS, ROUTES_PATHS } from 'shared/consts';
 import { appLocalStorage } from 'shared/utils';
 
 import AppHeader from './layouts/AppHeader.vue';
+import DeleteConfirmPopup from './layouts/DeleteConfirmPopup.vue';
 
 const route = useRoute();
 
@@ -23,6 +24,8 @@ if (isDarkTheme) {
 
 <template>
   <Toast position="top-right" />
+
+  <DeleteConfirmPopup />
 
   <AppHeader v-if="isAuthPage === false" />
 

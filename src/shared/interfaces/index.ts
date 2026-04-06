@@ -3,3 +3,4 @@ export type {
   GoalSettings,
   GoalSettingsParams,
 } from './goalsCollection';
+export type { HistoryState } from './historyState';

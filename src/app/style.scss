@@ -138,6 +138,15 @@ h6 {
     opacity: var(--p-disabled-opacity);
   }
 
+  .p-select-label {
+    --p-select-color: var(--p-button-primary-color);
+    --p-select-placeholder-color: var(--p-button-primary-color);
+    --p-select-disabled-color: var(--p-button-primary-color);
+
+    padding-right: 0;
+    font-weight: var(--p-button-label-font-weight);
+  }
+
   @media (hover: hover) {
     &:hover {
       background-color: var(--p-button-primary-hover-background);
@@ -147,15 +156,6 @@ h6 {
 
 .p-select-overlay.p-anchored-overlay-leave-active {
   animation: none;
-}
-
-.p-select-label {
-  --p-select-color: var(--p-button-primary-color);
-  --p-select-placeholder-color: var(--p-button-primary-color);
-  --p-select-disabled-color: var(--p-button-primary-color);
-
-  padding-right: 0;
-  font-weight: var(--p-button-label-font-weight);
 }
 
 .p-select-dropdown {
@@ -184,15 +184,15 @@ h6 {
       background-color: var(--p-button-primary-hover-background);
     }
   }
-}
 
-.p-multiselect-label {
-  --p-multiselect-color: var(--p-button-primary-color);
-  --p-multiselect-placeholder-color: var(--p-button-primary-color);
-  --p-multiselect-disabled-color: var(--p-button-primary-color);
+  & .p-multiselect-label {
+    --p-multiselect-color: var(--p-button-primary-color);
+    --p-multiselect-placeholder-color: var(--p-button-primary-color);
+    --p-multiselect-disabled-color: var(--p-button-primary-color);
 
-  padding-right: 0;
-  font-weight: var(--p-button-label-font-weight);
+    padding-right: 0;
+    font-weight: var(--p-button-label-font-weight);
+  }
 }
 
 .p-multiselect-dropdown {
@@ -244,17 +244,6 @@ h6 {
     calc((var(--p-form-field-padding-x) * 2) + var(--p-icon-size));
 }
 
-// p-popover
-.p-popover .p-chip-remove-icon {
-  transition: background-color 0.2s;
-
-  @media (hover: hover) {
-    &:hover {
-      background-color: red;
-    }
-  }
-}
-
 // p-chip
 .p-chip.p-component {
   cursor: pointer;
@@ -299,4 +288,18 @@ h6 {
   &::-webkit-scrollbar {
     width: 0;
   }
+}
+
+// icons
+.p-password-toggle-mask-icon {
+  cursor: pointer;
+}
+
+// p-tooltip
+.p-tooltip {
+  --p-tooltip-background: var(--p-button-primary-hover-background);
+  --p-tooltip-color: var(--p-button-primary-color);
+  --p-tooltip-max-width: 300px;
+
+  font-size: 0.8rem;
 }

@@ -3,6 +3,8 @@ import MultiSelect from 'primevue/multiselect';
 import Select from 'primevue/select';
 import { computed } from 'vue';
 
+import { GoalTip } from 'features/goalTip';
+
 import {
   MONTH_CHOOSE_FILTERS_OPTIONS,
   PERIOD_FILTERS_OPTIONS,
@@ -12,8 +14,6 @@ import { getDaysInSelectedMonths } from '../utils/getDaysInSelectedMonths';
 
 import type { PeriodFilterValue } from '../types/periodOptions';
 import type { PeriodTypeValue } from 'shared/types';
-
-const { isLoading } = defineProps<{ isLoading: boolean }>();
 
 const selectedPeriod = defineModel<PeriodTypeValue>('selectedPeriod', {
   required: true,
@@ -43,53 +43,71 @@ const selectedDayChooseFilter = defineModel<number[]>(
 const dayChooseFilterOptions = computed<number[]>(() =>
   getDaysInSelectedMonths(selectedMonthChooseFilter.value)
 );
+
+const selectPeriodTipText = computed(() => {
+  if (selectedPeriod.value === 'year') {
+    return 'При выборе "Год" - будет создана только одна цель на весь год';
+  }
+
+  if (selectedPeriod.value === 'month') {
+    return 'При выборе "Месяц" - будет созданы цели на выбранные месяцы ниже';
+  }
+
+  return 'При выборе "День" - будет созданы цели на выбранные дни ниже';
+});
 </script>
 
 <template>
   <div class="extra-settings">
-    <Select
-      v-model="selectedPeriod"
-      class="period-select"
-      option-label="label"
-      option-value="value"
-      :options="PERIOD_TYPES_OPTIONS"
-      :disabled="isLoading"
-    />
+    <div class="select-period-wrapper">
+      <Select
+        v-model="selectedPeriod"
+        class="period-select"
+        option-label="label"
+        option-value="value"
+        :options="PERIOD_TYPES_OPTIONS"
+      />
+
+      <GoalTip :text="selectPeriodTipText" />
+    </div>
 
     <div class="period-settings">
-      <Select
-        v-model="selectedPeriodFilter"
-        option-label="label"
-        option-value="value"
-        :options="PERIOD_FILTERS_OPTIONS"
-        :disabled="selectedPeriod === 'year' || isLoading"
-      />
+      <div class="selected-period-filter-wrapper">
+        <Select
+          v-model="selectedPeriodFilter"
+          option-label="label"
+          option-value="value"
+          :options="PERIOD_FILTERS_OPTIONS"
+          :disabled="selectedPeriod === 'year'"
+        />
 
-      <MultiSelect
-        v-model="selectedMonthChooseFilter"
-        input-id="month-choose-filter"
-        option-label="label"
-        option-value="value"
-        placeholder="Все месяцы"
-        :options="MONTH_CHOOSE_FILTERS_OPTIONS"
-        :disabled="
-          selectedPeriod === 'year' ||
-          (selectedPeriod === 'month' && selectedPeriodFilter !== 'choose') ||
-          (selectedPeriod === 'day' && selectedPeriodFilter === 'all') ||
-          isLoading
-        "
-      />
+        <MultiSelect
+          v-model="selectedMonthChooseFilter"
+          input-id="month-choose-filter"
+          option-label="label"
+          option-value="value"
+          placeholder="Все месяцы"
+          :options="MONTH_CHOOSE_FILTERS_OPTIONS"
+          :disabled="
+            selectedPeriod === 'year' ||
+            (selectedPeriod === 'month' && selectedPeriodFilter !== 'choose') ||
+            (selectedPeriod === 'day' && selectedPeriodFilter === 'all')
+          "
+        />
 
-      <MultiSelect
-        v-model="selectedDayChooseFilter"
-        input-id="day-choose-filter"
-        placeholder="Все дни"
-        :options="dayChooseFilterOptions"
-        :disabled="
-          selectedPeriod !== 'day' ||
-          selectedPeriodFilter !== 'choose' ||
-          isLoading
-        "
+        <MultiSelect
+          v-model="selectedDayChooseFilter"
+          input-id="day-choose-filter"
+          placeholder="Все дни"
+          :options="dayChooseFilterOptions"
+          :disabled="
+            selectedPeriod !== 'day' || selectedPeriodFilter !== 'choose'
+          "
+        />
+      </div>
+
+      <GoalTip
+        text="Здесь вы можете выбрать определенные месяцы или дни (если вы выберите день, который превышает количество дней в месяце, то будет создана цель на последний день данного месяца)"
       />
     </div>
   </div>
@@ -102,14 +120,25 @@ const dayChooseFilterOptions = computed<number[]>(() =>
   gap: 10px;
 }
 
+.select-period-wrapper {
+  display: flex;
+  gap: 5px;
+}
+
 .period-settings {
   display: flex;
+  gap: 5px;
   justify-content: space-between;
+}
+
+.selected-period-filter-wrapper {
+  display: flex;
+  gap: 5px;
 }
 
 .p-select,
 .p-multiselect {
-  width: 162px;
+  width: 150px;
 }
 
 .period-select {

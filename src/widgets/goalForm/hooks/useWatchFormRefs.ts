@@ -20,6 +20,22 @@ export function useWatchFormRefs(
   };
 
   watch(
+    () => createGoalsFormRef.value?.formRef?.valid,
+    (value) => {
+      if (
+        !value &&
+        formStates.value?.title.invalid &&
+        createGoalsFormRef.value?.formRef?.$el?.parentElement
+      ) {
+        createGoalsFormRef.value?.formRef.$el.parentElement.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+    }
+  );
+
+  watch(
     () => formStates.value?.timesStart?.value,
     () => {
       validateFormState('timesEnd');

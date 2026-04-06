@@ -16,18 +16,22 @@ import {
   type SwitchSettingsFields,
 } from 'widgets/goalForm';
 
+import { useEditGoal } from './hooks/useEditGoal';
+
 import type { GoalDocument } from 'shared/interfaces';
 
 const route = useRoute();
 const toast = useNotification();
 
-const { updateGoal, getGoal } = useGoals();
+const { getGoal } = useGoals();
 
 const goal = getGoal(route.params[ROUTES_PATHS.EDIT_GOAL.params] as string);
 
 const isLoading = goal.pending;
 
 const editGoalForm = ref<GoalFormExpose | null>(null);
+
+const editGoal = useEditGoal(editGoalForm);
 
 const getInitialFields = (goal: GoalDocument): GoalFormFields => {
   const startDate = goal.startDate.toDate();
@@ -54,18 +58,13 @@ const getInitialSwitchSettings = (goal: GoalDocument): SwitchSettingsFields => {
   return { isOverTimes: goal.isOverTimes, isShowOneTimes: goal.isShowOneTimes };
 };
 
-const handleSubmitEditForm = async () => {
-  if (goal.value) {
-    await updateGoal(goal.value.id, {
-      ...editGoalForm.value?.goalFormFields,
-      ...editGoalForm.value?.switchSettingsFields,
-    });
+const handleSubmitEditForm = (goal: GoalDocument) => async () => {
+  await editGoal?.(goal);
 
-    toast.add({
-      severity: 'success',
-      summary: 'Цель успешно изменена',
-    });
-  }
+  toast.add({
+    severity: 'success',
+    summary: 'Цель успешно изменена',
+  });
 };
 </script>
 
@@ -94,7 +93,7 @@ const handleSubmitEditForm = async () => {
               :selected-period="goal.periodType"
               :initial-fields="getInitialFields(goal)"
               :initial-switch-settings="getInitialSwitchSettings(goal)"
-              :form-submit="handleSubmitEditForm"
+              :form-submit="handleSubmitEditForm(goal)"
             />
           </template>
         </Card>

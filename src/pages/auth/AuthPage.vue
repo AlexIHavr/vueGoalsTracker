@@ -19,6 +19,7 @@ import { authResolver } from './schemas/authResolver';
 
 import type { AuthFormFields } from './interfaces/authFormFields';
 import type { FirebaseError } from 'firebase/app';
+import type { HistoryState } from 'shared/interfaces';
 
 const authForm = reactive<AuthFormFields>({
   email: '',
@@ -28,10 +29,12 @@ const authForm = reactive<AuthFormFields>({
 const route = useRoute();
 const router = useRouter();
 
-const successAuthRedirect = () => {
+const successAuthRedirect = (
+  { isNewUser }: HistoryState = { isNewUser: false }
+) => {
   let redirectPath = (route.query.redirect ?? ROUTES_PATHS.MAIN) as string;
 
-  router.push(redirectPath);
+  router.push({ path: redirectPath, state: { isNewUser } });
 };
 
 const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
@@ -50,7 +53,7 @@ const handleAuth = async ({ submitErrorMessage }: BaseFormEvent) => {
           authForm.password
         );
 
-        successAuthRedirect();
+        successAuthRedirect({ isNewUser: true });
       } catch (createErr) {
         const createError = createErr as FirebaseError;
 

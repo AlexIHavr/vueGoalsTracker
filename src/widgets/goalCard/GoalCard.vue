@@ -3,11 +3,12 @@ import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Message from 'primevue/message';
 import Tag from 'primevue/tag';
+import { useConfirm } from 'primevue/useconfirm';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { MAX_TIMES, ROUTES_PATHS } from 'shared/consts';
-import { useGoals, useGoalsInYear } from 'shared/hooks';
+import { MAX_TIMES, ROUTES_PATHS, TOOLTIP_SHOW_DELAY } from 'shared/consts';
+import { useGoals, useGoalsInYear, useNotification } from 'shared/hooks';
 import { selectedCategoryFilters } from 'shared/store';
 
 import { getGoalDates } from './utils/getGoalDates';
@@ -30,6 +31,10 @@ const { goal } = defineProps<{
 }>();
 
 const { updateGoal, removeGoal } = useGoals();
+
+const confirm = useConfirm();
+
+const toast = useNotification();
 
 const goalsInYear = useGoalsInYear();
 
@@ -72,6 +77,18 @@ const handleRemoveGoal = async () => {
   }
 };
 
+const handleConfirmRemoveGoal = (event: PointerEvent) => {
+  confirm.require({
+    target: event.currentTarget as HTMLButtonElement,
+    message: 'Вы уверены, что хотите удалить цель?',
+    accept: async () => {
+      await handleRemoveGoal();
+
+      toast.add({ severity: 'success', summary: 'Цель удалена' });
+    },
+  });
+};
+
 const handleUpdateTimes = () => {
   const isOverUpdateTimes =
     goal.isOverTimes &&
@@ -110,6 +127,10 @@ const goToEditGoal = () => {
 
       <Tag
         v-if="!isEditGoalPage"
+        v-tooltip.bottom="{
+          value: 'Редактировать цель',
+          showDelay: TOOLTIP_SHOW_DELAY,
+        }"
         icon="pi pi-pencil"
         class="edit-goal-button"
         :severity="goalAttrs.buttonSeverity"
@@ -120,6 +141,10 @@ const goToEditGoal = () => {
         <h4 class="goal-title">{{ goal.title }}</h4>
 
         <Button
+          v-tooltip.bottom="{
+            value: goal.isCompleted ? 'Отменить цель' : 'Выполнить цель',
+            showDelay: TOOLTIP_SHOW_DELAY,
+          }"
           size="small"
           rounded
           :icon="goalAttrs.statusIcon"
@@ -168,10 +193,14 @@ const goToEditGoal = () => {
           />
 
           <Button
+            v-tooltip.bottom="{
+              value: 'Удалить цель',
+              showDelay: TOOLTIP_SHOW_DELAY,
+            }"
             icon="pi pi-trash"
             severity="danger"
             raised
-            @click="handleRemoveGoal"
+            @click="handleConfirmRemoveGoal"
           />
         </div>
       </div>
@@ -180,7 +209,7 @@ const goToEditGoal = () => {
 </template>
 
 <style lang="scss" scoped>
-$goal-card-size: 320px;
+$goal-card-size: 330px;
 $goal-max-width: calc($goal-card-size - 2 * var(--p-card-body-padding));
 
 .goal-card {

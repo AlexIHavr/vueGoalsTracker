@@ -7,7 +7,7 @@ const { name } = defineProps<{ name: T }>();
 </script>
 
 <template>
-  <FormField v-slot="$field" :name>
+  <FormField v-slot="$field" class="form-field" :name>
     <FloatLabel variant="on">
       <slot />
     </FloatLabel>
@@ -24,6 +24,10 @@ const { name } = defineProps<{ name: T }>();
 </template>
 
 <style lang="scss" scoped>
+.form-field {
+  width: 100%;
+}
+
 .p-message-simple {
   margin-top: 8px;
 }

@@ -17,7 +17,8 @@ interface CreateDayGoalParams {
 
 export function useCreatePeriodGoal(
   createGoalsForm: ComputedRef<GoalFormFields | undefined>,
-  switchSettingsFields: ComputedRef<SwitchSettingsFields | undefined>
+  switchSettingsFields: ComputedRef<SwitchSettingsFields | undefined>,
+  maxCreateGoalsCount: ComputedRef<number>
 ) {
   const { createGoal } = useGoals();
 
@@ -26,7 +27,11 @@ export function useCreatePeriodGoal(
     endDate?: Date,
     periodType: PeriodTypeValue = 'year'
   ) => {
-    if (!createGoalsForm.value || !switchSettingsFields.value) {
+    if (
+      !createGoalsForm.value ||
+      !switchSettingsFields.value ||
+      !maxCreateGoalsCount.value
+    ) {
       return;
     }
 
@@ -58,7 +63,7 @@ export function useCreatePeriodGoal(
   };
 
   const createMonthGoal = async (months: number[] = []) => {
-    if (!createGoalsForm.value) {
+    if (!createGoalsForm.value || !maxCreateGoalsCount.value) {
       return;
     }
 
@@ -68,13 +73,17 @@ export function useCreatePeriodGoal(
       createGoalsForm.value.endDay ?? DEFAULT_GOALS_FORM_FIELDS.endDay;
 
     await Promise.all(
-      (months.length ? months : MONTH_INDEXES).map((monthIndex) => {
+      (months.length ? months : MONTH_INDEXES).map((monthIndex, index) => {
+        if (index > maxCreateGoalsCount.value - 1) {
+          return;
+        }
+
         const lastDay = getLastDayOfMonth(monthIndex);
 
         const startDate = new Date(
           CURRENT_YEAR,
           monthIndex,
-          startDay > lastDay ? lastDay : startDay
+          startDay > lastDay ? lastDay - 1 : startDay
         );
 
         const endDate = new Date(
@@ -93,13 +102,17 @@ export function useCreatePeriodGoal(
     days = [],
     filterFunc,
   }: CreateDayGoalParams = {}) => {
-    if (!createGoalsForm.value) {
+    if (!createGoalsForm.value || !maxCreateGoalsCount.value) {
       return;
     }
 
     const daysGoal: Promise<void>[] = [];
 
     (months.length ? months : MONTH_INDEXES).forEach((monthIndex) => {
+      if (daysGoal.length > maxCreateGoalsCount.value - 1) {
+        return;
+      }
+
       const daysInMonth = DAYS_NUMBERS_IN_MONTHS[monthIndex]!;
 
       const filteredDaysInMonth = filterFunc
@@ -107,7 +120,10 @@ export function useCreatePeriodGoal(
         : daysInMonth;
 
       (days.length ? days : filteredDaysInMonth).forEach((dayNumber) => {
-        if (!createGoalsForm.value) {
+        if (
+          !createGoalsForm.value ||
+          daysGoal.length > maxCreateGoalsCount.value - 1
+        ) {
           return;
         }
 

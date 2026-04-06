@@ -7,7 +7,7 @@ import { useGoals } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 import { getUniqueArr } from 'shared/utils';
 
-import CreateGoalsDialog from './CreateGoalsDialog.vue';
+import CreateGoalsModal from './CreateGoalsModal.vue';
 import GoalsFilters from './GoalsFilters.vue';
 import GoalsSearch from '../ui/GoalsSearch.vue';
 import GoalsSort from '../ui/GoalsSort.vue';
@@ -25,7 +25,7 @@ const yearSelectOptions = computed<number[]>(() =>
 
 <template>
   <div class="goals-board-header">
-    <CreateGoalsDialog />
+    <CreateGoalsModal />
     <Select
       v-model="selectedYear"
       :options="yearSelectOptions"

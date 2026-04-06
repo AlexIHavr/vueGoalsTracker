@@ -4,6 +4,7 @@ import InputText from 'primevue/inputtext';
 import { inject } from 'vue';
 
 import { BaseFormField } from 'features/baseFormField';
+import { GoalTip } from 'features/goalTip';
 import { ALL_EXCEPT_NUMBERS_REGEX } from 'shared/consts';
 
 import { INITIAL_FIELDS_INJECT_KEY } from '../consts/injectKeys';
@@ -31,54 +32,76 @@ const timesStep = defineModel<GoalFormFields['timesStep'] | null>('timesStep', {
 </script>
 
 <template>
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="timesSuffix" :initial-value="initialFields?.timesSuffix">
-    <InputText
-      id="goals-timesSuffix"
-      v-model="timesSuffix"
-      v-keyfilter="ALL_EXCEPT_NUMBERS_REGEX"
-      fluid
-      show-clear
-    />
-    <label for="goals-timesSuffix">Наименование количества</label>
-  </BaseFormField>
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField
+      name="timesSuffix"
+      :initial-value="initialFields?.timesSuffix"
+    >
+      <InputText
+        id="goals-timesSuffix"
+        v-model="timesSuffix"
+        v-keyfilter="ALL_EXCEPT_NUMBERS_REGEX"
+        fluid
+        show-clear
+      />
+      <label for="goals-timesSuffix">Наименование количества</label>
+    </BaseFormField>
 
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="timesStart">
-    <InputNumber
-      v-model="timesStart"
-      input-id="goals-timesStart"
-      fluid
-      show-clear
-      :suffix="timesSuffix"
-      :min="0"
+    <GoalTip
+      text='Укажите здесь наименование, которое будет применяться ко всем количествам. Например при указании " раз" ваше количестве будет выглядеть как "0 раз из 5 раз"'
     />
-    <label for="goals-timesStart">Начальное количество*</label>
-  </BaseFormField>
+  </div>
 
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="timesEnd">
-    <InputNumber
-      v-model="timesEnd"
-      input-id="goals-timesEnd"
-      fluid
-      show-clear
-      :suffix="timesSuffix"
-      :min="0"
-    />
-    <label for="goals-timesEnd">Количество*</label>
-  </BaseFormField>
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField name="timesStart">
+      <InputNumber
+        v-model="timesStart"
+        input-id="goals-timesStart"
+        fluid
+        show-clear
+        :min="0"
+      />
+      <label for="goals-timesStart">Начальное количество</label>
+    </BaseFormField>
 
-  <!-- @vue-generic {keyof GoalFormFields} -->
-  <BaseFormField name="timesStep">
-    <InputNumber
-      v-model="timesStep"
-      input-id="goals-timesStep"
-      fluid
-      show-clear
-      :suffix="timesSuffix"
-      :min="0"
+    <GoalTip text="Укажите начальное количество вашей цели" />
+  </div>
+
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField name="timesEnd">
+      <InputNumber
+        v-model="timesEnd"
+        input-id="goals-timesEnd"
+        fluid
+        show-clear
+        :min="0"
+      />
+      <label for="goals-timesEnd">Количество</label>
+    </BaseFormField>
+
+    <GoalTip
+      text="Укажите какое количество раз должна будет выполниться ваша цель"
     />
-    <label for="goals-timesStep">Шаг*</label>
-  </BaseFormField>
+  </div>
+
+  <div class="goal-field-wrapper">
+    <!-- @vue-generic {keyof GoalFormFields} -->
+    <BaseFormField name="timesStep">
+      <InputNumber
+        v-model="timesStep"
+        input-id="goals-timesStep"
+        fluid
+        show-clear
+        :min="0"
+      />
+      <label for="goals-timesStep">Шаг</label>
+    </BaseFormField>
+
+    <GoalTip
+      text="Укажите с каким шагом будет выполняться ваша цель. Например при шаге 2 к вашему количеству будет каждый раз прибавляется 2"
+    />
+  </div>
 </template>

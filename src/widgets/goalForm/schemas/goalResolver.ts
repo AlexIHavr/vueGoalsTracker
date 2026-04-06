@@ -11,7 +11,7 @@ const MAX_TITLE_LENGTH = 50;
 const MAX_DESCRIPTION_LENGTH = 500;
 const MAX_CATEGORY_LENGTH = 30;
 
-const MAX_TIMES_SUFFIX_LENGTH = 5;
+const MAX_TIMES_SUFFIX_LENGTH = 7;
 
 const MIN_TIMES_START = 0;
 const MIN_DAY = 1;
@@ -24,7 +24,7 @@ const getNumberScheme = ({
   maxValue = MAX_TIMES,
 }: {
   name: string;
-  defaultValue: number;
+  defaultValue: number | null;
   errorVerb?: string;
   minValue?: number;
   maxValue?: number;
@@ -32,13 +32,14 @@ const getNumberScheme = ({
   const min = minValue;
 
   return number()
+    .nullable()
     .transform((value) => (value === null ? defaultValue : value))
-    .required(`${name} обязательно`)
     .min(min, `${name} не ${errorVerb} быть меньше ${min}`)
     .max(
       maxValue,
       `${name} не ${errorVerb} превышать ${getLocaleNumberString(maxValue)}`
-    );
+    )
+    .defined();
 };
 
 const createGoalSchema = (
