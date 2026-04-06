@@ -15,5 +15,5 @@ export {
   MAX_START_DATE,
   DATE_FIELD_FORMAT,
 } from './dates';
-export { MAX_TIMES } from './goals';
+export { MAX_TIMES, MAX_GOALS_COUNT } from './goals';
 export { TOOLTIP_SHOW_DELAY } from './tooltip';

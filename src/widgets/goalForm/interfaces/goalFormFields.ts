@@ -1,12 +1,4 @@
-export interface GoalFormNumberFields {
-  timesStart: number;
-  timesEnd: number;
-  timesStep: number;
-  startDay: number;
-  endDay: number;
-}
-
-export interface GoalFormFields extends GoalFormNumberFields {
+export interface GoalFormFields {
   title: string;
   description: string;
   category: string;
@@ -15,6 +7,11 @@ export interface GoalFormFields extends GoalFormNumberFields {
   endDate: Date;
   startTime: string;
   endTime: string;
+  timesStart: number | null;
+  timesEnd: number | null;
+  timesStep: number | null;
+  startDay: number | null;
+  endDay: number | null;
 }
 
 export interface SwitchSettingsFields {

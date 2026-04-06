@@ -5,7 +5,7 @@ import Message from 'primevue/message';
 import { computed, ref, watch } from 'vue';
 
 import { LoadingModal } from 'features/loadingModal';
-import { CURRENT_YEAR } from 'shared/consts';
+import { CURRENT_YEAR, MAX_GOALS_COUNT } from 'shared/consts';
 import { useGoalsInYear, useNotification } from 'shared/hooks';
 import { selectedYear } from 'shared/store';
 import { getEvenNumbers, getOddNumbers } from 'shared/utils';
@@ -20,7 +20,7 @@ import {
   DEFAULT_SWITCH_SETTINGS_FIELDS,
   DEFAULT_GOALS_FORM_FIELDS,
 } from '../consts/goalsFormFields';
-import { MAX_GOALS_COUNT, MONTH_INDEXES } from '../consts/periodOptions';
+import { MONTH_INDEXES } from '../consts/periodOptions';
 import { useCreatePeriodGoal } from '../hooks/useCreatePeriodGoal';
 import ExtraSettings from '../ui/ExtraSettings.vue';
 import { getConfirmModalText } from '../utils/getConfirmModalText';
@@ -56,14 +56,16 @@ const goalFormRef = computed<BaseFormExpose | null | undefined>(
   () => createGoalsFormRef.value?.goalFormRef
 );
 
-const maxCreateGoalsCount = computed(
-  () => MAX_GOALS_COUNT - goalsInYear.value.length
+const maxCreateGoalsCount = computed(() =>
+  goalsInYear.value.length > MAX_GOALS_COUNT
+    ? 0
+    : MAX_GOALS_COUNT - goalsInYear.value.length
 );
 
 const { createYearGoal, createMonthGoal, createDayGoal } = useCreatePeriodGoal(
   goalFormFields,
   switchSettingsFields,
-  maxCreateGoalsCount.value
+  maxCreateGoalsCount
 );
 
 watch(selectedPeriod, () => {
@@ -314,5 +316,9 @@ const handleCreateGoals = async () => {
   display: flex;
   gap: 10px;
   justify-content: center;
+}
+
+.confirm-modal-content .p-message {
+  animation: none;
 }
 </style>

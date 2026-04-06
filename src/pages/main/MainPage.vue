@@ -3,6 +3,7 @@ import Dialog from 'primevue/dialog';
 import ProgressSpinner from 'primevue/progressspinner';
 import { ref } from 'vue';
 
+import { MAX_GOALS_COUNT } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
 
 import GoalsBoard from './components/GoalsBoard.vue';
@@ -37,7 +38,8 @@ const hideWelcomeDialog = () => {
     >
       <h4 class="welcome-content">
         Здесь ты сможешь создавать свои цели на текущий год. Можешь по одной, а
-        можешь сразу несколько - на каждый месяц или даже на каждый день. Удачи!
+        можешь сразу несколько - на каждый месяц или даже на каждый день. Помни,
+        что ты можешь создать только {{ MAX_GOALS_COUNT }} целей в год. Удачи!
       </h4>
     </Dialog>
 
