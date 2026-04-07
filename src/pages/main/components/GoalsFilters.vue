@@ -141,3 +141,9 @@ watch(selectedYear, () => {
   height: 40px;
 }
 </style>
+
+<style lang="scss">
+.p-popover {
+  margin-left: 23px;
+}
+</style>

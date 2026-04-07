@@ -3,10 +3,12 @@ import { ref, watchEffect } from 'vue';
 import { MEDIA_QUERIES } from 'shared/consts';
 
 export function useMatchMedia(mediaQuery = MEDIA_QUERIES.MOBILE) {
-  const isMatches = ref<boolean>(false);
+  const isMatchMedia = ref<boolean>(false);
 
   const setMatches = () => {
-    isMatches.value = window.matchMedia(`(max-width: ${mediaQuery}px)`).matches;
+    isMatchMedia.value = window.matchMedia(
+      `(max-width: ${mediaQuery}px)`
+    ).matches;
   };
 
   watchEffect((onCleanup) => {
@@ -19,5 +21,5 @@ export function useMatchMedia(mediaQuery = MEDIA_QUERIES.MOBILE) {
     });
   });
 
-  return isMatches;
+  return isMatchMedia;
 }

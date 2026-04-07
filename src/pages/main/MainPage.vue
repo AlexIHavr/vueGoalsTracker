@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import Drawer from 'primevue/drawer';
 import ProgressSpinner from 'primevue/progressspinner';
 import { ref } from 'vue';
 
 import { MAX_GOALS_COUNT } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
+import { useMatchMedia } from 'shared/hooks';
 
 import GoalsBoard from './components/GoalsBoard.vue';
 import GoalsBoardHeader from './components/GoalsBoardHeader.vue';
@@ -15,7 +18,10 @@ const {
   data: { pending },
 } = useGoals();
 
+const isMatchMedia = useMatchMedia();
+
 const isWelcomeDialogVisible = ref<boolean>(true);
+const isMobileDrawerVisible = ref<boolean>(false);
 
 const isNewUser = (history.state as HistoryState).isNewUser;
 
@@ -25,10 +31,14 @@ const hideWelcomeDialog = () => {
     ''
   );
 };
+
+const handleToggleMobileDrawerVisible = () => {
+  isMobileDrawerVisible.value = !isMobileDrawerVisible.value;
+};
 </script>
 
 <template>
-  <div v-if="!pending" class="main-page">
+  <div v-if="!pending" :class="['main-page', { 'is-mobile': isMatchMedia }]">
     <Dialog
       v-if="isNewUser"
       v-model:visible="isWelcomeDialogVisible"
@@ -43,7 +53,17 @@ const hideWelcomeDialog = () => {
       </h4>
     </Dialog>
 
-    <GoalsBoardHeader />
+    <Drawer v-model:visible="isMobileDrawerVisible" header="Меню" block-scroll>
+      <GoalsBoardHeader />
+    </Drawer>
+
+    <Button
+      v-if="isMatchMedia"
+      icon="pi pi-bars"
+      raised
+      @click="handleToggleMobileDrawerVisible"
+    />
+    <GoalsBoardHeader v-else />
     <GoalsBoard />
   </div>
   <ProgressSpinner v-else class="loader" />
@@ -54,6 +74,11 @@ const hideWelcomeDialog = () => {
   display: flex;
   flex-direction: column;
   gap: 30px;
+
+  &.is-mobile {
+    gap: 10px;
+    overflow: hidden;
+  }
 }
 
 .loader {

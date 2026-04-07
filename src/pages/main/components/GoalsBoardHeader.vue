@@ -32,8 +32,12 @@ const yearSelectOptions = computed<number[]>(() =>
       :default-value="selectedYear"
       :placeholder="selectedYear.toString()"
     />
-    <GoalsSort />
-    <GoalsFilters />
+
+    <div class="sort-and-filters-wrapper">
+      <GoalsSort />
+      <GoalsFilters />
+    </div>
+
     <GoalsSearch />
   </div>
 </template>
@@ -42,6 +46,16 @@ const yearSelectOptions = computed<number[]>(() =>
 .goals-board-header {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
+
+  .p-drawer-content & {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.sort-and-filters-wrapper {
+  display: flex;
   gap: 10px;
 }
 </style>

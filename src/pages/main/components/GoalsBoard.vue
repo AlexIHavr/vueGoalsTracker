@@ -31,6 +31,10 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
   <div class="goal-board-wrapper">
     <GoalsStatistics :filtered-goals-in-year="filteredGoalsInYear" />
 
+    <Message v-if="goalsInYear.length" severity="success">
+      <h4>Ваши цели</h4>
+    </Message>
+
     <main class="goals-board">
       <Message
         v-if="!filteredGoalsInYear.length && goalsInYear.length"
@@ -61,6 +65,7 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: space-around;
 }
 
 .goal-cards-enter-active {

@@ -1,3 +1,3 @@
 export const MEDIA_QUERIES = {
-  MOBILE: 550,
+  MOBILE: 600,
 } as const;

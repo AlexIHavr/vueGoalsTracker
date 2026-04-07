@@ -8,8 +8,10 @@ import { useCurrentUser } from 'vuefire';
 
 import { auth } from 'shared/api';
 import { ROUTES_PATHS, DARK_THEME_CLASS } from 'shared/consts';
-import { useNotification } from 'shared/hooks';
+import { useMatchMedia, useNotification } from 'shared/hooks';
 import { appLocalStorage } from 'shared/utils';
+
+const isMatchMedia = useMatchMedia();
 
 const isLoading = ref<boolean>(false);
 const isDarkTheme = ref<boolean>(appLocalStorage.get('isDarkTheme') ?? false);
@@ -69,9 +71,9 @@ const goToMain = () => {
     />
 
     <Button
-      label="Все цели"
       icon="pi pi-home"
       raised
+      :label="isMatchMedia ? '' : 'Все цели'"
       :class="{ active: route.path === ROUTES_PATHS.MAIN }"
       @click="goToMain"
     />
@@ -79,6 +81,8 @@ const goToMain = () => {
     <Message class="welcome-message" severity="secondary">
       <h4>Добро пожаловать {{ user?.email }}</h4>
     </Message>
+
+    <Message severity="success">beta v.1.0.0</Message>
   </header>
 </template>
 
