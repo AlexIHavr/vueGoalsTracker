@@ -85,6 +85,7 @@ const goToMain = () => {
 <style lang="scss" scoped>
 .app-header {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 30px;
 }

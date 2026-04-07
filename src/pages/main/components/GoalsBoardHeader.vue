@@ -41,6 +41,7 @@ const yearSelectOptions = computed<number[]>(() =>
 <style lang="scss" scoped>
 .goals-board-header {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 </style>

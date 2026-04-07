@@ -60,7 +60,7 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 .goals-board {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 }
 
 .goal-cards-enter-active {
