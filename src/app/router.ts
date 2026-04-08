@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import { getCurrentUser } from 'vuefire';
 
 import { AuthPage } from 'pages/auth';
@@ -7,7 +7,7 @@ import { MainPage } from 'pages/main';
 import { ROUTES_PATHS } from 'shared/consts';
 
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: ROUTES_PATHS.AUTH,
