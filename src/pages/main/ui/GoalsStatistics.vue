@@ -3,8 +3,6 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { computed, ref, watch } from 'vue';
 
-import { TOOLTIP_SHOW_DELAY } from 'shared/consts';
-import { useMatchMedia } from 'shared/hooks';
 import { appLocalStorage } from 'shared/utils';
 import { getGoalStatus } from 'widgets/goalCard';
 
@@ -14,8 +12,6 @@ import type { GoalStatus } from 'shared/types';
 const { filteredGoalsInYear } = defineProps<{
   filteredGoalsInYear: GoalDocument[];
 }>();
-
-const isMatchMedia = useMatchMedia();
 
 const isShowStatistics = ref<boolean>(
   appLocalStorage.get('isShowStatistics') ?? false
@@ -66,20 +62,14 @@ watch(isShowStatistics, (value) => {
 
 <template>
   <Button
-    v-tooltip.bottom="{
-      value: 'Статистика',
-      showDelay: TOOLTIP_SHOW_DELAY,
-    }"
     icon="pi pi-chart-bar"
+    label="Статистика"
     raised
     :class="['show-statistics-button', { active: isShowStatistics }]"
     @click="handleShowStatistics"
   />
 
-  <div
-    v-if="isShowStatistics"
-    :class="['goals-statistics', { 'is-mobile': isMatchMedia }]"
-  >
+  <div v-if="isShowStatistics" class="goals-statistics">
     <Message class="completed-message" severity="success" icon="pi pi-check">
       Выполнено {{ getCounterText('completed') }}
     </Message>
@@ -105,13 +95,18 @@ watch(isShowStatistics, (value) => {
   gap: 10px;
   align-self: flex-start;
 
-  &.is-mobile {
+  .is-mobile & {
     align-self: stretch;
   }
 }
 
 .show-statistics-button {
+  align-self: flex-start;
   height: 40px;
+
+  .is-mobile & {
+    align-self: stretch;
+  }
 }
 
 .completed-message {

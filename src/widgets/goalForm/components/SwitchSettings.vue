@@ -27,7 +27,7 @@ const overTimes = defineModel<boolean>('overTimes', {
     />
 
     <label for="show-one-times" class="switch-field-label">
-      <Message severity="secondary">Показывать одно количество</Message>
+      <Message severity="secondary">Видно 1 количество</Message>
     </label>
 
     <GoalTip
@@ -43,7 +43,7 @@ const overTimes = defineModel<boolean>('overTimes', {
     />
 
     <label for="over-times" class="switch-field-label">
-      <Message severity="secondary">Добавлять сверх количество</Message>
+      <Message severity="secondary">Сверх количество</Message>
     </label>
 
     <GoalTip

@@ -2,16 +2,16 @@
 import { signOut } from 'firebase/auth';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCurrentUser } from 'vuefire';
 
 import { auth } from 'shared/api';
-import { ROUTES_PATHS, DARK_THEME_CLASS } from 'shared/consts';
+import { ROUTES_PATHS } from 'shared/consts';
 import { useMatchMedia, useNotification } from 'shared/hooks';
 import { appLocalStorage } from 'shared/utils';
 
-const isMatchMedia = useMatchMedia();
+const isMobileMedia = useMatchMedia();
 
 const isLoading = ref<boolean>(false);
 const isDarkTheme = ref<boolean>(appLocalStorage.get('isDarkTheme') ?? false);
@@ -39,7 +39,7 @@ const handleLogout = async () => {
 };
 
 const handleToggleTheme = () => {
-  document.documentElement.classList.toggle(DARK_THEME_CLASS);
+  document.documentElement.classList.toggle('dark-theme');
 
   isDarkTheme.value = !isDarkTheme.value;
 
@@ -49,6 +49,14 @@ const handleToggleTheme = () => {
 const goToMain = () => {
   router.push(ROUTES_PATHS.MAIN);
 };
+
+watchEffect(() => {
+  if (isMobileMedia.value) {
+    document.documentElement.classList.add('is-mobile');
+  } else {
+    document.documentElement.classList.remove('is-mobile');
+  }
+});
 </script>
 
 <template>
@@ -73,7 +81,7 @@ const goToMain = () => {
     <Button
       icon="pi pi-home"
       raised
-      :label="isMatchMedia ? '' : 'Все цели'"
+      :label="isMobileMedia ? '' : 'Все цели'"
       :class="{ active: route.path === ROUTES_PATHS.MAIN }"
       @click="goToMain"
     />
@@ -92,6 +100,10 @@ const goToMain = () => {
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 30px;
+
+  .is-mobile & {
+    justify-content: space-evenly;
+  }
 }
 
 .welcome-message {

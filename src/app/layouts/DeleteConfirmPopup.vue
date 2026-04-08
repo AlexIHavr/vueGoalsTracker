@@ -47,6 +47,10 @@ import ConfirmPopup from 'primevue/confirmpopup';
   display: flex;
   gap: 5px;
   align-items: center;
+
+  .is-mobile & {
+    font-size: 0.9rem;
+  }
 }
 
 .delete-confirm-popup-buttons {
@@ -56,5 +60,9 @@ import ConfirmPopup from 'primevue/confirmpopup';
 
 .delete-confirm-popup-icon {
   font-size: var(--p-confirmpopup-icon-size);
+
+  .is-mobile & {
+    font-size: 1.2rem;
+  }
 }
 </style>

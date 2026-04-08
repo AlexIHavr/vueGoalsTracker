@@ -3,7 +3,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Drawer from 'primevue/drawer';
 import ProgressSpinner from 'primevue/progressspinner';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 import { MAX_GOALS_COUNT } from 'shared/consts';
 import { useGoals } from 'shared/hooks';
@@ -18,7 +18,7 @@ const {
   data: { pending },
 } = useGoals();
 
-const isMatchMedia = useMatchMedia();
+const isMobileMedia = useMatchMedia();
 
 const isWelcomeDialogVisible = ref<boolean>(true);
 const isMobileDrawerVisible = ref<boolean>(false);
@@ -35,10 +35,18 @@ const hideWelcomeDialog = () => {
 const handleToggleMobileDrawerVisible = () => {
   isMobileDrawerVisible.value = !isMobileDrawerVisible.value;
 };
+
+watchEffect(() => {
+  if (isMobileDrawerVisible.value) {
+    document.body.classList.add('is-overflow-hidden');
+  } else {
+    document.body.classList.remove('is-overflow-hidden');
+  }
+});
 </script>
 
 <template>
-  <div v-if="!pending" :class="['main-page', { 'is-mobile': isMatchMedia }]">
+  <div v-if="!pending" class="main-page">
     <Dialog
       v-if="isNewUser"
       v-model:visible="isWelcomeDialogVisible"
@@ -58,8 +66,9 @@ const handleToggleMobileDrawerVisible = () => {
     </Drawer>
 
     <Button
-      v-if="isMatchMedia"
+      v-if="isMobileMedia"
       icon="pi pi-bars"
+      label="Меню"
       raised
       @click="handleToggleMobileDrawerVisible"
     />
@@ -75,7 +84,7 @@ const handleToggleMobileDrawerVisible = () => {
   flex-direction: column;
   gap: 30px;
 
-  &.is-mobile {
+  .is-mobile & {
     gap: 10px;
     overflow: hidden;
   }

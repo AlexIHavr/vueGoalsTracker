@@ -144,6 +144,10 @@ defineExpose({
   gap: 15px;
   width: 500px;
   padding-top: 5px;
+
+  .is-mobile & {
+    width: var(--max-goals-modal-width-on-mobile);
+  }
 }
 
 .extra-settings-wrapper {
