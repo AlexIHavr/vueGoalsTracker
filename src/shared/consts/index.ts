@@ -15,5 +15,4 @@ export {
   DATE_FIELD_FORMAT,
 } from './dates';
 export { MAX_TIMES, MAX_GOALS_COUNT } from './goals';
-export { TOOLTIP_SHOW_DELAY } from './tooltip';
 export { MEDIA_QUERIES } from './mediaQueries';
