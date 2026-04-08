@@ -1,5 +1,4 @@
 export { ROUTES_PATHS } from './routes';
-export { DARK_THEME_CLASS } from './classNames';
 export { COLLECTIONS_NAMES } from './collections';
 export { ALL_EXCEPT_NUMBERS_REGEX, TIME_24_REGEX } from './regex';
 export {
@@ -16,4 +15,4 @@ export {
   DATE_FIELD_FORMAT,
 } from './dates';
 export { MAX_TIMES, MAX_GOALS_COUNT } from './goals';
-export { TOOLTIP_SHOW_DELAY } from './tooltip';
+export { MEDIA_QUERIES } from './mediaQueries';

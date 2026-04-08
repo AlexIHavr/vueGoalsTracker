@@ -25,10 +25,16 @@
 html {
   font-family: Inter, sans-serif;
   background-color: var(--background-color-primary);
+
+  --max-goals-modal-width-on-mobile: 80vw;
 }
 
 body {
   overflow-wrap: break-word;
+
+  &.is-overflow-hidden {
+    overflow: hidden;
+  }
 }
 
 h1,
@@ -282,11 +288,15 @@ h6 {
 }
 
 // p-dialog
-.p-dialog-content {
-  overflow-x: hidden;
+.p-dialog {
+  max-width: 90%;
 
-  &::-webkit-scrollbar {
-    width: 0;
+  .p-dialog-content {
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 }
 
@@ -302,4 +312,9 @@ h6 {
   --p-tooltip-max-width: 300px;
 
   font-size: 0.8rem;
+}
+
+// p-toast
+.p-toast {
+  max-width: 330px;
 }

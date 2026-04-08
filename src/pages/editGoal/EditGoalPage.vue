@@ -116,6 +116,8 @@ const handleSubmitEditForm = (goal: GoalDocument) => async () => {
 
 .edit-goal-form-wrapper {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  justify-content: center;
 }
 </style>

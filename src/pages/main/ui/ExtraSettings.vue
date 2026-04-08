@@ -134,11 +134,22 @@ const selectPeriodTipText = computed(() => {
 .selected-period-filter-wrapper {
   display: flex;
   gap: 5px;
+
+  .is-mobile & {
+    flex-grow: 1;
+    flex-direction: column;
+  }
 }
 
 .p-select,
 .p-multiselect {
   width: 150px;
+
+  .is-mobile & {
+    $padding-offset: calc(2 * var(--p-overlay-modal-padding));
+
+    width: calc(var(--max-goals-modal-width-on-mobile) - $padding-offset);
+  }
 }
 
 .period-select {

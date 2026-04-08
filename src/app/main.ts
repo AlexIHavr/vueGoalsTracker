@@ -3,7 +3,6 @@ import PrimeVue, { type PrimeVueConfiguration } from 'primevue/config';
 import ConfirmationService from 'primevue/confirmationservice';
 import KeyFilter from 'primevue/keyfilter';
 import ToastService from 'primevue/toastservice';
-import Tooltip from 'primevue/tooltip';
 import { createApp } from 'vue';
 import { VueFire, VueFireAuth } from 'vuefire';
 
@@ -44,6 +43,5 @@ app.use(ToastService);
 app.use(ConfirmationService);
 
 app.directive('keyfilter', KeyFilter);
-app.directive('tooltip', Tooltip);
 
 app.mount('#app');

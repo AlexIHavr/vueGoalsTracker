@@ -31,6 +31,11 @@ watch(debouncedSearchValue, (value) => {
 
 <style lang="scss" scoped>
 .goals-search {
+  align-self: flex-start;
   width: auto;
+
+  .is-mobile & {
+    width: 100%;
+  }
 }
 </style>

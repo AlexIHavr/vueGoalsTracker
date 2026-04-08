@@ -4,7 +4,6 @@ import InputGroup from 'primevue/inputgroup';
 import Select from 'primevue/select';
 import { computed, watch } from 'vue';
 
-import { TOOLTIP_SHOW_DELAY } from 'shared/consts';
 import { selectedSortOrder, selectedSortType } from 'shared/store';
 import { appLocalStorage } from 'shared/utils';
 
@@ -43,13 +42,6 @@ watch(selectedSortType, () => {
     />
 
     <Button
-      v-tooltip.bottom="{
-        value:
-          selectedSortOrder === 'asc'
-            ? 'Сортировать по убыванию'
-            : 'Сортировать по возрастанию',
-        showDelay: TOOLTIP_SHOW_DELAY,
-      }"
       class="sort-order-button"
       raised
       :icon="selectedSortOrderIcon"

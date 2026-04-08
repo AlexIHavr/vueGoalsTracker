@@ -9,7 +9,6 @@ import { getUniqueArr } from 'shared/utils';
 
 import CreateGoalsModal from './CreateGoalsModal.vue';
 import GoalsFilters from './GoalsFilters.vue';
-import GoalsSearch from '../ui/GoalsSearch.vue';
 import GoalsSort from '../ui/GoalsSort.vue';
 
 const { data } = useGoals();
@@ -32,14 +31,27 @@ const yearSelectOptions = computed<number[]>(() =>
       :default-value="selectedYear"
       :placeholder="selectedYear.toString()"
     />
-    <GoalsSort />
-    <GoalsFilters />
-    <GoalsSearch />
+
+    <div class="sort-and-filters-wrapper">
+      <GoalsSort />
+      <GoalsFilters />
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .goals-board-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .p-drawer-content & {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.sort-and-filters-wrapper {
   display: flex;
   gap: 10px;
 }

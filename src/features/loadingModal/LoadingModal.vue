@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ProgressSpinner } from 'primevue';
 import Dialog from 'primevue/dialog';
+import ProgressSpinner from 'primevue/progressspinner';
 import { ref } from 'vue';
 
 const visible = ref<boolean>(true);

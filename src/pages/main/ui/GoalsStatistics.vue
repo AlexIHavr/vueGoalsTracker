@@ -3,7 +3,6 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { computed, ref, watch } from 'vue';
 
-import { TOOLTIP_SHOW_DELAY } from 'shared/consts';
 import { appLocalStorage } from 'shared/utils';
 import { getGoalStatus } from 'widgets/goalCard';
 
@@ -63,11 +62,8 @@ watch(isShowStatistics, (value) => {
 
 <template>
   <Button
-    v-tooltip.bottom="{
-      value: 'Статистика',
-      showDelay: TOOLTIP_SHOW_DELAY,
-    }"
     icon="pi pi-chart-bar"
+    label="Статистика"
     raised
     :class="['show-statistics-button', { active: isShowStatistics }]"
     @click="handleShowStatistics"
@@ -98,10 +94,19 @@ watch(isShowStatistics, (value) => {
   flex-direction: column;
   gap: 10px;
   align-self: flex-start;
+
+  .is-mobile & {
+    align-self: stretch;
+  }
 }
 
 .show-statistics-button {
+  align-self: flex-start;
   height: 40px;
+
+  .is-mobile & {
+    align-self: stretch;
+  }
 }
 
 .completed-message {

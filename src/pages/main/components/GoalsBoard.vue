@@ -6,6 +6,7 @@ import { useGoalsInYear } from 'shared/hooks';
 import { GoalCard } from 'widgets/goalCard';
 
 import { useVisibleGoals } from '../hooks/useVisibleGoals';
+import GoalsSearch from '../ui/GoalsSearch.vue';
 import GoalsStatistics from '../ui/GoalsStatistics.vue';
 import { getFilteredGoalsInYear } from '../utils/getFilteredGoalsInYear';
 import { getSortedGoals } from '../utils/getSortedGoals';
@@ -30,6 +31,12 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 <template>
   <div class="goal-board-wrapper">
     <GoalsStatistics :filtered-goals-in-year="filteredGoalsInYear" />
+
+    <GoalsSearch />
+
+    <Message v-if="goalsInYear.length" severity="success">
+      <h4>Ваши цели</h4>
+    </Message>
 
     <main class="goals-board">
       <Message
@@ -60,7 +67,8 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 .goals-board {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
+  justify-content: space-around;
 }
 
 .goal-cards-enter-active {

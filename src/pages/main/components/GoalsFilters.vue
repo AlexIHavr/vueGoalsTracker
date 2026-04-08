@@ -5,7 +5,6 @@ import Popover from 'primevue/popover';
 import { computed, ref, watch, type ClassValue } from 'vue';
 
 import { LoadingModal } from 'features/loadingModal';
-import { TOOLTIP_SHOW_DELAY } from 'shared/consts';
 import {
   selectedCategoryFilters,
   selectedDatesRangeFilters,
@@ -63,7 +62,6 @@ watch(selectedYear, () => {
     :value="goalsFiltersCount"
   >
     <Button
-      v-tooltip.bottom="{ value: 'Фильтры', showDelay: TOOLTIP_SHOW_DELAY }"
       icon="pi pi-filter"
       raised
       :class="filterButtonClasses"
@@ -73,10 +71,6 @@ watch(selectedYear, () => {
 
   <Button
     v-else
-    v-tooltip.bottom="{
-      value: 'Фильтры',
-      showDelay: TOOLTIP_SHOW_DELAY,
-    }"
     icon="pi pi-filter"
     raised
     :class="filterButtonClasses"
@@ -121,7 +115,7 @@ watch(selectedYear, () => {
   flex-direction: column;
   gap: 10px;
   min-width: 250px;
-  max-width: 265px;
+  max-width: 310px;
   max-height: 385px;
   overflow: hidden auto;
   user-select: none;
@@ -139,5 +133,11 @@ watch(selectedYear, () => {
 
 .toggle-popover-button {
   height: 40px;
+}
+</style>
+
+<style lang="scss">
+.p-popover {
+  margin-left: 23px;
 }
 </style>
