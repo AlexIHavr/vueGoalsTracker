@@ -90,7 +90,7 @@ watchEffect(() => {
       <h4>Добро пожаловать {{ user?.email }}</h4>
     </Message>
 
-    <Message severity="success">beta v.1.0.0</Message>
+    <Message severity="success">beta v.1.0.1</Message>
   </header>
 </template>
 

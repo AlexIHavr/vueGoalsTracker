@@ -105,6 +105,11 @@ const handleSubmitEditForm = (goal: GoalDocument) => async () => {
 <style lang="scss" scoped>
 .edit-goal-wrapper {
   display: flex;
+
+  .goal-card {
+    align-self: flex-start;
+    min-height: fit-content;
+  }
 }
 
 .edit-goal {

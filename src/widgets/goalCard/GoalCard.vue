@@ -197,15 +197,14 @@ const goToEditGoal = () => {
 </template>
 
 <style lang="scss" scoped>
-$goal-card-size: 335px;
-$goal-max-width: calc($goal-card-size - 2 * var(--p-card-body-padding));
+$goal-card-width: 335px;
+$goal-max-width: calc($goal-card-width - 2 * var(--p-card-body-padding));
 
 .goal-card {
   position: relative;
-  width: $goal-card-size;
-  min-width: $goal-card-size;
-  height: $goal-card-size;
-  min-height: $goal-card-size;
+  width: $goal-card-width;
+  min-width: $goal-card-width;
+  min-height: 300px;
   padding-top: 10px;
   transition: var(--p-button-transition-duration);
 }
@@ -248,7 +247,6 @@ $goal-max-width: calc($goal-card-size - 2 * var(--p-card-body-padding));
 
 .goal-title {
   max-width: calc($goal-max-width - var(--p-button-sm-icon-only-width) - 10px);
-  max-height: 30px;
   overflow: hidden auto;
 
   &::-webkit-scrollbar {
