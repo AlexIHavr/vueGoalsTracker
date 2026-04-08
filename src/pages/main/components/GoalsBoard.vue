@@ -42,11 +42,16 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
       <Message
         v-if="!filteredGoalsInYear.length && goalsInYear.length"
         severity="success"
+        class="goals-board-message"
       >
         По данным фильтрам или поиску целей нет
       </Message>
 
-      <Message v-if="!goalsInYear.length" severity="success">
+      <Message
+        v-if="!goalsInYear.length"
+        severity="success"
+        class="goals-board-message"
+      >
         Здесь будут ваши цели. Создайте первую цель
       </Message>
 
@@ -73,6 +78,10 @@ const visibleGoals = useVisibleGoals(sortedGoalsInYear, observerTriggerRef);
 
 .goal-cards-enter-active {
   animation: bounce-in 0.5s;
+}
+
+.goals-board-message {
+  width: 100%;
 }
 
 @keyframes bounce-in {
