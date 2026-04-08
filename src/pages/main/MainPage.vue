@@ -2,6 +2,7 @@
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Drawer from 'primevue/drawer';
+import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
 import { ref, watchEffect } from 'vue';
 
@@ -50,15 +51,26 @@ watchEffect(() => {
     <Dialog
       v-if="isNewUser"
       v-model:visible="isWelcomeDialogVisible"
-      header="Добро пожаловать в Goals Tracker"
       modal
       @after-hide="hideWelcomeDialog"
     >
-      <h4 class="welcome-content">
-        Здесь ты сможешь создавать свои цели на текущий год. Можешь по одной, а
-        можешь сразу несколько - на каждый месяц или даже на каждый день. Помни,
-        что ты можешь создать только {{ MAX_GOALS_COUNT }} целей в год. Удачи!
-      </h4>
+      <template #header>
+        <h3 class="welcome-content-header">Добро пожаловать в Goals Tracker</h3>
+      </template>
+
+      <div class="welcome-content">
+        <Message variant="simple" severity="success">
+          Здесь ты сможешь создавать свои цели на текущий год.
+        </Message>
+        <Message variant="simple" severity="success">
+          Можешь по одной, а можешь сразу несколько - на каждый месяц или даже
+          на каждый день.
+        </Message>
+        <Message variant="simple">
+          Помни, что ты можешь создать только {{ MAX_GOALS_COUNT }} целей в год.
+          Удачи!
+        </Message>
+      </div>
     </Dialog>
 
     <Drawer v-model:visible="isMobileDrawerVisible" header="Меню" block-scroll>
@@ -98,8 +110,11 @@ watchEffect(() => {
 }
 
 .welcome-content {
-  width: 500px;
   line-height: 25px;
+  text-align: center;
+}
+
+.welcome-content-header {
   text-align: center;
 }
 </style>

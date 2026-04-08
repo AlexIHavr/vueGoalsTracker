@@ -9,7 +9,6 @@ import { getUniqueArr } from 'shared/utils';
 
 import CreateGoalsModal from './CreateGoalsModal.vue';
 import GoalsFilters from './GoalsFilters.vue';
-import GoalsSearch from '../ui/GoalsSearch.vue';
 import GoalsSort from '../ui/GoalsSort.vue';
 
 const { data } = useGoals();
@@ -37,8 +36,6 @@ const yearSelectOptions = computed<number[]>(() =>
       <GoalsSort />
       <GoalsFilters />
     </div>
-
-    <GoalsSearch />
   </div>
 </template>
 
